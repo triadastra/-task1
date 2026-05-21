@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c ' *)",
+      "PowerShell(& conda run python --version 2>&1; \\(Get-Command conda -ErrorAction SilentlyContinue\\).Source)",
+      "PowerShell(Get-ChildItem \"$env:LOCALAPPDATA\\\\Programs\\\\Python\" -ErrorAction SilentlyContinue | Select-Object Name, FullName)",
+      "PowerShell($env:USERPROFILE)",
+      "Bash(git config *)",
+      "Bash(git filter-branch --env-filter ' *)",
+      "Bash(git push *)",
+      "Bash(Remove-Item -Recurse -Force .git)",
+      "Bash(rm -rf .git)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ]
+  }
+}
