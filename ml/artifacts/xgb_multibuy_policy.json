@@ -1,0 +1,4350 @@
+{
+  "policy_type": "multibuy",
+  "csv": "brk_b_data/brk_b_daily.csv",
+  "features": [
+    "Open",
+    "High",
+    "Low",
+    "Close",
+    "Volume",
+    "Dividends",
+    "Stock Splits"
+  ],
+  "window": 14,
+  "action_space": {
+    "0": "HOLD",
+    "1": "BUY_50",
+    "2": "BUY_100",
+    "3": "BUY_200",
+    "4": "SELL_LOT",
+    "5": "SELL_ALL"
+  },
+  "train_range": {
+    "end_exclusive": "2025-03-10"
+  },
+  "game_range": {
+    "start": "2025-03-10",
+    "end": "2026-03-10"
+  },
+  "model_path": "ml/artifacts/xgb_multibuy_model.json",
+  "device_used": "cuda",
+  "cleaning": {
+    "total_rows": 7558,
+    "dropped_bad": 0,
+    "kept_rows": 7558
+  },
+  "training": {
+    "mode": "rl",
+    "explore_episodes": 200,
+    "rl_epochs": 5,
+    "episodes_per_epoch": 1000,
+    "episode_len": 252,
+    "eval_episodes": 20,
+    "num_boost_round": 100,
+    "capital_pool": [
+      100000.0,
+      500000.0
+    ],
+    "th_lo": 0.003,
+    "th_hi": 0.008,
+    "chosen_candidate": {
+      "params": {
+        "eta": 0.05,
+        "max_depth": 5,
+        "subsample": 0.9,
+        "colsample_bytree": 0.9,
+        "min_child_weight": 3
+      },
+      "valid_accuracy": null,
+      "avg_return_pct": 65.60917407226563
+    },
+    "all_candidates": []
+  },
+  "policy_rows": [
+    {
+      "date": "2025-03-10",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 497.1000061035156,
+      "momentum_ret": -0.025447
+    },
+    {
+      "date": "2025-03-11",
+      "action_id": 1,
+      "action_name": "BUY_50",
+      "signal": "BUY",
+      "pred_class": 1,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.9,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 496.25,
+      "momentum_ret": 0.000787
+    },
+    {
+      "date": "2025-03-12",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 495.94000244140625,
+      "momentum_ret": -0.005135
+    },
+    {
+      "date": "2025-03-13",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 504.25,
+      "momentum_ret": 0.012876
+    },
+    {
+      "date": "2025-03-14",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 514.5999755859375,
+      "momentum_ret": 0.038295
+    },
+    {
+      "date": "2025-03-17",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 523.010009765625,
+      "momentum_ret": 0.052122
+    },
+    {
+      "date": "2025-03-18",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 523.1400146484375,
+      "momentum_ret": 0.054186
+    },
+    {
+      "date": "2025-03-19",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 525.27001953125,
+      "momentum_ret": 0.05914
+    },
+    {
+      "date": "2025-03-20",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 528.72998046875,
+      "momentum_ret": 0.048547
+    },
+    {
+      "date": "2025-03-21",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 521.9099731445312,
+      "momentum_ret": 0.014205
+    },
+    {
+      "date": "2025-03-24",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 525.8499755859375,
+      "momentum_ret": 0.00543
+    },
+    {
+      "date": "2025-03-25",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 528.8699951171875,
+      "momentum_ret": 0.010953
+    },
+    {
+      "date": "2025-03-26",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 533.2100219726562,
+      "momentum_ret": 0.015116
+    },
+    {
+      "date": "2025-03-27",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 534.52001953125,
+      "momentum_ret": 0.010951
+    },
+    {
+      "date": "2025-03-28",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 526.3099975585938,
+      "momentum_ret": 0.008431
+    },
+    {
+      "date": "2025-03-31",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 532.5800170898438,
+      "momentum_ret": 0.012798
+    },
+    {
+      "date": "2025-04-01",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 532.989990234375,
+      "momentum_ret": 0.00779
+    },
+    {
+      "date": "2025-04-02",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 537.719970703125,
+      "momentum_ret": 0.008458
+    },
+    {
+      "date": "2025-04-03",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 530.1599731445312,
+      "momentum_ret": -0.008157
+    },
+    {
+      "date": "2025-04-04",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 493.5400085449219,
+      "momentum_ret": -0.062264
+    },
+    {
+      "date": "2025-04-07",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 490.3800048828125,
+      "momentum_ret": -0.079237
+    },
+    {
+      "date": "2025-04-08",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 492.6400146484375,
+      "momentum_ret": -0.075705
+    },
+    {
+      "date": "2025-04-09",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 521.4099731445312,
+      "momentum_ret": -0.030332
+    },
+    {
+      "date": "2025-04-10",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 515.8099975585938,
+      "momentum_ret": -0.027067
+    },
+    {
+      "date": "2025-04-11",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 524.1099853515625,
+      "momentum_ret": 0.06194
+    },
+    {
+      "date": "2025-04-14",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 529.52001953125,
+      "momentum_ret": 0.079816
+    },
+    {
+      "date": "2025-04-15",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 528.1699829101562,
+      "momentum_ret": 0.072122
+    },
+    {
+      "date": "2025-04-16",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 516.4500122070312,
+      "momentum_ret": -0.009513
+    },
+    {
+      "date": "2025-04-17",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 518.2100219726562,
+      "momentum_ret": 0.004653
+    },
+    {
+      "date": "2025-04-21",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 506.9200134277344,
+      "momentum_ret": -0.032798
+    },
+    {
+      "date": "2025-04-22",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 520.7899780273438,
+      "momentum_ret": -0.016487
+    },
+    {
+      "date": "2025-04-23",
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "probabilities": {
+        "HOLD": 0.9,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 526.8099975585938,
+      "momentum_ret": -0.002575
+    },
+    {
+      "date": "2025-04-24",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 531.6400146484375,
+      "momentum_ret": 0.029412
+    },
+    {
+      "date": "2025-04-25",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 530.9600219726562,
+      "momentum_ret": 0.024604
+    },
+    {
+      "date": "2025-04-28",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 530.9400024414062,
+      "momentum_ret": 0.047384
+    },
+    {
+      "date": "2025-04-29",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 534.5700073242188,
+      "momentum_ret": 0.02646
+    },
+    {
+      "date": "2025-04-30",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 533.25,
+      "momentum_ret": 0.012225
+    },
+    {
+      "date": "2025-05-01",
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "probabilities": {
+        "HOLD": 0.9,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 530.22998046875,
+      "momentum_ret": -0.002652
+    },
+    {
+      "date": "2025-05-02",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 539.7999877929688,
+      "momentum_ret": 0.016649
+    },
+    {
+      "date": "2025-05-05",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 512.1500244140625,
+      "momentum_ret": -0.03539
+    },
+    {
+      "date": "2025-05-06",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 512.3300170898438,
+      "momentum_ret": -0.041604
+    },
+    {
+      "date": "2025-05-07",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 518.219970703125,
+      "momentum_ret": -0.028186
+    },
+    {
+      "date": "2025-05-08",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 513.25,
+      "momentum_ret": -0.032024
+    },
+    {
+      "date": "2025-05-09",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 513.739990234375,
+      "momentum_ret": -0.048277
+    },
+    {
+      "date": "2025-05-12",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 514.2999877929688,
+      "momentum_ret": 0.004198
+    },
+    {
+      "date": "2025-05-13",
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "probabilities": {
+        "HOLD": 0.9,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 511.8800048828125,
+      "momentum_ret": -0.000878
+    },
+    {
+      "date": "2025-05-14",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 503.3999938964844,
+      "momentum_ret": -0.028598
+    },
+    {
+      "date": "2025-05-15",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 507.3299865722656,
+      "momentum_ret": -0.011534
+    },
+    {
+      "date": "2025-05-16",
+      "action_id": 1,
+      "action_name": "BUY_50",
+      "signal": "BUY",
+      "pred_class": 1,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.9,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 514.3099975585938,
+      "momentum_ret": 0.00111
+    },
+    {
+      "date": "2025-05-19",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 512.3900146484375,
+      "momentum_ret": -0.003714
+    },
+    {
+      "date": "2025-05-20",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 508.739990234375,
+      "momentum_ret": -0.006134
+    },
+    {
+      "date": "2025-05-21",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 507.0299987792969,
+      "momentum_ret": 0.007211
+    },
+    {
+      "date": "2025-05-22",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 503.57000732421875,
+      "momentum_ret": -0.007411
+    },
+    {
+      "date": "2025-05-23",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 503.4599914550781,
+      "momentum_ret": -0.021096
+    },
+    {
+      "date": "2025-05-27",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 509.1600036621094,
+      "momentum_ret": -0.006304
+    },
+    {
+      "date": "2025-05-28",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 503.1099853515625,
+      "momentum_ret": -0.011067
+    },
+    {
+      "date": "2025-05-29",
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "probabilities": {
+        "HOLD": 0.9,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 506.17999267578125,
+      "momentum_ret": -0.001676
+    },
+    {
+      "date": "2025-05-30",
+      "action_id": 1,
+      "action_name": "BUY_50",
+      "signal": "BUY",
+      "pred_class": 1,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.9,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 503.9599914550781,
+      "momentum_ret": 0.000774
+    },
+    {
+      "date": "2025-06-02",
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "probabilities": {
+        "HOLD": 0.9,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 502.80999755859375,
+      "momentum_ret": -0.001291
+    },
+    {
+      "date": "2025-06-03",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 497.8299865722656,
+      "momentum_ret": -0.022252
+    },
+    {
+      "date": "2025-06-04",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 491.0,
+      "momentum_ret": -0.02407
+    },
+    {
+      "date": "2025-06-05",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 488.739990234375,
+      "momentum_ret": -0.034454
+    },
+    {
+      "date": "2025-06-06",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 493.5299987792969,
+      "momentum_ret": -0.020696
+    },
+    {
+      "date": "2025-06-09",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 493.3299865722656,
+      "momentum_ret": -0.018854
+    },
+    {
+      "date": "2025-06-10",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 491.1300048828125,
+      "momentum_ret": -0.013458
+    },
+    {
+      "date": "2025-06-11",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 488.1400146484375,
+      "momentum_ret": -0.005825
+    },
+    {
+      "date": "2025-06-12",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 490.3399963378906,
+      "momentum_ret": 0.003274
+    },
+    {
+      "date": "2025-06-13",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 487.5400085449219,
+      "momentum_ret": -0.012137
+    },
+    {
+      "date": "2025-06-16",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 490.2300109863281,
+      "momentum_ret": -0.006284
+    },
+    {
+      "date": "2025-06-17",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 483.4800109863281,
+      "momentum_ret": -0.015576
+    },
+    {
+      "date": "2025-06-18",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 485.1400146484375,
+      "momentum_ret": -0.006146
+    },
+    {
+      "date": "2025-06-20",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 484.8500061035156,
+      "momentum_ret": -0.011196
+    },
+    {
+      "date": "2025-06-23",
+      "action_id": 1,
+      "action_name": "BUY_50",
+      "signal": "BUY",
+      "pred_class": 1,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.9,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 487.7699890136719,
+      "momentum_ret": 0.000472
+    },
+    {
+      "date": "2025-06-24",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 493.4800109863281,
+      "momentum_ret": 0.00663
+    },
+    {
+      "date": "2025-06-25",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 486.2099914550781,
+      "momentum_ret": 0.005647
+    },
+    {
+      "date": "2025-06-26",
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "probabilities": {
+        "HOLD": 0.9,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 485.04998779296875,
+      "momentum_ret": -0.000186
+    },
+    {
+      "date": "2025-06-27",
+      "action_id": 1,
+      "action_name": "BUY_50",
+      "signal": "BUY",
+      "pred_class": 1,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.9,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 485.67999267578125,
+      "momentum_ret": 0.001712
+    },
+    {
+      "date": "2025-06-30",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 485.7699890136719,
+      "momentum_ret": -0.0041
+    },
+    {
+      "date": "2025-07-01",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 489.6099853515625,
+      "momentum_ret": -0.007842
+    },
+    {
+      "date": "2025-07-02",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 480.4800109863281,
+      "momentum_ret": -0.011785
+    },
+    {
+      "date": "2025-07-03",
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "probabilities": {
+        "HOLD": 0.9,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 485.0,
+      "momentum_ret": -0.000103
+    },
+    {
+      "date": "2025-07-07",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 478.0299987792969,
+      "momentum_ret": -0.015751
+    },
+    {
+      "date": "2025-07-08",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 477.4700012207031,
+      "momentum_ret": -0.017086
+    },
+    {
+      "date": "2025-07-09",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 478.9100036621094,
+      "momentum_ret": -0.021854
+    },
+    {
+      "date": "2025-07-10",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 478.2699890136719,
+      "momentum_ret": -0.0046
+    },
+    {
+      "date": "2025-07-11",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 475.8599853515625,
+      "momentum_ret": -0.018845
+    },
+    {
+      "date": "2025-07-14",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 476.30999755859375,
+      "momentum_ret": -0.003598
+    },
+    {
+      "date": "2025-07-15",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 470.1300048828125,
+      "momentum_ret": -0.015373
+    },
+    {
+      "date": "2025-07-16",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 471.30999755859375,
+      "momentum_ret": -0.015869
+    },
+    {
+      "date": "2025-07-17",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 473.3999938964844,
+      "momentum_ret": -0.010183
+    },
+    {
+      "date": "2025-07-18",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 473.79998779296875,
+      "momentum_ret": -0.004329
+    },
+    {
+      "date": "2025-07-21",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 474.4100036621094,
+      "momentum_ret": -0.003989
+    },
+    {
+      "date": "2025-07-22",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 478.1300048828125,
+      "momentum_ret": 0.017017
+    },
+    {
+      "date": "2025-07-23",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 482.6300048828125,
+      "momentum_ret": 0.024018
+    },
+    {
+      "date": "2025-07-24",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 480.6000061035156,
+      "momentum_ret": 0.015209
+    },
+    {
+      "date": "2025-07-25",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 484.07000732421875,
+      "momentum_ret": 0.021676
+    },
+    {
+      "date": "2025-07-28",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 481.70001220703125,
+      "momentum_ret": 0.015366
+    },
+    {
+      "date": "2025-07-29",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 476.55999755859375,
+      "momentum_ret": -0.003284
+    },
+    {
+      "date": "2025-07-30",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 476.0,
+      "momentum_ret": -0.013737
+    },
+    {
+      "date": "2025-07-31",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 471.8800048828125,
+      "momentum_ret": -0.018144
+    },
+    {
+      "date": "2025-08-01",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 472.8399963378906,
+      "momentum_ret": -0.023199
+    },
+    {
+      "date": "2025-08-04",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 459.1099853515625,
+      "momentum_ret": -0.046896
+    },
+    {
+      "date": "2025-08-05",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 464.19000244140625,
+      "momentum_ret": -0.025957
+    },
+    {
+      "date": "2025-08-06",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 468.9100036621094,
+      "momentum_ret": -0.014895
+    },
+    {
+      "date": "2025-08-07",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 461.4700012207031,
+      "momentum_ret": -0.022061
+    },
+    {
+      "date": "2025-08-08",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 465.3999938964844,
+      "momentum_ret": -0.015735
+    },
+    {
+      "date": "2025-08-11",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 464.7300109863281,
+      "momentum_ret": 0.012241
+    },
+    {
+      "date": "2025-08-12",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 470.3900146484375,
+      "momentum_ret": 0.013357
+    },
+    {
+      "date": "2025-08-13",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 477.30999755859375,
+      "momentum_ret": 0.017914
+    },
+    {
+      "date": "2025-08-14",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 479.2200012207031,
+      "momentum_ret": 0.038464
+    },
+    {
+      "date": "2025-08-15",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 477.20001220703125,
+      "momentum_ret": 0.025355
+    },
+    {
+      "date": "2025-08-18",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 478.5199890136719,
+      "momentum_ret": 0.029673
+    },
+    {
+      "date": "2025-08-19",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 485.30999755859375,
+      "momentum_ret": 0.031718
+    },
+    {
+      "date": "2025-08-20",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 488.67999267578125,
+      "momentum_ret": 0.023821
+    },
+    {
+      "date": "2025-08-21",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 488.5899963378906,
+      "momentum_ret": 0.019553
+    },
+    {
+      "date": "2025-08-22",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 489.0,
+      "momentum_ret": 0.024728
+    },
+    {
+      "date": "2025-08-25",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 486.17999267578125,
+      "momentum_ret": 0.016008
+    },
+    {
+      "date": "2025-08-26",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 492.2099914550781,
+      "momentum_ret": 0.014218
+    },
+    {
+      "date": "2025-08-27",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 495.7200012207031,
+      "momentum_ret": 0.014406
+    },
+    {
+      "date": "2025-08-28",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 499.8599853515625,
+      "momentum_ret": 0.023066
+    },
+    {
+      "date": "2025-08-29",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 502.9800109863281,
+      "momentum_ret": 0.028589
+    },
+    {
+      "date": "2025-09-02",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 501.1400146484375,
+      "momentum_ret": 0.030771
+    },
+    {
+      "date": "2025-09-03",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 501.489990234375,
+      "momentum_ret": 0.018854
+    },
+    {
+      "date": "2025-09-04",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 506.9100036621094,
+      "momentum_ret": 0.022573
+    },
+    {
+      "date": "2025-09-05",
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "probabilities": {
+        "HOLD": 0.9,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 499.7699890136719,
+      "momentum_ret": -0.00018
+    },
+    {
+      "date": "2025-09-08",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 493.7799987792969,
+      "momentum_ret": -0.018291
+    },
+    {
+      "date": "2025-09-09",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 492.7200012207031,
+      "momentum_ret": -0.016802
+    },
+    {
+      "date": "2025-09-10",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 490.0799865722656,
+      "momentum_ret": -0.022752
+    },
+    {
+      "date": "2025-09-11",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 496.9100036621094,
+      "momentum_ret": -0.019727
+    },
+    {
+      "date": "2025-09-12",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 493.739990234375,
+      "momentum_ret": -0.012066
+    },
+    {
+      "date": "2025-09-15",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 491.5400085449219,
+      "momentum_ret": -0.004536
+    },
+    {
+      "date": "2025-09-16",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 490.989990234375,
+      "momentum_ret": -0.003511
+    },
+    {
+      "date": "2025-09-17",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 492.3299865722656,
+      "momentum_ret": 0.004591
+    },
+    {
+      "date": "2025-09-18",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 490.5,
+      "momentum_ret": -0.0129
+    },
+    {
+      "date": "2025-09-19",
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "probabilities": {
+        "HOLD": 0.9,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 492.8500061035156,
+      "momentum_ret": -0.001803
+    },
+    {
+      "date": "2025-09-22",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 493.7099914550781,
+      "momentum_ret": 0.004415
+    },
+    {
+      "date": "2025-09-23",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 494.1000061035156,
+      "momentum_ret": 0.006334
+    },
+    {
+      "date": "2025-09-24",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 497.0899963378906,
+      "momentum_ret": 0.009668
+    },
+    {
+      "date": "2025-09-25",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 494.9599914550781,
+      "momentum_ret": 0.009093
+    },
+    {
+      "date": "2025-09-26",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 500.0299987792969,
+      "momentum_ret": 0.014568
+    },
+    {
+      "date": "2025-09-29",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 499.25,
+      "momentum_ret": 0.011221
+    },
+    {
+      "date": "2025-09-30",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 502.739990234375,
+      "momentum_ret": 0.017486
+    },
+    {
+      "date": "2025-10-01",
+      "action_id": 1,
+      "action_name": "BUY_50",
+      "signal": "BUY",
+      "pred_class": 1,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.9,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 498.20001220703125,
+      "momentum_ret": 0.002233
+    },
+    {
+      "date": "2025-10-02",
+      "action_id": 1,
+      "action_name": "BUY_50",
+      "signal": "BUY",
+      "pred_class": 1,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.9,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 495.9200134277344,
+      "momentum_ret": 0.00194
+    },
+    {
+      "date": "2025-10-03",
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "probabilities": {
+        "HOLD": 0.9,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 498.75,
+      "momentum_ret": -0.00256
+    },
+    {
+      "date": "2025-10-06",
+      "action_id": 1,
+      "action_name": "BUY_50",
+      "signal": "BUY",
+      "pred_class": 1,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.9,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 500.0199890136719,
+      "momentum_ret": 0.001542
+    },
+    {
+      "date": "2025-10-07",
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "probabilities": {
+        "HOLD": 0.9,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 502.29998779296875,
+      "momentum_ret": -0.000875
+    },
+    {
+      "date": "2025-10-08",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 499.8399963378906,
+      "momentum_ret": 0.003292
+    },
+    {
+      "date": "2025-10-09",
+      "action_id": 1,
+      "action_name": "BUY_50",
+      "signal": "BUY",
+      "pred_class": 1,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.9,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 496.739990234375,
+      "momentum_ret": 0.001653
+    },
+    {
+      "date": "2025-10-10",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 489.1300048828125,
+      "momentum_ret": -0.019288
+    },
+    {
+      "date": "2025-10-13",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 491.92999267578125,
+      "momentum_ret": -0.016179
+    },
+    {
+      "date": "2025-10-14",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 495.9700012207031,
+      "momentum_ret": -0.012602
+    },
+    {
+      "date": "2025-10-15",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 496.3900146484375,
+      "momentum_ret": -0.006902
+    },
+    {
+      "date": "2025-10-16",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 488.80999755859375,
+      "momentum_ret": -0.015964
+    },
+    {
+      "date": "2025-10-17",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 492.4200134277344,
+      "momentum_ret": 0.006726
+    },
+    {
+      "date": "2025-10-20",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 494.0799865722656,
+      "momentum_ret": 0.004371
+    },
+    {
+      "date": "2025-10-21",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 491.2900085449219,
+      "momentum_ret": -0.009436
+    },
+    {
+      "date": "2025-10-22",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 491.80999755859375,
+      "momentum_ret": -0.009227
+    },
+    {
+      "date": "2025-10-23",
+      "action_id": 1,
+      "action_name": "BUY_50",
+      "signal": "BUY",
+      "pred_class": 1,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.9,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 490.1600036621094,
+      "momentum_ret": 0.002762
+    },
+    {
+      "date": "2025-10-24",
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "probabilities": {
+        "HOLD": 0.9,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 492.1000061035156,
+      "momentum_ret": -0.00065
+    },
+    {
+      "date": "2025-10-27",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 488.07000732421875,
+      "momentum_ret": -0.012164
+    },
+    {
+      "date": "2025-10-28",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 481.44000244140625,
+      "momentum_ret": -0.020049
+    },
+    {
+      "date": "2025-10-29",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 475.760009765625,
+      "momentum_ret": -0.032635
+    },
+    {
+      "date": "2025-10-30",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 478.5199890136719,
+      "momentum_ret": -0.023747
+    },
+    {
+      "date": "2025-10-31",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 477.5400085449219,
+      "momentum_ret": -0.029587
+    },
+    {
+      "date": "2025-11-03",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 475.67999267578125,
+      "momentum_ret": -0.025386
+    },
+    {
+      "date": "2025-11-04",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 487.6600036621094,
+      "momentum_ret": 0.01292
+    },
+    {
+      "date": "2025-11-05",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 488.7699890136719,
+      "momentum_ret": 0.027346
+    },
+    {
+      "date": "2025-11-06",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 493.1499938964844,
+      "momentum_ret": 0.030573
+    },
+    {
+      "date": "2025-11-07",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 499.05999755859375,
+      "momentum_ret": 0.045064
+    },
+    {
+      "date": "2025-11-10",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 496.9800109863281,
+      "momentum_ret": 0.044778
+    },
+    {
+      "date": "2025-11-11",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 497.07000732421875,
+      "momentum_ret": 0.019296
+    },
+    {
+      "date": "2025-11-12",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 502.3999938964844,
+      "momentum_ret": 0.027886
+    },
+    {
+      "date": "2025-11-13",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 513.1099853515625,
+      "momentum_ret": 0.040474
+    },
+    {
+      "date": "2025-11-14",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 508.94000244140625,
+      "momentum_ret": 0.019797
+    },
+    {
+      "date": "2025-11-17",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 503.260009765625,
+      "momentum_ret": 0.012636
+    },
+    {
+      "date": "2025-11-18",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 504.3699951171875,
+      "momentum_ret": 0.014686
+    },
+    {
+      "date": "2025-11-19",
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "probabilities": {
+        "HOLD": 0.9,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 501.260009765625,
+      "momentum_ret": -0.002269
+    },
+    {
+      "date": "2025-11-20",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 501.1199951171875,
+      "momentum_ret": -0.023367
+    },
+    {
+      "date": "2025-11-21",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 504.0400085449219,
+      "momentum_ret": -0.009628
+    },
+    {
+      "date": "2025-11-24",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 507.80999755859375,
+      "momentum_ret": 0.009041
+    },
+    {
+      "date": "2025-11-25",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 508.57000732421875,
+      "momentum_ret": 0.008327
+    },
+    {
+      "date": "2025-11-26",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 511.2300109863281,
+      "momentum_ret": 0.01989
+    },
+    {
+      "date": "2025-11-28",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 513.8099975585938,
+      "momentum_ret": 0.025323
+    },
+    {
+      "date": "2025-12-01",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 508.54998779296875,
+      "momentum_ret": 0.008948
+    },
+    {
+      "date": "2025-12-02",
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "probabilities": {
+        "HOLD": 0.9,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 506.6499938964844,
+      "momentum_ret": -0.002284
+    },
+    {
+      "date": "2025-12-03",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 503.6000061035156,
+      "momentum_ret": -0.009773
+    },
+    {
+      "date": "2025-12-04",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 503.2300109863281,
+      "momentum_ret": -0.015649
+    },
+    {
+      "date": "2025-12-05",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 504.3399963378906,
+      "momentum_ret": -0.018431
+    },
+    {
+      "date": "2025-12-08",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 497.2300109863281,
+      "momentum_ret": -0.022259
+    },
+    {
+      "date": "2025-12-09",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 491.42999267578125,
+      "momentum_ret": -0.03004
+    },
+    {
+      "date": "2025-12-10",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 490.42999267578125,
+      "momentum_ret": -0.026152
+    },
+    {
+      "date": "2025-12-11",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 495.8500061035156,
+      "momentum_ret": -0.014665
+    },
+    {
+      "date": "2025-12-12",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 499.5199890136719,
+      "momentum_ret": -0.009557
+    },
+    {
+      "date": "2025-12-15",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 506.3800048828125,
+      "momentum_ret": 0.018402
+    },
+    {
+      "date": "2025-12-16",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 499.8399963378906,
+      "momentum_ret": 0.017113
+    },
+    {
+      "date": "2025-12-17",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 504.2699890136719,
+      "momentum_ret": 0.02822
+    },
+    {
+      "date": "2025-12-18",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 503.3900146484375,
+      "momentum_ret": 0.015206
+    },
+    {
+      "date": "2025-12-19",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 494.5299987792969,
+      "momentum_ret": -0.00999
+    },
+    {
+      "date": "2025-12-22",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 499.95001220703125,
+      "momentum_ret": -0.012698
+    },
+    {
+      "date": "2025-12-23",
+      "action_id": 1,
+      "action_name": "BUY_50",
+      "signal": "BUY",
+      "pred_class": 1,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.9,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 500.510009765625,
+      "momentum_ret": 0.00134
+    },
+    {
+      "date": "2025-12-24",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 501.3399963378906,
+      "momentum_ret": -0.00581
+    },
+    {
+      "date": "2025-12-26",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 498.29998779296875,
+      "momentum_ret": -0.010111
+    },
+    {
+      "date": "2025-12-29",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 501.04998779296875,
+      "momentum_ret": 0.013184
+    },
+    {
+      "date": "2025-12-30",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 503.7099914550781,
+      "momentum_ret": 0.007521
+    },
+    {
+      "date": "2025-12-31",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 502.6499938964844,
+      "momentum_ret": 0.004276
+    },
+    {
+      "date": "2026-01-02",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 496.8500061035156,
+      "momentum_ret": -0.008956
+    },
+    {
+      "date": "2026-01-05",
+      "action_id": 1,
+      "action_name": "BUY_50",
+      "signal": "BUY",
+      "pred_class": 1,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.9,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 498.5199890136719,
+      "momentum_ret": 0.000442
+    },
+    {
+      "date": "2026-01-06",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 499.04998779296875,
+      "momentum_ret": -0.003992
+    },
+    {
+      "date": "2026-01-07",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 496.1199951171875,
+      "momentum_ret": -0.015068
+    },
+    {
+      "date": "2026-01-08",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 499.7699890136719,
+      "momentum_ret": -0.00573
+    },
+    {
+      "date": "2026-01-09",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 499.1000061035156,
+      "momentum_ret": 0.004529
+    },
+    {
+      "date": "2026-01-12",
+      "action_id": 1,
+      "action_name": "BUY_50",
+      "signal": "BUY",
+      "pred_class": 1,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.9,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 498.6700134277344,
+      "momentum_ret": 0.000301
+    },
+    {
+      "date": "2026-01-13",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 495.239990234375,
+      "momentum_ret": -0.007635
+    },
+    {
+      "date": "2026-01-14",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 493.1499938964844,
+      "momentum_ret": -0.005986
+    },
+    {
+      "date": "2026-01-15",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 492.6199951171875,
+      "momentum_ret": -0.014307
+    },
+    {
+      "date": "2026-01-16",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 493.2900085449219,
+      "momentum_ret": -0.011641
+    },
+    {
+      "date": "2026-01-20",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 485.3900146484375,
+      "momentum_ret": -0.026631
+    },
+    {
+      "date": "2026-01-21",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 483.8299865722656,
+      "momentum_ret": -0.023039
+    },
+    {
+      "date": "2026-01-22",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 484.489990234375,
+      "momentum_ret": -0.017561
+    },
+    {
+      "date": "2026-01-23",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 478.9700012207031,
+      "momentum_ret": -0.027709
+    },
+    {
+      "date": "2026-01-26",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 483.4700012207031,
+      "momentum_ret": -0.019907
+    },
+    {
+      "date": "2026-01-27",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 474.6700134277344,
+      "momentum_ret": -0.022085
+    },
+    {
+      "date": "2026-01-28",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 473.489990234375,
+      "momentum_ret": -0.021371
+    },
+    {
+      "date": "2026-01-29",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 476.7900085449219,
+      "momentum_ret": -0.015893
+    },
+    {
+      "date": "2026-01-30",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 480.5299987792969,
+      "momentum_ret": 0.003257
+    },
+    {
+      "date": "2026-02-02",
+      "action_id": 2,
+      "action_name": "BUY_100",
+      "signal": "BUY",
+      "pred_class": 2,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.9,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 487.2900085449219,
+      "momentum_ret": 0.007901
+    },
+    {
+      "date": "2026-02-03",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 493.739990234375,
+      "momentum_ret": 0.040175
+    },
+    {
+      "date": "2026-02-04",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 503.8299865722656,
+      "momentum_ret": 0.064077
+    },
+    {
+      "date": "2026-02-05",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 503.8900146484375,
+      "momentum_ret": 0.056838
+    },
+    {
+      "date": "2026-02-06",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 508.0899963378906,
+      "momentum_ret": 0.057353
+    },
+    {
+      "date": "2026-02-09",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 498.0799865722656,
+      "momentum_ret": 0.022143
+    },
+    {
+      "date": "2026-02-10",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 500.29998779296875,
+      "momentum_ret": 0.013286
+    },
+    {
+      "date": "2026-02-11",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 500.0199890136719,
+      "momentum_ret": -0.007562
+    },
+    {
+      "date": "2026-02-12",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 500.010009765625,
+      "momentum_ret": -0.0077
+    },
+    {
+      "date": "2026-02-13",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 497.54998779296875,
+      "momentum_ret": -0.020744
+    },
+    {
+      "date": "2026-02-17",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 503.4100036621094,
+      "momentum_ret": 0.010701
+    },
+    {
+      "date": "2026-02-18",
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "probabilities": {
+        "HOLD": 0.9,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 499.07000732421875,
+      "momentum_ret": -0.002458
+    },
+    {
+      "date": "2026-02-19",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 496.94000244140625,
+      "momentum_ret": -0.00616
+    },
+    {
+      "date": "2026-02-20",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 498.20001220703125,
+      "momentum_ret": -0.00362
+    },
+    {
+      "date": "2026-02-23",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 494.0899963378906,
+      "momentum_ret": -0.006954
+    },
+    {
+      "date": "2026-02-24",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 494.510009765625,
+      "momentum_ret": -0.017679
+    },
+    {
+      "date": "2026-02-25",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 493.989990234375,
+      "momentum_ret": -0.010179
+    },
+    {
+      "date": "2026-02-26",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 502.6700134277344,
+      "momentum_ret": 0.011531
+    },
+    {
+      "date": "2026-02-27",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 504.95001220703125,
+      "momentum_ret": 0.013549
+    },
+    {
+      "date": "2026-03-02",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 480.1700134277344,
+      "momentum_ret": -0.028173
+    },
+    {
+      "date": "2026-03-03",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 481.3599853515625,
+      "momentum_ret": -0.026592
+    },
+    {
+      "date": "2026-03-04",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 487.4800109863281,
+      "momentum_ret": -0.013178
+    },
+    {
+      "date": "2026-03-05",
+      "action_id": 4,
+      "action_name": "SELL_LOT",
+      "signal": "SELL",
+      "pred_class": 4,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.9,
+        "SELL_ALL": 0.02
+      },
+      "close": 500.3999938964844,
+      "momentum_ret": -0.004516
+    },
+    {
+      "date": "2026-03-06",
+      "action_id": 5,
+      "action_name": "SELL_ALL",
+      "signal": "SELL",
+      "pred_class": 5,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.02,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.9
+      },
+      "close": 498.9800109863281,
+      "momentum_ret": -0.011823
+    },
+    {
+      "date": "2026-03-09",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 497.20001220703125,
+      "momentum_ret": 0.035467
+    },
+    {
+      "date": "2026-03-10",
+      "action_id": 3,
+      "action_name": "BUY_200",
+      "signal": "BUY",
+      "pred_class": 3,
+      "probabilities": {
+        "HOLD": 0.02,
+        "BUY_50": 0.02,
+        "BUY_100": 0.02,
+        "BUY_200": 0.9,
+        "SELL_LOT": 0.02,
+        "SELL_ALL": 0.02
+      },
+      "close": 494.1400146484375,
+      "momentum_ret": 0.02655
+    }
+  ],
+  "generated_at": "2026-05-26T14:44:05"
+}

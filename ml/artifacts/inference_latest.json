@@ -1,0 +1,215 @@
+{
+  "csv": "brk_b_data/brk_b_daily.csv",
+  "window": 14,
+  "latest_date": "2026-03-10",
+  "rows_used": 252,
+  "features": [
+    "Open",
+    "High",
+    "Low",
+    "Close",
+    "Volume",
+    "Dividends",
+    "Stock Splits"
+  ],
+  "signal": {
+    "pred_class": 0,
+    "pred_label": "SELL",
+    "probabilities": {
+      "SELL": 0.416620135307312,
+      "HOLD": 0.3449012041091919,
+      "BUY": 0.2384786456823349
+    }
+  },
+  "forecast_next_47_steps": [
+    {
+      "step": 1,
+      "pred_close": 495.39508056640625
+    },
+    {
+      "step": 2,
+      "pred_close": 495.66156005859375
+    },
+    {
+      "step": 3,
+      "pred_close": 496.27813720703125
+    },
+    {
+      "step": 4,
+      "pred_close": 496.2943115234375
+    },
+    {
+      "step": 5,
+      "pred_close": 497.59710693359375
+    },
+    {
+      "step": 6,
+      "pred_close": 493.22210693359375
+    },
+    {
+      "step": 7,
+      "pred_close": 494.43695068359375
+    },
+    {
+      "step": 8,
+      "pred_close": 490.2010498046875
+    },
+    {
+      "step": 9,
+      "pred_close": 488.75128173828125
+    },
+    {
+      "step": 10,
+      "pred_close": 488.11871337890625
+    },
+    {
+      "step": 11,
+      "pred_close": 487.8825988769531
+    },
+    {
+      "step": 12,
+      "pred_close": 487.1075744628906
+    },
+    {
+      "step": 13,
+      "pred_close": 488.2266540527344
+    },
+    {
+      "step": 14,
+      "pred_close": 490.2384033203125
+    },
+    {
+      "step": 15,
+      "pred_close": 490.8102111816406
+    },
+    {
+      "step": 16,
+      "pred_close": 487.12176513671875
+    },
+    {
+      "step": 17,
+      "pred_close": 486.59649658203125
+    },
+    {
+      "step": 18,
+      "pred_close": 488.3432922363281
+    },
+    {
+      "step": 19,
+      "pred_close": 487.06085205078125
+    },
+    {
+      "step": 20,
+      "pred_close": 488.3930969238281
+    },
+    {
+      "step": 21,
+      "pred_close": 487.0853271484375
+    },
+    {
+      "step": 22,
+      "pred_close": 485.95703125
+    },
+    {
+      "step": 23,
+      "pred_close": 487.0598449707031
+    },
+    {
+      "step": 24,
+      "pred_close": 487.3271484375
+    },
+    {
+      "step": 25,
+      "pred_close": 486.0378723144531
+    },
+    {
+      "step": 26,
+      "pred_close": 491.24102783203125
+    },
+    {
+      "step": 27,
+      "pred_close": 488.036376953125
+    },
+    {
+      "step": 28,
+      "pred_close": 492.3381652832031
+    },
+    {
+      "step": 29,
+      "pred_close": 488.18597412109375
+    },
+    {
+      "step": 30,
+      "pred_close": 483.96380615234375
+    },
+    {
+      "step": 31,
+      "pred_close": 487.9288024902344
+    },
+    {
+      "step": 32,
+      "pred_close": 496.514892578125
+    },
+    {
+      "step": 33,
+      "pred_close": 499.58489990234375
+    },
+    {
+      "step": 34,
+      "pred_close": 498.5014953613281
+    },
+    {
+      "step": 35,
+      "pred_close": 499.4261474609375
+    },
+    {
+      "step": 36,
+      "pred_close": 497.88128662109375
+    },
+    {
+      "step": 37,
+      "pred_close": 497.6968688964844
+    },
+    {
+      "step": 38,
+      "pred_close": 501.96160888671875
+    },
+    {
+      "step": 39,
+      "pred_close": 498.0350646972656
+    },
+    {
+      "step": 40,
+      "pred_close": 496.45745849609375
+    },
+    {
+      "step": 41,
+      "pred_close": 497.9412536621094
+    },
+    {
+      "step": 42,
+      "pred_close": 498.0489196777344
+    },
+    {
+      "step": 43,
+      "pred_close": 497.254638671875
+    },
+    {
+      "step": 44,
+      "pred_close": 493.6727600097656
+    },
+    {
+      "step": 45,
+      "pred_close": 497.8475036621094
+    },
+    {
+      "step": 46,
+      "pred_close": 499.73126220703125
+    },
+    {
+      "step": 47,
+      "pred_close": 499.2828674316406
+    }
+  ],
+  "generated_at": "2026-05-26T11:52:37"
+}

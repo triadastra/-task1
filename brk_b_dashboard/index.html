@@ -1,0 +1,2046 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRK-B (Berkshire Hathaway) 数据展示中心</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1e3a5f;
+      --primary-light: #2c5282;
+      --accent: #3182ce;
+      --bg: #f7fafc;
+      --card-bg: #ffffff;
+      --text: #2d3748;
+      --text-light: #718096;
+      --border: #e2e8f0;
+      --success: #38a169;
+      --danger: #e53e3e;
+      --warning: #d69e2e;
+      --sidebar-width: 260px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      width: var(--sidebar-width);
+      background: var(--primary);
+      color: #fff;
+      overflow-y: auto;
+      z-index: 1000;
+      transition: transform .3s;
+    }
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .sidebar-header h1 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .sidebar-header .ticker {
+      font-size: 12px;
+      opacity: .7;
+      margin-top: 4px;
+    }
+    .nav-group {
+      margin: 10px 0;
+    }
+    .nav-group-title {
+      padding: 10px 20px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      opacity: .6;
+      font-weight: 600;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background .2s;
+      font-size: 14px;
+      border-left: 3px solid transparent;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.08); }
+    .nav-item.active {
+      background: rgba(255,255,255,0.12);
+      border-left-color: #63b3ed;
+    }
+    .nav-item i { width: 20px; text-align: center; font-size: 14px; }
+
+    /* Main */
+    .main-content {
+      margin-left: var(--sidebar-width);
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    /* Mobile toggle */
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 16px; left: 16px;
+      z-index: 1100;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      width: 40px; height: 40px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .kpi-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .kpi-label {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-bottom: 6px;
+    }
+    .kpi-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .kpi-change {
+      font-size: 12px;
+      margin-top: 4px;
+    }
+    .kpi-change.up { color: var(--success); }
+    .kpi-change.down { color: var(--danger); }
+
+    /* Chart container */
+    .chart-wrapper {
+      position: relative;
+      height: 400px;
+      margin-bottom: 10px;
+    }
+    .chart-wrapper.half {
+      height: 300px;
+    }
+
+    /* Table */
+    .table-container {
+      overflow-x: auto;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    th {
+      background: #f8fafc;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    tr:hover td { background: #f7fafc; }
+    td.num { text-align: right; font-family: 'SF Mono', monospace; }
+
+    /* Sections */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* Info cards grid */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .info-item:last-child { border-bottom: none; }
+    .info-key { color: var(--text-light); }
+    .info-val { font-weight: 500; }
+
+    /* Officers */
+    .officer-card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .officer-name { font-weight: 600; margin-bottom: 4px; }
+    .officer-title { font-size: 12px; color: var(--text-light); }
+    .officer-pay { font-size: 14px; color: var(--success); margin-top: 8px; font-weight: 600; }
+
+    /* Loading */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      color: var(--text-light);
+      gap: 10px;
+    }
+    .spinner {
+      width: 20px; height: 20px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* File protocol warning */
+    .protocol-warning {
+      background: #fffbeb;
+      border: 1px solid #f6e05e;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 20px;
+      color: #744210;
+      font-size: 14px;
+      display: none;
+    }
+    .protocol-warning code {
+      background: #fefcbf;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    /* TradingView Chart */
+    .tv-chart-container {
+      position: relative;
+      width: 100%;
+      height: 560px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .tv-toolbar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .tv-btn {
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text);
+      transition: all .2s;
+    }
+    .tv-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .tv-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .tv-legend {
+      display: flex;
+      gap: 16px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text-light);
+    }
+    .tv-legend span { display: flex; align-items: center; gap: 4px; }
+    .tv-legend .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* Backtrader game panel */
+    .bt-panel {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      background: #fbfdff;
+    }
+    .bt-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .bt-controls input {
+      width: 120px;
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    .bt-btn {
+      padding: 7px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all .2s;
+    }
+    .bt-btn:hover { border-color: var(--accent); }
+    .bt-btn.buy { border-color: #9ae6b4; color: #22543d; }
+    .bt-btn.sell { border-color: #feb2b2; color: #742a2a; }
+    .bt-status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .bt-stat {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+    }
+    .bt-stat .k { font-size: 11px; color: var(--text-light); }
+    .bt-stat .v { font-size: 15px; font-weight: 700; color: var(--primary); margin-top: 2px; }
+    .bt-stat .v.up { color: var(--success); }
+    .bt-stat .v.down { color: var(--danger); }
+    .bt-log {
+      max-height: 220px;
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left: 0; padding: 16px; padding-top: 60px; }
+      .menu-toggle { display: flex; align-items: center; justify-content: center; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .bt-controls input { width: 100px; }
+    }
+  </style>
+</head>
+<body>
+  <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h1><i class="fas fa-chart-line"></i> BRK-B 数据中心</h1>
+      <div class="ticker">Berkshire Hathaway Inc.</div>
+    </div>
+    <nav>
+      <div class="nav-group">
+        <div class="nav-group-title">概览</div>
+        <div class="nav-item active" data-target="overview" onclick="showSection(this)">
+          <i class="fas fa-th-large"></i> 公司概览
+        </div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-title">行情数据</div>
+        <div class="nav-item" data-target="tvchart" onclick="showSection(this)">
+          <i class="fas fa-chart-candlestick"></i> 交互K线
+        </div>
+        <div class="nav-item" data-target="daily" onclick="showSection(this)">
+          <i class="fas fa-chart-area"></i> 历史日线
+        </div>
+        <div class="nav-item" data-target="hourly" onclick="showSection(this)">
+          <i class="fas fa-clock"></i> 小时线 (2年)
+        </div>
+        <div class="nav-item" data-target="daily2024" onclick="showSection(this)">
+          <i class="fas fa-gamepad"></i> 游戏专区
+        </div>
+        <div class="nav-item" data-target="weekly2024" onclick="showSection(this)">
+          <i class="fas fa-calendar-week"></i> 2024至今周线
+        </div>
+        <div class="nav-item" data-target="monthly2024" onclick="showSection(this)">
+          <i class="fas fa-calendar-alt"></i> 2024至今月线
+        </div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-title">财务报表 (年度)</div>
+        <div class="nav-item" data-target="balance" onclick="showSection(this)">
+          <i class="fas fa-balance-scale"></i> 资产负债表
+        </div>
+        <div class="nav-item" data-target="income" onclick="showSection(this)">
+          <i class="fas fa-file-invoice-dollar"></i> 利润表
+        </div>
+        <div class="nav-item" data-target="cashflow" onclick="showSection(this)">
+          <i class="fas fa-money-bill-wave"></i> 现金流量表
+        </div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-title">财务报表 (季度)</div>
+        <div class="nav-item" data-target="q_balance" onclick="showSection(this)">
+          <i class="fas fa-balance-scale"></i> 季度资产负债表
+        </div>
+        <div class="nav-item" data-target="q_income" onclick="showSection(this)">
+          <i class="fas fa-file-invoice-dollar"></i> 季度利润表
+        </div>
+        <div class="nav-item" data-target="q_cashflow" onclick="showSection(this)">
+          <i class="fas fa-money-bill-wave"></i> 季度现金流量表
+        </div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-title">其他数据</div>
+        <div class="nav-item" data-target="holders" onclick="showSection(this)">
+          <i class="fas fa-landmark"></i> 机构持仓
+        </div>
+        <div class="nav-item" data-target="major_holders" onclick="showSection(this)">
+          <i class="fas fa-users"></i> 主要持仓
+        </div>
+        <div class="nav-item" data-target="earnings_est" onclick="showSection(this)">
+          <i class="fas fa-bullseye"></i> 盈利预测
+        </div>
+        <div class="nav-item" data-target="recommendations" onclick="showSection(this)">
+          <i class="fas fa-thumbs-up"></i> 分析师推荐
+        </div>
+        <div class="nav-item" data-target="splits" onclick="showSection(this)">
+          <i class="fas fa-cut"></i> 拆股记录
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <div class="protocol-warning" id="protocolWarning">
+      <i class="fas fa-exclamation-triangle"></i> 
+      <strong>检测到本地文件访问模式</strong><br>
+      由于浏览器安全限制，直接打开HTML文件可能无法加载CSV数据。<br>
+      请使用本地服务器运行：在命令行执行 <code>python -m http.server 8080</code> 或双击 <code>start_server.bat</code>，然后访问 <code>http://localhost:8080</code>
+    </div>
+
+    <!-- ===== OVERVIEW ===== -->
+    <section class="section active" id="overview">
+      <h2 style="margin-bottom:20px;font-size:24px"><i class="fas fa-building"></i> Berkshire Hathaway Inc. (BRK-B)</h2>
+      <div class="kpi-grid" id="kpiGrid">
+        <div class="kpi-card"><div class="kpi-label">当前股价</div><div class="kpi-value" id="kpiPrice">--</div></div>
+        <div class="kpi-card"><div class="kpi-label">市值</div><div class="kpi-value" id="kpiMktCap">--</div></div>
+        <div class="kpi-card"><div class="kpi-label">市盈率 (TTM)</div><div class="kpi-value" id="kpiPE">--</div></div>
+        <div class="kpi-card"><div class="kpi-label">市净率</div><div class="kpi-value" id="kpiPB">--</div></div>
+        <div class="kpi-card"><div class="kpi-label">52周最高</div><div class="kpi-value" id="kpi52High">--</div></div>
+        <div class="kpi-card"><div class="kpi-label">52周最低</div><div class="kpi-value" id="kpi52Low">--</div></div>
+        <div class="kpi-card"><div class="kpi-label">Beta</div><div class="kpi-value" id="kpiBeta">--</div></div>
+        <div class="kpi-card"><div class="kpi-label">员工人数</div><div class="kpi-value" id="kpiEmployees">--</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><i class="fas fa-info-circle"></i> 公司简介</div>
+        <p id="companySummary" style="line-height:1.7;color:var(--text-light);font-size:14px">加载中...</p>
+      </div>
+
+      <div class="info-grid">
+        <div class="card">
+          <div class="card-title"><i class="fas fa-tag"></i> 基本信息</div>
+          <div id="basicInfo"></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fas fa-percentage"></i> 财务指标</div>
+          <div id="financialInfo"></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fas fa-exchange-alt"></i> 交易信息</div>
+          <div id="tradingInfo"></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fas fa-user-tie"></i> 高管团队</div>
+          <div id="officersList" style="display:flex;flex-direction:column;gap:10px"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PRICE SECTIONS ===== -->
+    <section class="section" id="tvchart">
+      <h2 style="margin-bottom:20px"><i class="fas fa-chart-candlestick"></i> 交互式 K 线图</h2>
+      <div class="card">
+        <div class="tv-toolbar" id="tvToolbar">
+          <button class="tv-btn active" onclick="switchTVSource('brk_b_daily.csv', '日线', this)">历史日线</button>
+          <button class="tv-btn" onclick="switchTVSource('brk_b_1h_2y.csv', '小时线', this)">小时线 (2年)</button>
+          <button class="tv-btn" onclick="switchTVSource('brk_b_daily_2024_now.csv', '2024日线', this)">2024日线</button>
+          <button class="tv-btn" onclick="switchTVSource('brk_b_weekly_2024_now.csv', '周线', this)">2024周线</button>
+          <button class="tv-btn" onclick="switchTVSource('brk_b_monthly_2024_now.csv', '月线', this)">2024月线</button>
+        </div>
+        <div class="tv-chart-container" id="tvChartContainer"></div>
+        <div class="tv-legend" id="tvLegend">
+          <span><div class="dot" style="background:#26a69a"></div> 上涨</span>
+          <span><div class="dot" style="background:#ef5350"></div> 下跌</span>
+          <span>🖱️ 滚轮缩放 · 拖拽平移 · 双击复原</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="daily">
+      <h2 style="margin-bottom:20px"><i class="fas fa-chart-area"></i> 历史日线数据 (1996-至今)</h2>
+      <div class="card">
+        <div class="card-title">收盘价走势</div>
+        <div class="chart-wrapper"><canvas id="dailyChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">成交量</div>
+        <div class="chart-wrapper half"><canvas id="dailyVolumeChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">数据预览 (最近20条)</div>
+        <div class="table-container" id="dailyTable"></div>
+      </div>
+    </section>
+
+    <section class="section" id="hourly">
+      <h2 style="margin-bottom:20px"><i class="fas fa-clock"></i> 小时线数据 (近2年)</h2>
+      <div class="card">
+        <div class="card-title">收盘价走势</div>
+        <div class="chart-wrapper"><canvas id="hourlyChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">成交量</div>
+        <div class="chart-wrapper half"><canvas id="hourlyVolumeChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">数据预览 (最近20条)</div>
+        <div class="table-container" id="hourlyTable"></div>
+      </div>
+    </section>
+
+    <section class="section" id="daily2024">
+      <h2 style="margin-bottom:20px"><i class="fas fa-gamepad"></i> 游戏专区 · Backtrader（日线，2025-03-10 ~ 2026-03-10）</h2>
+      <div class="card">
+        <div class="card-title">K线走势 (OHLC)</div>
+        <div class="chart-wrapper"><div id="d2024Chart" style="width:100%;height:100%"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fas fa-gamepad"></i> Backtrader 游戏控制台</div>
+        <div class="bt-panel">
+          <div class="bt-controls">
+            <button class="bt-btn" onclick="btStep(1)"><i class="fas fa-forward"></i> 下一根</button>
+            <button class="bt-btn" onclick="btStep(5)">+5根</button>
+            <button class="bt-btn buy" onclick="btBuy50()"><i class="fas fa-arrow-up"></i> 买50股</button>
+            <button class="bt-btn buy" onclick="btBuy100()"><i class="fas fa-arrow-up"></i> 买100股</button>
+            <button class="bt-btn buy" onclick="btBuy200()"><i class="fas fa-arrow-up"></i> 买200股</button>
+            <button class="bt-btn" onclick="btBuy()"><i class="fas fa-arrow-up"></i> 自定义买</button>
+            <button class="bt-btn sell" onclick="btSellOldest()"><i class="fas fa-arrow-down"></i> 卖最早Lot</button>
+            <button class="bt-btn sell" onclick="btSellAll()"><i class="fas fa-times"></i> 全卖出</button>
+            <button class="bt-btn" onclick="btReset()"><i class="fas fa-undo"></i> 重置</button>
+            <button class="bt-btn" id="btXgbStepBtn" onclick="btXGBStep()"><i class="fas fa-robot"></i> XGB下一步</button>
+            <button class="bt-btn" id="btAutoPlayBtn" onclick="btToggleAutoPlay()"><i class="fas fa-play"></i> AutoPlay</button>
+            <label for="btQty" style="font-size:12px;color:var(--text-light)">自定义股数</label>
+            <input id="btQty" type="number" min="1" value="100" />
+            <label for="btStartIdx" style="font-size:12px;color:var(--text-light)">起始Bar</label>
+            <input id="btStartIdx" type="number" min="20" value="40" />
+            <label for="btInitCash" style="font-size:12px;color:var(--text-light)">初始资金</label>
+            <input id="btInitCash" type="number" min="1000" step="1000" value="100000" />
+            <label for="btCapitalPool" style="font-size:12px;color:var(--text-light)">随机资产池</label>
+            <input id="btCapitalPool" type="text" value="100000,500000" />
+            <button class="bt-btn" id="btTrainLoopBtn" onclick="btToggleTrainingLoop()"><i class="fas fa-dice"></i> 训练循环</button>
+          </div>
+          <div class="bt-status-grid" id="btStatusGrid"></div>
+          <div class="card-title" style="margin-top:8px">持仓明细（当前持仓Lots）</div>
+          <div id="btLotsTable" style="overflow-x:auto;font-size:12px"></div>
+          <div class="card-title" style="margin-top:8px">XGBoost 信号与47步趋势预测</div>
+          <div class="bt-status-grid" id="xgbStatusGrid"></div>
+          <div class="chart-wrapper half"><canvas id="xgbForecastChart"></canvas></div>
+          <div class="card-title" style="margin-top:8px">均线图 (MA3/MA5/MA14)</div>
+          <div class="chart-wrapper half"><canvas id="btMAChart"></canvas></div>
+          <div class="chart-wrapper half"><canvas id="btEquityChart"></canvas></div>
+          <div class="card-title" style="margin-top:8px">交易日志</div>
+          <div class="bt-log" id="btTradeLog"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">成交量</div>
+        <div class="chart-wrapper half"><canvas id="d2024VolumeChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">数据预览</div>
+        <div class="table-container" id="d2024Table"></div>
+      </div>
+    </section>
+
+    <section class="section" id="weekly2024">
+      <h2 style="margin-bottom:20px"><i class="fas fa-calendar-week"></i> 2024至今周线数据</h2>
+      <div class="card">
+        <div class="card-title">收盘价走势</div>
+        <div class="chart-wrapper"><canvas id="w2024Chart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">成交量</div>
+        <div class="chart-wrapper half"><canvas id="w2024VolumeChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">数据预览</div>
+        <div class="table-container" id="w2024Table"></div>
+      </div>
+    </section>
+
+    <section class="section" id="monthly2024">
+      <h2 style="margin-bottom:20px"><i class="fas fa-calendar-alt"></i> 2024至今月线数据</h2>
+      <div class="card">
+        <div class="card-title">收盘价走势</div>
+        <div class="chart-wrapper"><canvas id="m2024Chart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">成交量</div>
+        <div class="chart-wrapper half"><canvas id="m2024VolumeChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">数据预览</div>
+        <div class="table-container" id="m2024Table"></div>
+      </div>
+    </section>
+
+    <!-- ===== FINANCIAL STATEMENTS (Annual) ===== -->
+    <section class="section" id="balance">
+      <h2 style="margin-bottom:20px"><i class="fas fa-balance-scale"></i> 年度资产负债表</h2>
+      <div class="card">
+        <div class="card-title">关键指标趋势</div>
+        <div class="chart-wrapper"><canvas id="balanceChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">完整数据</div>
+        <div class="table-container" id="balanceTable"></div>
+      </div>
+    </section>
+
+    <section class="section" id="income">
+      <h2 style="margin-bottom:20px"><i class="fas fa-file-invoice-dollar"></i> 年度利润表</h2>
+      <div class="card">
+        <div class="card-title">关键指标趋势</div>
+        <div class="chart-wrapper"><canvas id="incomeChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">完整数据</div>
+        <div class="table-container" id="incomeTable"></div>
+      </div>
+    </section>
+
+    <section class="section" id="cashflow">
+      <h2 style="margin-bottom:20px"><i class="fas fa-money-bill-wave"></i> 年度现金流量表</h2>
+      <div class="card">
+        <div class="card-title">关键指标趋势</div>
+        <div class="chart-wrapper"><canvas id="cashflowChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">完整数据</div>
+        <div class="table-container" id="cashflowTable"></div>
+      </div>
+    </section>
+
+    <!-- ===== QUARTERLY ===== -->
+    <section class="section" id="q_balance">
+      <h2 style="margin-bottom:20px"><i class="fas fa-balance-scale"></i> 季度资产负债表</h2>
+      <div class="card">
+        <div class="card-title">关键指标趋势</div>
+        <div class="chart-wrapper"><canvas id="qBalanceChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">完整数据</div>
+        <div class="table-container" id="qBalanceTable"></div>
+      </div>
+    </section>
+
+    <section class="section" id="q_income">
+      <h2 style="margin-bottom:20px"><i class="fas fa-file-invoice-dollar"></i> 季度利润表</h2>
+      <div class="card">
+        <div class="card-title">关键指标趋势</div>
+        <div class="chart-wrapper"><canvas id="qIncomeChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">完整数据</div>
+        <div class="table-container" id="qIncomeTable"></div>
+      </div>
+    </section>
+
+    <section class="section" id="q_cashflow">
+      <h2 style="margin-bottom:20px"><i class="fas fa-money-bill-wave"></i> 季度现金流量表</h2>
+      <div class="card">
+        <div class="card-title">关键指标趋势</div>
+        <div class="chart-wrapper"><canvas id="qCashflowChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">完整数据</div>
+        <div class="table-container" id="qCashflowTable"></div>
+      </div>
+    </section>
+
+    <!-- ===== OTHER DATA ===== -->
+    <section class="section" id="holders">
+      <h2 style="margin-bottom:20px"><i class="fas fa-landmark"></i> 机构持仓</h2>
+      <div class="card">
+        <div class="card-title">持仓比例分布</div>
+        <div class="chart-wrapper half"><canvas id="holdersPieChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">机构列表</div>
+        <div class="table-container" id="holdersTable"></div>
+      </div>
+    </section>
+
+    <section class="section" id="major_holders">
+      <h2 style="margin-bottom:20px"><i class="fas fa-users"></i> 主要持仓构成</h2>
+      <div class="card">
+        <div class="table-container" id="majorHoldersTable"></div>
+      </div>
+    </section>
+
+    <section class="section" id="earnings_est">
+      <h2 style="margin-bottom:20px"><i class="fas fa-bullseye"></i> 盈利预测</h2>
+      <div class="card">
+        <div class="chart-wrapper half"><canvas id="earningsChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="table-container" id="earningsTable"></div>
+      </div>
+    </section>
+
+    <section class="section" id="recommendations">
+      <h2 style="margin-bottom:20px"><i class="fas fa-thumbs-up"></i> 分析师推荐</h2>
+      <div class="card">
+        <div class="chart-wrapper half"><canvas id="recChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="table-container" id="recTable"></div>
+      </div>
+    </section>
+
+    <section class="section" id="splits">
+      <h2 style="margin-bottom:20px"><i class="fas fa-cut"></i> 拆股记录</h2>
+      <div class="card">
+        <div class="table-container" id="splitsTable"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+  // ===== Protocol check =====
+    if (window.location.protocol === 'file:') {
+      document.getElementById('protocolWarning').style.display = 'block';
+    }
+
+    const DATA_PATH = '/brk_b_data/';
+    const charts = {};
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    let tvChartInitialized = false;
+    function showSection(el) {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      el.classList.add('active');
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(el.dataset.target).classList.add('active');
+      if (window.innerWidth <= 768) toggleSidebar();
+      // Lazy init TradingView chart when first opened
+      if (el.dataset.target === 'tvchart' && !tvChartInitialized) {
+        tvChartInitialized = true;
+        setTimeout(() => initTVChart('brk_b_daily.csv', '日线'), 50);
+      }
+    }
+
+    // ===== Utils =====
+    function fmtNum(n) {
+      if (n === null || n === undefined || n === '') return '-';
+      const num = parseFloat(n);
+      if (isNaN(num)) return n;
+      if (Math.abs(num) >= 1e12) return (num / 1e12).toFixed(2) + 'T';
+      if (Math.abs(num) >= 1e9) return (num / 1e9).toFixed(2) + 'B';
+      if (Math.abs(num) >= 1e6) return (num / 1e6).toFixed(2) + 'M';
+      if (Math.abs(num) >= 1e3) return (num / 1e3).toFixed(2) + 'K';
+      return num.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    }
+    function fmtPrice(n) {
+      if (n === null || n === undefined) return '-';
+      return parseFloat(n).toFixed(2);
+    }
+    function fmtPct(n) {
+      if (n === null || n === undefined) return '-';
+      return (parseFloat(n) * 100).toFixed(2) + '%';
+    }
+    function parseDate(d) {
+      // Remove timezone info for chart labels
+      return d ? d.replace(/\s\d{2}:\d{2}:\d{2}[\-+]\d{2}:\d{2}/, '').replace(/\s\d{2}:\d{2}:\d{2}[\-+]\d{4}/, '') : d;
+    }
+    function toDateMs(v) {
+      const ms = Date.parse(String(v || '').replace(' ', 'T'));
+      return Number.isFinite(ms) ? ms : NaN;
+    }
+    function sortRowsByDateAsc(rows, key) {
+      return [...rows].sort((a, b) => {
+        const ta = Date.parse(String(a[key] || '').replace(' ', 'T'));
+        const tb = Date.parse(String(b[key] || '').replace(' ', 'T'));
+        return ta - tb;
+      });
+    }
+    function cleanGameRows(rows, startDate, endDate) {
+      const startMs = Date.parse(startDate + 'T00:00:00');
+      const endMs = Date.parse(endDate + 'T23:59:59');
+      return sortRowsByDateAsc(rows, 'Date').filter(row => {
+        const dateMs = Date.parse(String(row.Date || '').replace(' ', 'T'));
+        const open = Number(row.Open);
+        const high = Number(row.High);
+        const low = Number(row.Low);
+        const close = Number(row.Close);
+        const volume = Number(row.Volume);
+        return Number.isFinite(dateMs) && dateMs >= startMs && dateMs <= endMs && [open, high, low, close, volume].every(Number.isFinite);
+      });
+    }
+    function cleanBOM(text) {
+      return text.replace(/^\uFEFF/, '');
+    }
+    function destroyChart(key) {
+      if (charts[key]) { charts[key].destroy(); delete charts[key]; }
+    }
+
+    // ===== Load CSV =====
+    async function loadCSV(filename) {
+      const res = await fetch(DATA_PATH + filename);
+      if (!res.ok) throw new Error('Failed to load ' + filename);
+      const text = cleanBOM(await res.text());
+      return Papa.parse(text, { header: true, dynamicTyping: true, skipEmptyLines: true });
+    }
+
+    // ===== Load JSON =====
+    async function loadJSON(filename) {
+      const res = await fetch(DATA_PATH + filename);
+      if (!res.ok) throw new Error('Failed to load ' + filename);
+      return res.json();
+    }
+
+    // ===== Render simple table =====
+    function renderTable(containerId, data, maxRows = 0) {
+      const container = document.getElementById(containerId);
+      if (!data || data.length === 0) { container.innerHTML = '<div class="loading">无数据</div>'; return; }
+      const cols = Object.keys(data[0]);
+      let html = '<table><thead><tr>';
+      cols.forEach(c => html += '<th>' + c + '</th>');
+      html += '</tr></thead><tbody>';
+      const rows = maxRows > 0 ? data.slice(0, maxRows) : data;
+      rows.forEach(row => {
+        html += '<tr>';
+        cols.forEach(c => {
+          const v = row[c];
+          const isNum = typeof v === 'number';
+          html += isNum ? '<td class="num">' + fmtNum(v) + '</td>' : '<td>' + (v ?? '-') + '</td>';
+        });
+        html += '</tr>';
+      });
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+
+    // ===== Render transposed financial table =====
+    function renderTransposedTable(containerId, rawData, fileName) {
+      const container = document.getElementById(containerId);
+      if (!rawData || rawData.length === 0) { container.innerHTML = '<div class="loading">无数据</div>'; return; }
+      // rawData from PapaParse with header:true: each row is { "": "Metric", "2025-12-31": value, ... }
+      // Find the key for first column (often empty string due to BOM/leading comma)
+      const firstRow = rawData[0];
+      const metricKey = Object.keys(firstRow)[0];
+      const dateKeys = Object.keys(firstRow).slice(1).filter(k => k);
+
+      let html = '<table><thead><tr><th>指标</th>';
+      dateKeys.forEach(d => html += '<th class="num">' + d + '</th>');
+      html += '</tr></thead><tbody>';
+
+      rawData.forEach(row => {
+        const metric = row[metricKey];
+        if (!metric) return;
+        html += '<tr><td><strong>' + metric + '</strong></td>';
+        dateKeys.forEach(d => {
+          const v = row[d];
+          html += '<td class="num">' + fmtNum(v) + '</td>';
+        });
+        html += '</tr>';
+      });
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+
+    // ===== Render price chart =====
+    function renderPriceChart(canvasId, data, dateKey, closeKey, volKey, label) {
+      destroyChart(canvasId);
+      const labels = data.map(r => parseDate(r[dateKey]));
+      const prices = data.map(r => r[closeKey]);
+      const ctx = document.getElementById(canvasId).getContext('2d');
+      charts[canvasId] = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: label || '收盘价',
+            data: prices,
+            borderColor: '#3182ce',
+            backgroundColor: 'rgba(49,130,206,0.08)',
+            fill: true,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            tension: 0.1,
+            borderWidth: 1.5
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => 'Close: $' + ctx.parsed.y.toFixed(2) } } },
+          scales: {
+            x: { ticks: { maxTicksLimit: 8, font: { size: 11 } }, grid: { display: false } },
+            y: { ticks: { callback: v => '$' + v, font: { size: 11 } }, grid: { color: '#edf2f7' } }
+          }
+        }
+      });
+    }
+
+    function renderVolumeChart(canvasId, data, dateKey, volKey) {
+      destroyChart(canvasId);
+      const labels = data.map(r => parseDate(r[dateKey]));
+      const volumes = data.map(r => r[volKey]);
+      const ctx = document.getElementById(canvasId).getContext('2d');
+      charts[canvasId] = new Chart(ctx, {
+        type: 'bar',
+        data: { labels, datasets: [{ label: '成交量', data: volumes, backgroundColor: '#63b3ed', borderWidth: 0 }] },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { maxTicksLimit: 8, font: { size: 11 } }, grid: { display: false } },
+            y: { ticks: { callback: v => fmtNum(v), font: { size: 11 } }, grid: { color: '#edf2f7' } }
+          }
+        }
+      });
+    }
+
+    // ===== Financial chart helper =====
+    function renderFinancialChart(canvasId, rawData, metricNames, title) {
+      destroyChart(canvasId);
+      if (!rawData || rawData.length === 0) return;
+      const metricKey = Object.keys(rawData[0])[0];
+      const dateKeys = Object.keys(rawData[0]).slice(1).filter(k => k);
+      const datasets = [];
+      const colors = ['#3182ce', '#e53e3e', '#38a169', '#d69e2e', '#805ad5', '#dd6b20'];
+
+      metricNames.forEach((name, idx) => {
+        const row = rawData.find(r => r[metricKey] === name);
+        if (!row) return;
+        const data = dateKeys.map(d => row[d]);
+        datasets.push({
+          label: name,
+          data,
+          borderColor: colors[idx % colors.length],
+          backgroundColor: colors[idx % colors.length] + '20',
+          fill: false,
+          pointRadius: 3,
+          tension: 0.2,
+          borderWidth: 2
+        });
+      });
+
+      const ctx = document.getElementById(canvasId).getContext('2d');
+      charts[canvasId] = new Chart(ctx, {
+        type: 'line',
+        data: { labels: dateKeys, datasets },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { position: 'top', labels: { font: { size: 11 }, boxWidth: 12 } } },
+          scales: {
+            x: { ticks: { font: { size: 11 } }, grid: { display: false } },
+            y: { ticks: { callback: v => fmtNum(v), font: { size: 11 } }, grid: { color: '#edf2f7' } }
+          }
+        }
+      });
+    }
+
+    // ===== Overview =====
+    async function initOverview() {
+      const info = await loadJSON('brk_b_info.json');
+      document.getElementById('kpiPrice').textContent = '$' + fmtPrice(info.currentPrice);
+      document.getElementById('kpiMktCap').textContent = fmtNum(info.marketCap);
+      document.getElementById('kpiPE').textContent = fmtPrice(info.trailingPE);
+      document.getElementById('kpiPB').textContent = fmtPrice(info.priceToBook);
+      document.getElementById('kpi52High').textContent = '$' + fmtPrice(info.fiftyTwoWeekHigh);
+      document.getElementById('kpi52Low').textContent = '$' + fmtPrice(info.fiftyTwoWeekLow);
+      document.getElementById('kpiBeta').textContent = info.beta;
+      document.getElementById('kpiEmployees').textContent = fmtNum(info.fullTimeEmployees);
+
+      document.getElementById('companySummary').textContent = info.longBusinessSummary;
+
+      const basicItems = [
+        ['公司名称', info.longName], ['股票代码', info.symbol], ['交易所', info.fullExchangeName],
+        ['行业', info.industry], ['板块', info.sector], ['总部', [info.address1, info.city, info.state, info.country].filter(Boolean).join(', ')],
+        ['官网', '<a href="' + info.website + '" target="_blank">' + info.website + '</a>'], ['成立时间', info.yearBorn ? info.yearBorn : '-'],
+        ['货币', info.currency]
+      ];
+      document.getElementById('basicInfo').innerHTML = basicItems.map(([k, v]) =>
+        '<div class="info-item"><span class="info-key">' + k + '</span><span class="info-val">' + v + '</span></div>'
+      ).join('');
+
+      const finItems = [
+        ['总收入', fmtNum(info.totalRevenue)], ['净利润', fmtNum(info.netIncomeToCommon)], ['利润率', fmtPct(info.profitMargins)],
+        ['毛利率', fmtPct(info.grossMargins)], ['营业利润率', fmtPct(info.operatingMargins)], ['EBITDA利润率', fmtPct(info.ebitdaMargins)],
+        ['ROE', fmtPct(info.returnOnEquity)], ['ROA', fmtPct(info.returnOnAssets)], ['负债权益比', info.debtToEquity],
+        ['流动比率', info.currentRatio], ['速动比率', info.quickRatio], ['每股账面价值', fmtNum(info.bookValue)],
+        ['总现金', fmtNum(info.totalCash)], ['总债务', fmtNum(info.totalDebt)], ['自由现金流', fmtNum(info.freeCashflow)]
+      ];
+      document.getElementById('financialInfo').innerHTML = finItems.map(([k, v]) =>
+        '<div class="info-item"><span class="info-key">' + k + '</span><span class="info-val">' + v + '</span></div>'
+      ).join('');
+
+      const tradingItems = [
+        ['今开', '$' + fmtPrice(info.open)], ['最高', '$' + fmtPrice(info.dayHigh)], ['最低', '$' + fmtPrice(info.dayLow)],
+        ['昨收', '$' + fmtPrice(info.previousClose)], ['成交量', fmtNum(info.volume)], ['10日均量', fmtNum(info.averageDailyVolume10Day)],
+        ['50日均线', '$' + fmtPrice(info.fiftyDayAverage)], ['200日均线', '$' + fmtPrice(info.twoHundredDayAverage)],
+        ['买一', '$' + fmtPrice(info.bid)], ['卖一', '$' + fmtPrice(info.ask)], ['做空股数', fmtNum(info.sharesShort)],
+        ['做空比率', info.shortRatio], ['流通股', fmtNum(info.floatShares)], ['总股本', fmtNum(info.sharesOutstanding)]
+      ];
+      document.getElementById('tradingInfo').innerHTML = tradingItems.map(([k, v]) =>
+        '<div class="info-item"><span class="info-key">' + k + '</span><span class="info-val">' + v + '</span></div>'
+      ).join('');
+
+      if (info.companyOfficers) {
+        document.getElementById('officersList').innerHTML = info.companyOfficers.slice(0, 6).map(o => {
+          const pay = o.totalPay ? '$' + fmtNum(o.totalPay) : 'N/A';
+          return '<div class="officer-card"><div class="officer-name">' + o.name + '</div><div class="officer-title">' + o.title + (o.age ? ' (' + o.age + '岁)' : '') + '</div><div class="officer-pay">年薪: ' + pay + '</div></div>';
+        }).join('');
+      }
+    }
+
+    // ===== Backtrader Game =====
+    const btGame = {
+      allBars: [],
+      cursor: 0,
+      startIndex: 40,
+      initialCash: 100000,
+      cash: 100000,
+      lots: [],        // [{id, buyDate, buyPrice, qty}]  — open positions
+      nextLotId: 0,
+      trades: [],
+      equityCurve: []
+    };
+    // Computed helpers (use these instead of direct shares/avgCost)
+    function btTotalShares() {
+      return btGame.lots.reduce((s, l) => s + l.qty, 0);
+    }
+    function btAvgCost() {
+      const tot = btTotalShares();
+      if (tot === 0) return 0;
+      return btGame.lots.reduce((s, l) => s + l.buyPrice * l.qty, 0) / tot;
+    }
+    let btMainChart = null;
+    let btMainCandleSeries = null;
+    let btMainResizeObserver = null;
+    let xgbInferenceLatest = null;
+    let xgbPolicyGame = null;
+    let btAutoPlayTimer = null;
+    let btAutoPlayRunning = false;
+    let btTrainingLoopRunning = false;
+    let btTrainingStats = { episodes: 0, returns: [], lastStartCash: 100000 };
+
+    function btPriceNow() {
+      return btGame.allBars[btGame.cursor] || null;
+    }
+
+    function btPortfolioValue() {
+      const bar = btPriceNow();
+      if (!bar) return btGame.cash;
+      const holdingValue = btGame.lots.reduce((s, l) => s + l.qty * bar.close, 0);
+      return btGame.cash + holdingValue;
+    }
+
+    function btSnapshot(note) {
+      const bar = btPriceNow();
+      if (!bar) return;
+      btGame.equityCurve.push({
+        date: bar.date,
+        equity: btPortfolioValue(),
+        note: note || ''
+      });
+    }
+
+    function calcSMA(values, period) {
+      const out = [];
+      let sum = 0;
+      for (let i = 0; i < values.length; i++) {
+        const v = Number(values[i]);
+        if (!Number.isFinite(v)) {
+          out.push(null);
+          continue;
+        }
+        sum += v;
+        if (i >= period) sum -= Number(values[i - period]);
+        if (i >= period - 1) out.push(sum / period);
+        else out.push(null);
+      }
+      return out;
+    }
+
+    function btMASignal() {
+      const bars = btGame.allBars.slice(0, btGame.cursor + 1);
+      const closes = bars.map(b => b.close);
+      const ma3 = calcSMA(closes, 3);
+      const ma5 = calcSMA(closes, 5);
+      const ma14 = calcSMA(closes, 14);
+      const i = closes.length - 1;
+      const v3 = ma3[i];
+      const v5 = ma5[i];
+      const v14 = ma14[i];
+      if (![v3, v5].every(Number.isFinite)) {
+        return { signal: 'WAIT', reason: '样本不足', ma3: v3, ma5: v5, ma14: v14, ma3Arr: ma3, ma5Arr: ma5, ma14Arr: ma14 };
+      }
+      if (v3 < v5) return { signal: 'BUY', reason: 'MA3 < MA5', ma3: v3, ma5: v5, ma14: v14, ma3Arr: ma3, ma5Arr: ma5, ma14Arr: ma14 };
+      if (v3 > v5) return { signal: 'SELL', reason: 'MA3 > MA5', ma3: v3, ma5: v5, ma14: v14, ma3Arr: ma3, ma5Arr: ma5, ma14Arr: ma14 };
+      return { signal: 'HOLD', reason: 'MA3 = MA5', ma3: v3, ma5: v5, ma14: v14, ma3Arr: ma3, ma5Arr: ma5, ma14Arr: ma14 };
+    }
+
+    function btStatusItems() {
+      const bar = btPriceNow();
+      const equity = btPortfolioValue();
+      const shares = btTotalShares();
+      const avgCost = btAvgCost();
+      const posPnl = shares > 0 && bar ? (bar.close - avgCost) * shares : 0;
+      const totalPnl = equity - btGame.initialCash;
+      const sig = btMASignal();
+      return [
+        ['当前日期', bar ? bar.date : '-'],
+        ['当前收盘', bar ? '$' + fmtPrice(bar.close) : '-'],
+        ['初始资金', '$' + fmtNum(btGame.initialCash)],
+        ['MA3/MA5', [sig.ma3, sig.ma5].map(v => Number.isFinite(v) ? fmtPrice(v) : '-').join(' / ')],
+        ['均线信号', sig.signal + ' (' + sig.reason + ')'],
+        ['现金', '$' + fmtNum(btGame.cash)],
+        ['持仓股数', fmtNum(shares)],
+        ['持仓笔数', String(btGame.lots.length)],
+        ['均摊成本', shares > 0 ? '$' + fmtPrice(avgCost) : '-'],
+        ['账户权益', '$' + fmtNum(equity)],
+        ['浮动盈亏', '$' + fmtNum(posPnl)],
+        ['累计盈亏', '$' + fmtNum(totalPnl)]
+      ];
+    }
+
+    function renderBTStatus() {
+      const wrap = document.getElementById('btStatusGrid');
+      const items = btStatusItems();
+      wrap.innerHTML = items.map(([k, v]) => {
+        let cls = 'v';
+        if (k.includes('盈亏') && typeof v === 'string') {
+          const n = parseFloat(v.replace(/[,$]/g, ''));
+          if (Number.isFinite(n) && n > 0) cls = 'v up';
+          if (Number.isFinite(n) && n < 0) cls = 'v down';
+        }
+        if (k === '均线信号') {
+          if (String(v).startsWith('BUY')) cls = 'v up';
+          else if (String(v).startsWith('SELL')) cls = 'v down';
+        }
+        return '<div class="bt-stat"><div class="k">' + k + '</div><div class="' + cls + '">' + v + '</div></div>';
+      }).join('');
+    }
+
+    function renderBTMAChart() {
+      destroyChart('btMAChart');
+      const bars = btGame.allBars.slice(0, btGame.cursor + 1);
+      const labels = bars.map(b => b.date);
+      const closes = bars.map(b => b.close);
+      const ma3 = calcSMA(closes, 3);
+      const ma5 = calcSMA(closes, 5);
+      const ma14 = calcSMA(closes, 14);
+      const ctx = document.getElementById('btMAChart').getContext('2d');
+      charts['btMAChart'] = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            { label: 'MA3', data: ma3, borderColor: '#dd6b20', pointRadius: 0, tension: 0.12, borderWidth: 1.8 },
+            { label: 'MA5', data: ma5, borderColor: '#2b6cb0', pointRadius: 0, tension: 0.12, borderWidth: 1.8 },
+            { label: 'MA14', data: ma14, borderColor: '#6b46c1', pointRadius: 0, tension: 0.12, borderWidth: 1.8 }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { display: true, labels: { boxWidth: 12, font: { size: 11 } } } },
+          scales: {
+            x: { ticks: { maxTicksLimit: 8, font: { size: 11 } }, grid: { display: false } },
+            y: { ticks: { callback: v => '$' + v, font: { size: 11 } }, grid: { color: '#edf2f7' } }
+          }
+        }
+      });
+    }
+
+    function renderBTLotsTable() {
+      const box = document.getElementById('btLotsTable');
+      if (!box) return;
+      if (!btGame.lots.length) {
+        box.innerHTML = '<div style="color:#999;font-size:12px;padding:6px">无持仓仓位</div>';
+        return;
+      }
+      const bar = btPriceNow();
+      const nowPx = bar ? bar.close : 0;
+      let html = '<table><thead><tr><th>Lot</th><th>买入日</th><th class="num">买入价</th>' +
+                 '<th class="num">股数</th><th class="num">现价値</th><th class="num">浮盈亏</th>' +
+                 '<th>操作</th></tr></thead><tbody>';
+      for (const lot of btGame.lots) {
+        const mv = nowPx * lot.qty;
+        const pnl = (nowPx - lot.buyPrice) * lot.qty;
+        const pnlCls = pnl >= 0 ? 'up' : 'down';
+        html += '<tr>' +
+          '<td>#' + lot.id + '</td>' +
+          '<td>' + lot.buyDate + '</td>' +
+          '<td class="num">$' + fmtPrice(lot.buyPrice) + '</td>' +
+          '<td class="num">' + fmtNum(lot.qty) + '</td>' +
+          '<td class="num">$' + fmtNum(mv) + '</td>' +
+          '<td class="num ' + pnlCls + '">$' + fmtNum(pnl) + '</td>' +
+          '<td><button style="font-size:11px;padding:2px 6px" onclick="btSellLot(' + lot.id + ')">\u5356Lot#' + lot.id + '</button></td>' +
+          '</tr>';
+      }
+      html += '</tbody></table>';
+      box.innerHTML = html;
+    }
+
+    function renderBTTradeLog() {
+      const box = document.getElementById('btTradeLog');
+      if (!btGame.trades.length) {
+        box.innerHTML = '<div class="loading">暂无交易，先点击买入/卖出</div>';
+        return;
+      }
+      const rows = [...btGame.trades].reverse();
+      let html = '<table><thead><tr><th>日期</th><th>动作</th><th class="num">价格</th><th class="num">股数</th>' +
+                 '<th class="num">Lot</th><th class="num">单笔盈亏</th><th class="num">现金变化</th></tr></thead><tbody>';
+      rows.forEach(t => {
+        const cashDelta = t.side.startsWith('SELL') ? t.price * t.qty : -t.price * t.qty;
+        let lotPnl = '-';
+        if (t.side.startsWith('SELL') && t.buyPrice) {
+          const p = (t.sellPrice - t.buyPrice) * t.qty;
+          lotPnl = '<span class="' + (p >= 0 ? 'up' : 'down') + '">$' + fmtNum(p) + '</span>';
+        }
+        html += '<tr>' +
+          '<td>' + t.date + '</td>' +
+          '<td>' + t.side + '</td>' +
+          '<td class="num">$' + fmtPrice(t.price) + '</td>' +
+          '<td class="num">' + fmtNum(t.qty) + '</td>' +
+          '<td class="num">' + (t.lotId !== undefined && t.lotId >= 0 ? '#' + t.lotId : '-') + '</td>' +
+          '<td class="num">' + lotPnl + '</td>' +
+          '<td class="num">$' + fmtNum(cashDelta) + '</td>' +
+          '</tr>';
+      });
+      html += '</tbody></table>';
+      box.innerHTML = html;
+    }
+
+    function renderBTEquityChart() {
+      destroyChart('btEquityChart');
+      const ctx = document.getElementById('btEquityChart').getContext('2d');
+      charts['btEquityChart'] = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: btGame.equityCurve.map(p => p.date),
+          datasets: [{
+            label: '账户权益',
+            data: btGame.equityCurve.map(p => p.equity),
+            borderColor: '#1e3a5f',
+            backgroundColor: 'rgba(30,58,95,0.08)',
+            fill: true,
+            pointRadius: 0,
+            tension: 0.15,
+            borderWidth: 1.8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { maxTicksLimit: 8, font: { size: 11 } }, grid: { display: false } },
+            y: { ticks: { callback: v => '$' + fmtNum(v), font: { size: 11 } }, grid: { color: '#edf2f7' } }
+          }
+        }
+      });
+    }
+
+    function renderXGBStatus(result) {
+      const wrap = document.getElementById('xgbStatusGrid');
+      if (!wrap) return;
+      if (!result || !result.signal) {
+        wrap.innerHTML = '<div class="bt-stat"><div class="k">XGB状态</div><div class="v">暂无推理结果</div></div>';
+        return;
+      }
+      const policyRow = btFindPolicyRowForCurrentBar();
+      const probs = result.signal.probabilities || {};
+      const items = [
+        ['XGB信号', result.signal.pred_label || '-'],
+        ['当前Bar策略', policyRow ? policyRow.signal : 'N/A'],
+        ['AutoPlay', btAutoPlayRunning ? '运行中' : '已停止'],
+        ['训练循环', btTrainingLoopRunning ? '开启' : '关闭'],
+        ['训练局数', String(btTrainingStats.episodes || 0)],
+        ['平均收益率', (btAverageReturnPct()).toFixed(2) + '%'],
+        ['最近起始资金', '$' + fmtNum(btTrainingStats.lastStartCash || btGame.initialCash)],
+        ['SELL概率', (Number(probs.SELL || 0) * 100).toFixed(2) + '%'],
+        ['HOLD概率', (Number(probs.HOLD || 0) * 100).toFixed(2) + '%'],
+        ['BUY概率', (Number(probs.BUY || 0) * 100).toFixed(2) + '%'],
+        ['最新样本日期', result.latest_date || '-']
+      ];
+      wrap.innerHTML = items.map(([k, v]) => {
+        let cls = 'v';
+        if (k === 'XGB信号') {
+          if (String(v).startsWith('BUY')) cls = 'v up';
+          else if (String(v).startsWith('SELL')) cls = 'v down';
+        }
+        if (k === '当前Bar策略') {
+          if (String(v).startsWith('BUY')) cls = 'v up';
+          else if (String(v).startsWith('SELL')) cls = 'v down';
+        }
+        return '<div class="bt-stat"><div class="k">' + k + '</div><div class="' + cls + '">' + v + '</div></div>';
+      }).join('');
+    }
+
+    function renderXGBForecastChart(result) {
+      destroyChart('xgbForecastChart');
+      const canvas = document.getElementById('xgbForecastChart');
+      if (!canvas) return;
+      const series = (result && result.forecast_next_47_steps) ? result.forecast_next_47_steps : [];
+      const labels = series.map(p => 't+' + p.step);
+      const values = series.map(p => Number(p.pred_close));
+      const ctx = canvas.getContext('2d');
+      charts['xgbForecastChart'] = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'XGB预测收盘价(未来47步)',
+            data: values,
+            borderColor: '#1e3a5f',
+            backgroundColor: 'rgba(30,58,95,0.10)',
+            fill: true,
+            pointRadius: 1.5,
+            pointHoverRadius: 4,
+            tension: 0.15,
+            borderWidth: 1.8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { display: true, labels: { font: { size: 11 } } } },
+          scales: {
+            x: { ticks: { maxTicksLimit: 12, font: { size: 11 } }, grid: { display: false } },
+            y: { ticks: { callback: v => '$' + v, font: { size: 11 } }, grid: { color: '#edf2f7' } }
+          }
+        }
+      });
+    }
+
+    async function loadXGBInference() {
+      try {
+        const res = await fetch('/ml/artifacts/inference_latest.json?ts=' + Date.now());
+        if (!res.ok) throw new Error('XGB inference file not found');
+        xgbInferenceLatest = await res.json();
+        renderXGBStatus(xgbInferenceLatest);
+        renderXGBForecastChart(xgbInferenceLatest);
+      } catch (e) {
+        xgbInferenceLatest = null;
+        renderXGBStatus(null);
+        renderXGBForecastChart({ forecast_next_47_steps: [] });
+        console.warn('XGB inference load error:', e);
+      }
+    }
+
+    async function loadXGBPolicyGame() {
+      // Prefer new multibuy policy; fallback to old policy
+      const urls = [
+        '/ml/artifacts/xgb_multibuy_policy.json',
+        '/ml/artifacts/xgb_policy_game.json',
+      ];
+      for (const url of urls) {
+        try {
+          const res = await fetch(url + '?ts=' + Date.now());
+          if (!res.ok) continue;
+          xgbPolicyGame = await res.json();
+          console.log('Loaded XGB policy:', url, '| type:', xgbPolicyGame.policy_type || 'legacy');
+          break;
+        } catch (e) {
+          console.warn('XGB policy load error for', url, e);
+        }
+      }
+      if (!xgbPolicyGame) console.warn('No XGB game policy loaded.');
+      renderXGBStatus(xgbInferenceLatest);
+    }
+
+    function ensureBTMainChart() {
+      const container = document.getElementById('d2024Chart');
+      if (!container || typeof LightweightCharts === 'undefined') return false;
+      if (btMainChart) return true;
+
+      const width = container.clientWidth || container.parentElement?.clientWidth || 900;
+      const height = container.clientHeight || container.parentElement?.clientHeight || 400;
+      btMainChart = LightweightCharts.createChart(container, {
+        width,
+        height,
+        layout: {
+          background: { type: 'solid', color: '#ffffff' },
+          textColor: '#2d3748',
+          fontSize: 12
+        },
+        grid: {
+          vertLines: { color: '#f0f0f0' },
+          horzLines: { color: '#f0f0f0' }
+        },
+        crosshair: {
+          mode: LightweightCharts.CrosshairMode.Normal,
+          vertLine: { color: '#9ca3af', width: 1, style: 2, labelBackgroundColor: '#9ca3af' },
+          horzLine: { color: '#9ca3af', width: 1, style: 2, labelBackgroundColor: '#9ca3af' }
+        },
+        rightPriceScale: {
+          borderColor: '#e2e8f0',
+          scaleMargins: { top: 0.05, bottom: 0.12 }
+        },
+        timeScale: { borderColor: '#e2e8f0', timeVisible: false, secondsVisible: false },
+        handleScroll: { vertTouchDrag: false },
+        handleScale: { axisPressedMouseMove: { time: true, price: false } }
+      });
+
+      btMainCandleSeries = btMainChart.addCandlestickSeries({
+        upColor: '#26a69a',
+        downColor: '#ef5350',
+        borderUpColor: '#26a69a',
+        borderDownColor: '#ef5350',
+        wickUpColor: '#26a69a',
+        wickDownColor: '#ef5350'
+      });
+
+      btMainResizeObserver = new ResizeObserver(() => {
+        if (btMainChart) {
+          btMainChart.applyOptions({ width: container.clientWidth || 900, height: container.clientHeight || 400 });
+        }
+      });
+      btMainResizeObserver.observe(container);
+      return true;
+    }
+
+    function renderBTPriceChart() {
+      if (!ensureBTMainChart()) return;
+      const bars = btGame.allBars
+        .slice(0, btGame.cursor + 1)
+        .sort((a, b) => toDateMs(a.date) - toDateMs(b.date));
+      const candleData = bars.map(b => ({ time: b.date, open: b.open, high: b.high, low: b.low, close: b.close }));
+
+      btMainCandleSeries.setData(candleData);
+      btMainChart.timeScale().fitContent();
+    }
+
+    function btRefresh() {
+      renderBTStatus();
+      renderBTLotsTable();
+      renderBTTradeLog();
+      renderBTPriceChart();
+      renderBTMAChart();
+      renderBTEquityChart();
+      renderXGBStatus(xgbInferenceLatest);
+    }
+
+    function btRecordTrade(side, qty, lotId, buyPrice, sellPrice) {
+      const bar = btPriceNow();
+      if (!bar) return;
+      btGame.trades.push({ side, qty, price: bar.close, date: bar.date,
+                           index: btGame.cursor, lotId, buyPrice, sellPrice });
+    }
+
+    function btQtyInput() {
+      const v = Number(document.getElementById('btQty').value);
+      if (!Number.isFinite(v) || v <= 0) return 0;
+      return Math.floor(v);
+    }
+
+    function btReadInitCashInput() {
+      const v = Number(document.getElementById('btInitCash')?.value);
+      if (!Number.isFinite(v) || v <= 0) return 100000;
+      return Math.floor(v);
+    }
+
+    function btParseCapitalPool() {
+      const text = String(document.getElementById('btCapitalPool')?.value || '100000,500000');
+      const arr = text
+        .split(',')
+        .map(s => Number(String(s).trim()))
+        .filter(v => Number.isFinite(v) && v > 0)
+        .map(v => Math.floor(v));
+      return arr.length ? arr : [100000, 500000];
+    }
+
+    function btPickRandomCapital() {
+      const pool = btParseCapitalPool();
+      const idx = Math.floor(Math.random() * pool.length);
+      return pool[idx];
+    }
+
+    function btAverageReturnPct() {
+      if (!btTrainingStats.returns.length) return 0;
+      const sum = btTrainingStats.returns.reduce((a, b) => a + b, 0);
+      return sum / btTrainingStats.returns.length;
+    }
+
+    function btToggleTrainingLoop() {
+      const btn = document.getElementById('btTrainLoopBtn');
+      if (!btTrainingLoopRunning) {
+        btTrainingLoopRunning = true;
+        btTrainingStats = { episodes: 0, returns: [], lastStartCash: btPickRandomCapital() };
+        btReset(btTrainingStats.lastStartCash, true);
+        if (!btAutoPlayRunning) btToggleAutoPlay();
+        if (btn) btn.innerHTML = '<i class="fas fa-stop"></i> 停止训练循环';
+      } else {
+        btTrainingLoopRunning = false;
+        if (btn) btn.innerHTML = '<i class="fas fa-dice"></i> 训练循环';
+        if (btAutoPlayRunning) btToggleAutoPlay();
+      }
+      renderXGBStatus(xgbInferenceLatest);
+    }
+
+    function btReset(initialCash = null, keepAutoPlay = false) {
+      if (btAutoPlayRunning && !keepAutoPlay) btToggleAutoPlay();
+      const startInput = Number(document.getElementById('btStartIdx').value);
+      const maxStart = Math.max(0, btGame.allBars.length - 1);
+      const cash = Number.isFinite(initialCash) && initialCash > 0 ? Math.floor(initialCash) : btReadInitCashInput();
+      btGame.initialCash = cash;
+      const initCashInput = document.getElementById('btInitCash');
+      if (initCashInput) initCashInput.value = String(cash);
+      btGame.startIndex = Number.isFinite(startInput) ? Math.min(Math.max(0, Math.floor(startInput)), maxStart) : 40;
+      btGame.cursor = btGame.startIndex;
+      btGame.cash = cash;
+      btGame.lots = [];
+      btGame.nextLotId = 0;
+      btGame.trades = [];
+      btGame.equityCurve = [];
+      btSnapshot('RESET');
+      btRefresh();
+    }
+
+    function btStep(step = 1) {
+      const n = Math.max(1, Math.floor(Number(step) || 1));
+      btGame.cursor = Math.min(btGame.cursor + n, btGame.allBars.length - 1);
+      btSnapshot('STEP');
+      btRefresh();
+    }
+
+    // ---- Multi-lot buy/sell ------------------------------------------------
+    function btDoBuy(qty) {
+      const bar = btPriceNow();
+      if (!bar || qty <= 0) return false;
+      const cost = bar.close * qty;
+      if (cost > btGame.cash) return false;    // silent fail for autoplay
+      const lot = { id: btGame.nextLotId++, buyDate: bar.date, buyPrice: bar.close, qty };
+      btGame.lots.push(lot);
+      btGame.cash -= cost;
+      btRecordTrade('BUY', qty, lot.id);
+      btSnapshot('BUY');
+      btRefresh();
+      return true;
+    }
+    function btBuy50()  { btDoBuy(50); }
+    function btBuy100() { btDoBuy(100); }
+    function btBuy200() { btDoBuy(200); }
+    function btBuy()    { btDoBuy(btQtyInput()); }   // manual qty input
+
+    function btSellLot(lotId) {
+      const idx = btGame.lots.findIndex(l => l.id === lotId);
+      if (idx === -1) return false;
+      const bar = btPriceNow();
+      if (!bar) return false;
+      const lot = btGame.lots.splice(idx, 1)[0];
+      const proceeds = bar.close * lot.qty;
+      btGame.cash += proceeds;
+      btRecordTrade('SELL', lot.qty, lot.id, lot.buyPrice, bar.close);
+      btSnapshot('SELL');
+      btRefresh();
+      return true;
+    }
+    function btSellOldest() {
+      if (!btGame.lots.length) return false;
+      return btSellLot(btGame.lots[0].id);
+    }
+    function btSellAll() {
+      if (!btGame.lots.length) return false;
+      const bar = btPriceNow();
+      if (!bar) return false;
+      let totalQty = 0;
+      for (const lot of btGame.lots) {
+        btGame.cash += bar.close * lot.qty;
+        totalQty += lot.qty;
+      }
+      btRecordTrade('SELL_ALL', totalQty, -1, btAvgCost(), bar.close);
+      btGame.lots = [];
+      btSnapshot('SELL_ALL');
+      btRefresh();
+      return true;
+    }
+    function btSell() { btSellOldest(); }  // compat alias
+
+    function btFindPolicyRowForCurrentBar() {
+      if (!xgbPolicyGame || !xgbPolicyGame.policy_rows) return null;
+      const bar = btPriceNow();
+      if (!bar) return null;
+      return xgbPolicyGame.policy_rows.find(r => r.date === bar.date) || null;
+    }
+
+    function btApplyXGBDecisionForCurrentBar() {
+      const row = btFindPolicyRowForCurrentBar();
+      if (!row) return;
+      const aid = row.action_id;   // new multibuy policy has action_id 0-5
+      if (aid !== undefined) {
+        // 0=HOLD, 1=BUY_50, 2=BUY_100, 3=BUY_200, 4=SELL_LOT, 5=SELL_ALL
+        if (aid === 1) btDoBuy(50);
+        else if (aid === 2) btDoBuy(100);
+        else if (aid === 3) btDoBuy(200);
+        else if (aid === 4) btSellOldest();
+        else if (aid === 5) btSellAll();
+        // aid === 0 → HOLD, do nothing
+      } else {
+        // fallback: old policy format with signal=BUY/HOLD/SELL
+        if (row.signal === 'BUY') {
+          const bar = btPriceNow();
+          if (bar && (bar.close * 100) <= btGame.cash) btDoBuy(100);
+        } else if (row.signal === 'SELL') {
+          btSellOldest();
+        }
+      }
+    }
+
+    function btXGBStep() {
+      if (btGame.cursor >= btGame.allBars.length - 1) return;
+      btStep(1);
+      btApplyXGBDecisionForCurrentBar();
+      renderXGBStatus(xgbInferenceLatest);
+    }
+
+    function btToggleAutoPlay() {
+      const btn = document.getElementById('btAutoPlayBtn');
+      if (!btAutoPlayRunning) {
+        btAutoPlayRunning = true;
+        if (btn) btn.innerHTML = '<i class="fas fa-pause"></i> 停止AutoPlay';
+        btAutoPlayTimer = setInterval(() => {
+          if (btGame.cursor >= btGame.allBars.length - 1) {
+            if (btTrainingLoopRunning) {
+              const eq = btPortfolioValue();
+              const retPct = (eq - btGame.initialCash) / Math.max(btGame.initialCash, 1) * 100;
+              btTrainingStats.episodes += 1;
+              btTrainingStats.returns.push(retPct);
+              btTrainingStats.lastStartCash = btPickRandomCapital();
+              btReset(btTrainingStats.lastStartCash, true);
+              renderXGBStatus(xgbInferenceLatest);
+              return;
+            }
+            btToggleAutoPlay();
+            return;
+          }
+          btXGBStep();
+        }, 800);
+      } else {
+        btAutoPlayRunning = false;
+        if (btn) btn.innerHTML = '<i class="fas fa-play"></i> AutoPlay';
+        if (btAutoPlayTimer) {
+          clearInterval(btAutoPlayTimer);
+          btAutoPlayTimer = null;
+        }
+      }
+      renderXGBStatus(xgbInferenceLatest);
+    }
+
+    function initBacktraderGame(data) {
+      const ordered = data
+        .map((r, idx) => ({
+          index: idx,
+          date: parseDate(r.Date),
+          close: Number(r.Close),
+          open: Number(r.Open),
+          high: Number(r.High),
+          low: Number(r.Low),
+          volume: Number(r.Volume)
+        }))
+        .filter(r => Number.isFinite(r.close) && Number.isFinite(toDateMs(r.date)))
+        .sort((a, b) => toDateMs(a.date) - toDateMs(b.date));
+
+      btGame.allBars = ordered.map((r, idx) => ({ ...r, index: idx }));
+
+      const startInput = document.getElementById('btStartIdx');
+      if (startInput) startInput.max = String(Math.max(20, btGame.allBars.length - 1));
+      btReset();
+    }
+
+    // ===== Price Data =====
+    async function initDaily() {
+      const { data } = await loadCSV('brk_b_daily.csv');
+      // Reverse for chart (oldest first) but keep original for table
+      const chartData = [...data].reverse();
+      renderPriceChart('dailyChart', chartData, 'Date', 'Close', 'Volume', '收盘价');
+      renderVolumeChart('dailyVolumeChart', chartData, 'Date', 'Volume');
+      renderTable('dailyTable', data.slice(0, 20));
+    }
+    async function initHourly() {
+      const { data } = await loadCSV('brk_b_1h_2y.csv');
+      const chartData = [...data].reverse();
+      renderPriceChart('hourlyChart', chartData, 'Datetime', 'Close', 'Volume', '收盘价');
+      renderVolumeChart('hourlyVolumeChart', chartData, 'Datetime', 'Volume');
+      renderTable('hourlyTable', data.slice(0, 20));
+    }
+    async function initDaily2024() {
+      const { data } = await loadCSV('brk_b_daily.csv');
+      const chartData = cleanGameRows(data, '2025-03-10', '2026-03-10');
+      initBacktraderGame(chartData);
+      renderVolumeChart('d2024VolumeChart', chartData, 'Date', 'Volume');
+      renderTable('d2024Table', chartData);
+      await loadXGBInference();
+      await loadXGBPolicyGame();
+    }
+    async function initWeekly2024() {
+      const { data } = await loadCSV('brk_b_weekly_2024_now.csv');
+      const chartData = [...data].reverse();
+      renderPriceChart('w2024Chart', chartData, 'Date', 'Close', 'Volume', '收盘价');
+      renderVolumeChart('w2024VolumeChart', chartData, 'Date', 'Volume');
+      renderTable('w2024Table', data);
+    }
+    async function initMonthly2024() {
+      const { data } = await loadCSV('brk_b_monthly_2024_now.csv');
+      const chartData = [...data].reverse();
+      renderPriceChart('m2024Chart', chartData, 'Date', 'Close', 'Volume', '收盘价');
+      renderVolumeChart('m2024VolumeChart', chartData, 'Date', 'Volume');
+      renderTable('m2024Table', data);
+    }
+
+    // ===== Financial Statements =====
+    async function initBalance() {
+      const { data } = await loadCSV('brk_b_balance_sheet.csv');
+      renderTransposedTable('balanceTable', data);
+      renderFinancialChart('balanceChart', data, ['Total Assets', 'Total Liabilities Net Minority Interest', 'Stockholders Equity', 'Total Debt', 'Net Debt'], '资产负债表关键指标');
+    }
+    async function initIncome() {
+      const { data } = await loadCSV('brk_b_income_statement.csv');
+      renderTransposedTable('incomeTable', data);
+      renderFinancialChart('incomeChart', data, ['Total Revenue', 'Net Income', 'Gross Profit', 'Operating Income', 'EBITDA'], '利润表关键指标');
+    }
+    async function initCashflow() {
+      const { data } = await loadCSV('brk_b_cashflow.csv');
+      renderTransposedTable('cashflowTable', data);
+      renderFinancialChart('cashflowChart', data, ['Operating Cash Flow', 'Free Cash Flow', 'Capital Expenditure', 'Repurchase Of Capital Stock'], '现金流量表关键指标');
+    }
+    async function initQBalance() {
+      const { data } = await loadCSV('brk_b_quarterly_balance_sheet.csv');
+      renderTransposedTable('qBalanceTable', data);
+      renderFinancialChart('qBalanceChart', data, ['Total Assets', 'Total Liabilities Net Minority Interest', 'Stockholders Equity', 'Net Debt'], '季度资产负债表');
+    }
+    async function initQIncome() {
+      const { data } = await loadCSV('brk_b_quarterly_income_statement.csv');
+      renderTransposedTable('qIncomeTable', data);
+      renderFinancialChart('qIncomeChart', data, ['Total Revenue', 'Net Income', 'Gross Profit', 'Operating Income'], '季度利润表');
+    }
+    async function initQCashflow() {
+      const { data } = await loadCSV('brk_b_quarterly_cashflow.csv');
+      renderTransposedTable('qCashflowTable', data);
+      renderFinancialChart('qCashflowChart', data, ['Operating Cash Flow', 'Free Cash Flow', 'Capital Expenditure'], '季度现金流量表');
+    }
+
+    // ===== Other Data =====
+    async function initHolders() {
+      const { data } = await loadCSV('brk_b_institutional_holders.csv');
+      renderTable('holdersTable', data);
+      // Pie chart
+      destroyChart('holdersPieChart');
+      const labels = data.slice(0, 8).map(d => d.Holder);
+      const values = data.slice(0, 8).map(d => d.pctHeld * 100);
+      const ctx = document.getElementById('holdersPieChart').getContext('2d');
+      charts['holdersPieChart'] = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels,
+          datasets: [{
+            data: values,
+            backgroundColor: ['#3182ce', '#e53e3e', '#38a169', '#d69e2e', '#805ad5', '#dd6b20', '#00b5d8', '#718096']
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { position: 'right', labels: { font: { size: 11 } } } }
+        }
+      });
+    }
+    async function initMajorHolders() {
+      const { data } = await loadCSV('brk_b_major_holders.csv');
+      renderTable('majorHoldersTable', data);
+    }
+    async function initEarningsEst() {
+      const { data } = await loadCSV('brk_b_earnings_estimate.csv');
+      renderTable('earningsTable', data);
+      destroyChart('earningsChart');
+      const ctx = document.getElementById('earningsChart').getContext('2d');
+      charts['earningsChart'] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: data.map(d => d.period),
+          datasets: [
+            { label: 'Low', data: data.map(d => d.low), backgroundColor: '#e53e3e' },
+            { label: 'Avg', data: data.map(d => d.avg), backgroundColor: '#3182ce' },
+            { label: 'High', data: data.map(d => d.high), backgroundColor: '#38a169' }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { position: 'top' } },
+          scales: { y: { beginAtZero: false } }
+        }
+      });
+    }
+    async function initRecommendations() {
+      const { data } = await loadCSV('brk_b_recommendations.csv');
+      renderTable('recTable', data);
+      destroyChart('recChart');
+      const ctx = document.getElementById('recChart').getContext('2d');
+      charts['recChart'] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: data.map(d => d.period).reverse(),
+          datasets: [
+            { label: 'Strong Buy', data: data.map(d => d.strongBuy).reverse(), backgroundColor: '#38a169' },
+            { label: 'Buy', data: data.map(d => d.buy).reverse(), backgroundColor: '#3182ce' },
+            { label: 'Hold', data: data.map(d => d.hold).reverse(), backgroundColor: '#d69e2e' },
+            { label: 'Sell', data: data.map(d => d.sell).reverse(), backgroundColor: '#dd6b20' },
+            { label: 'Strong Sell', data: data.map(d => d.strongSell).reverse(), backgroundColor: '#e53e3e' }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          scales: { x: { stacked: true }, y: { stacked: true } }
+        }
+      });
+    }
+    async function initSplits() {
+      const { data } = await loadCSV('brk_b_splits.csv');
+      renderTable('splitsTable', data);
+    }
+
+    // ===== TradingView Lightweight Charts =====
+    let tvChart = null;
+    let tvCandleSeries = null;
+    let tvVolumeSeries = null;
+
+    function parseTVTime(str) {
+      if (!str) return null;
+      const clean = String(str).replace(/^\uFEFF/, '').trim();
+      if (!clean) return null;
+      const normalized = clean.includes(' ') ? clean.replace(' ', 'T') : clean;
+      const ms = Date.parse(normalized);
+      if (!Number.isFinite(ms)) return null;
+      return Math.floor(ms / 1000);
+    }
+
+    function convertToTVData(data, dateKey) {
+      const result = [];
+      for (const r of data) {
+        const time = parseTVTime(r[dateKey]);
+        const open = Number(r.Open);
+        const high = Number(r.High);
+        const low = Number(r.Low);
+        const close = Number(r.Close);
+        if (!time) continue;
+        if (![open, high, low, close].every(Number.isFinite)) continue;
+        result.push({ time, open, high, low, close });
+      }
+      result.sort((a, b) => a.time - b.time);
+      return result;
+    }
+
+    function convertToTVVolume(data, dateKey) {
+      const result = [];
+      for (const r of data) {
+        const time = parseTVTime(r[dateKey]);
+        const open = Number(r.Open);
+        const close = Number(r.Close);
+        const value = Number(r.Volume);
+        if (!time || !Number.isFinite(value)) continue;
+        const color = Number.isFinite(open) && Number.isFinite(close) && close >= open ? '#26a69a80' : '#ef535080';
+        result.push({ time, value, color });
+      }
+      result.sort((a, b) => a.time - b.time);
+      return result;
+    }
+
+    async function initTVChart(filename, title) {
+      const container = document.getElementById('tvChartContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const dateKey = filename.includes('1h') ? 'Datetime' : 'Date';
+      const { data } = await loadCSV(filename);
+      const candleData = convertToTVData(data, dateKey);
+      const volumeData = convertToTVVolume(data, dateKey);
+      if (!candleData.length) {
+        container.innerHTML = '<div class="loading">该数据源没有可用K线数据</div>';
+        return;
+      }
+
+      tvChart = LightweightCharts.createChart(container, {
+        layout: {
+          background: { type: 'solid', color: '#ffffff' },
+          textColor: '#2d3748',
+          fontSize: 12
+        },
+        grid: {
+          vertLines: { color: '#f0f0f0' },
+          horzLines: { color: '#f0f0f0' }
+        },
+        crosshair: {
+          mode: LightweightCharts.CrosshairMode.Normal,
+          vertLine: { color: '#9ca3af', width: 1, style: 2, labelBackgroundColor: '#9ca3af' },
+          horzLine: { color: '#9ca3af', width: 1, style: 2, labelBackgroundColor: '#9ca3af' }
+        },
+        rightPriceScale: {
+          borderColor: '#e2e8f0',
+          scaleMargins: { top: 0.1, bottom: 0.2 }
+        },
+        timeScale: {
+          borderColor: '#e2e8f0',
+          timeVisible: dateKey === 'Datetime',
+          secondsVisible: false
+        },
+        handleScroll: { vertTouchDrag: false },
+        handleScale: { axisPressedMouseMove: { time: true, price: false } }
+      });
+
+      tvVolumeSeries = tvChart.addHistogramSeries({
+        color: '#26a69a',
+        priceFormat: { type: 'volume' },
+        priceScaleId: '',
+        base: 0
+      });
+      tvVolumeSeries.priceScale().applyOptions({
+        scaleMargins: { top: 0.85, bottom: 0 }
+      });
+      tvVolumeSeries.setData(volumeData);
+
+      tvCandleSeries = tvChart.addCandlestickSeries({
+        upColor: '#26a69a',
+        downColor: '#ef5350',
+        borderUpColor: '#26a69a',
+        borderDownColor: '#ef5350',
+        wickUpColor: '#26a69a',
+        wickDownColor: '#ef5350'
+      });
+      tvCandleSeries.setData(candleData);
+
+      // Fit content on first load
+      tvChart.timeScale().fitContent();
+
+      // Resize handler
+      const resizeObserver = new ResizeObserver(() => {
+        if (tvChart) tvChart.applyOptions({ width: container.clientWidth, height: container.clientHeight });
+      });
+      resizeObserver.observe(container);
+
+      // Store for cleanup
+      container._resizeObserver = resizeObserver;
+    }
+
+    async function switchTVSource(filename, label, btn) {
+      // Update buttons
+      document.querySelectorAll('#tvToolbar .tv-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      // Show loading
+      const container = document.getElementById('tvChartContainer');
+      container.innerHTML = '<div class="loading"><div class="spinner"></div> 正在加载 ' + label + '...</div>';
+      // Load new data
+      await initTVChart(filename, label);
+    }
+
+    // ===== Init =====
+    async function initAll() {
+      try {
+        await initOverview();
+      } catch (e) { console.error('Overview error:', e); }
+      try {
+        await initDaily();
+      } catch (e) { console.error('Daily error:', e); }
+      try {
+        await initHourly();
+      } catch (e) { console.error('Hourly error:', e); }
+      try {
+        await initDaily2024();
+      } catch (e) { console.error('Daily2024 error:', e); }
+      try {
+        await initWeekly2024();
+      } catch (e) { console.error('Weekly2024 error:', e); }
+      try {
+        await initMonthly2024();
+      } catch (e) { console.error('Monthly2024 error:', e); }
+      try {
+        await initBalance();
+      } catch (e) { console.error('Balance error:', e); }
+      try {
+        await initIncome();
+      } catch (e) { console.error('Income error:', e); }
+      try {
+        await initCashflow();
+      } catch (e) { console.error('Cashflow error:', e); }
+      try {
+        await initQBalance();
+      } catch (e) { console.error('QBalance error:', e); }
+      try {
+        await initQIncome();
+      } catch (e) { console.error('QIncome error:', e); }
+      try {
+        await initQCashflow();
+      } catch (e) { console.error('QCashflow error:', e); }
+      try {
+        await initHolders();
+      } catch (e) { console.error('Holders error:', e); }
+      try {
+        await initMajorHolders();
+      } catch (e) { console.error('MajorHolders error:', e); }
+      try {
+        await initEarningsEst();
+      } catch (e) { console.error('EarningsEst error:', e); }
+      try {
+        await initRecommendations();
+      } catch (e) { console.error('Recommendations error:', e); }
+      try {
+        await initSplits();
+      } catch (e) { console.error('Splits error:', e); }
+    }
+
+    initAll();
+  </script>
+</body>
+</html>

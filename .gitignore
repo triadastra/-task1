@@ -1,0 +1,16 @@
+# 原始数据与清洗输出（大文件不上传Git）
+a/**/*.csv
+b/**/*.csv
+outputs/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+*.tmp
+~$*

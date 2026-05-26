@@ -13,7 +13,30 @@
       "Bash(git init *)",
       "Bash(git add *)",
       "Bash(git commit *)",
-      "Bash(git remote *)"
+      "Bash(git remote *)",
+      "Bash(gh auth *)",
+      "Bash(git credential-manager *)",
+      "Bash(git credential-wincred *)",
+      "Bash(cmdkey /list)",
+      "PowerShell($env:PATH -split ';' | Where-Object { $_ -ne '' })",
+      "PowerShell(& \"C:\\\\Users\\\\osmon\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\Scripts\\\\jupyter.exe\" --version 2>&1)",
+      "Bash(python3 -c \"pass\")",
+      "Bash(awk -F, 'NR==1{for\\(i=1;i<=NF;i++\\) header[i]=$i} NR>1 && NR<5000{phase=$NF; if\\(!\\(phase in seen\\)\\){seen[phase]=NR; print \"PHASE:\"phase\" row:\"NR\" last=\"$5\" bid1=\"$17\" ask1=\"$15\" vol=\"$9}}' d:/0521数据清洗/a/国债ETF数据/3秒快照/511090/511090.SH_20250701_20250731_snapshot.csv)",
+      "Bash(awk -F, 'NR>1 && $NF==\"T111\" && \\($5==\"0.0\" || $5==\"0\"\\) {count++} END{print \"T111 rows with last=0:\", count+0}' d:/0521数据清洗/a/国债ETF数据/3秒快照/511090/511090.SH_20250701_20250731_snapshot.csv)",
+      "Bash(awk -F, 'NR>1 && $NF==\"T111\" {total++; if\\($9==\"0.0\"||$9==\"0\"\\) vol0++} END{print \"T111 total:\", total, \"volume=0:\", vol0+0, \"rate:\", vol0/total}' d:/0521数据清洗/a/国债ETF数据/3秒快照/511090/511090.SH_20250701_20250731_snapshot.csv)",
+      "Bash(awk -F, 'NR>1 && $NF==\"T111\" {total++; if\\($10==\"0.0\"||$10==\"0\"\\) vol0++} END{print \"T111 total:\", total, \"volume=0:\", vol0+0}' d:/0521数据清洗/a/国债ETF数据/3秒快照/511090/511090.SH_20250701_20250731_snapshot.csv)",
+      "Bash(awk -F, 'NR>1 && $NF==\"E110\" {total++; if\\($5!=\"0.0\"&&$5!=\"0\"\\) valid++} END{print \"E110 total:\", total+0, \"last!=0:\", valid+0}' d:/0521数据清洗/a/国债ETF数据/3秒快照/511090/511090.SH_20250701_20250731_snapshot.csv)",
+      "Bash(awk -F, 'NR>1{phase[$NF]++} END{for\\(p in phase\\) print p, phase[p]}' d:/0521数据清洗/a/国债ETF数据/3秒快照/511090/511090.SH_20250701_20250731_snapshot.csv)",
+      "Bash(awk -F, 'NR>1 && $NF==\"T111\" {date=substr\\($3,1,10\\); if\\(date!=lastdate\\){lastdate=date; prev=0} *)",
+      "Bash(awk -F, 'NR>1 && $NF==\"T111\" {date=substr\\($3,1,10\\); *)",
+      "Bash(awk -F, 'NR>1 && $NF==\"T111\" {total++; if\\($15==\"0.0\"||$15==\"0\"\\) ask0++; if\\($17==\"0.0\"||$17==\"0\"\\) bid0++} *)",
+      "Bash(awk -F, 'NR>1 && $NF==\"T111\" {total++; if\\($12==\"0\"||$12==\"0.0\"\\) nt0++} *)",
+      "Bash(awk -F, 'NR>1{phase[$NF]++} END{for\\(p in phase\\) print p, phase[p]}' d:/0521数据清洗/a/国债ETF数据/3秒快照/511130/511130.SH_20260101_20260131_snapshot.csv)",
+      "Bash(awk -F, 'NR>1 && $NF==\"T111\" {total++; if\\($5==\"0.0\"||$5==\"0\"\\) l0++; if\\($15==\"0.0\"||$15==\"0\"\\) a0++; if\\($17==\"0.0\"||$17==\"0\"\\) b0++} *)",
+      "Bash(awk -F, 'NR>1 && $NF==\"T111\" { *)",
+      "Bash(awk -F, 'NR>1 && $NF==\"E110\" { *)",
+      "Bash(awk -F, 'NR>1 && $NF==\"T111\" {total++; if\\($35==\"0.0\"||$35==\"0\"\\) iopv0++} *)",
+      "PowerShell(& \"C:\\\\Users\\\\osmon\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe\" \"d:\\\\0521������ϴ\\\\notebooks\\\\_patch_notebook.py\")"
     ]
   }
 }
