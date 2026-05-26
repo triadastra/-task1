@@ -1073,6 +1073,8 @@
     let btAutoPlayRunning = false;
     let btTrainingLoopRunning = false;
     let btTrainingStats = { episodes: 0, returns: [], lastStartCash: 100000 };
+    let _policyLastGeneratedAt = null;  // for auto-reload detection
+    let _policyPollTimer = null;
 
     function btPriceNow() {
       return btGame.allBars[btGame.cursor] || null;
@@ -1393,7 +1395,9 @@
           const res = await fetch(url + '?ts=' + Date.now());
           if (!res.ok) continue;
           xgbPolicyGame = await res.json();
-          console.log('Loaded XGB policy:', url, '| type:', xgbPolicyGame.policy_type || 'legacy');
+          _policyLastGeneratedAt = xgbPolicyGame.generated_at || null;
+          console.log('Loaded XGB policy:', url, '| type:', xgbPolicyGame.policy_type || 'legacy',
+                      '| generated_at:', _policyLastGeneratedAt);
           break;
         } catch (e) {
           console.warn('XGB policy load error for', url, e);
@@ -1401,6 +1405,52 @@
       }
       if (!xgbPolicyGame) console.warn('No XGB game policy loaded.');
       renderXGBStatus(xgbInferenceLatest);
+    }
+
+    // Auto-reload: poll every 15 s; reload policy when generated_at changes
+    async function _pollPolicyUpdate() {
+      try {
+        const res = await fetch('/ml/artifacts/xgb_multibuy_policy.json?ts=' + Date.now());
+        if (!res.ok) return;
+        const data = await res.json();
+        const ts = data.generated_at || null;
+        if (ts && ts !== _policyLastGeneratedAt) {
+          console.log('Policy updated:', ts, '(was:', _policyLastGeneratedAt, ')');
+          xgbPolicyGame = data;
+          _policyLastGeneratedAt = ts;
+          renderXGBStatus(xgbInferenceLatest);
+          // Show toast notification
+          _showPolicyToast(ts);
+        }
+      } catch (_) {}
+    }
+
+    function _showPolicyToast(ts) {
+      let toast = document.getElementById('_policyReloadToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = '_policyReloadToast';
+        Object.assign(toast.style, {
+          position: 'fixed', bottom: '24px', right: '24px', zIndex: 9999,
+          background: '#1a365d', color: '#fff', borderRadius: '8px',
+          padding: '12px 18px', fontSize: '13px', boxShadow: '0 4px 12px rgba(0,0,0,.3)',
+          transition: 'opacity .4s', opacity: '0', pointerEvents: 'none',
+          maxWidth: '320px',
+        });
+        document.body.appendChild(toast);
+      }
+      toast.textContent = '✓ 模型已更新 — ' + ts;
+      toast.style.opacity = '1';
+      clearTimeout(toast._hideTimer);
+      toast._hideTimer = setTimeout(() => { toast.style.opacity = '0'; }, 5000);
+    }
+
+    function startPolicyPolling(intervalMs = 15000) {
+      if (_policyPollTimer) clearInterval(_policyPollTimer);
+      _policyPollTimer = setInterval(_pollPolicyUpdate, intervalMs);
+    }
+    function stopPolicyPolling() {
+      if (_policyPollTimer) { clearInterval(_policyPollTimer); _policyPollTimer = null; }
     }
 
     function ensureBTMainChart() {
@@ -1726,6 +1776,7 @@
       renderTable('d2024Table', chartData);
       await loadXGBInference();
       await loadXGBPolicyGame();
+      startPolicyPolling(15000);  // auto-reload every 15 s
     }
     async function initWeekly2024() {
       const { data } = await loadCSV('brk_b_weekly_2024_now.csv');

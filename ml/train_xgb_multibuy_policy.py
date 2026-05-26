@@ -1,38 +1,43 @@
-"""Multi-buy XGBoost policy trainer.
+"""Multi-buy XGBoost policy trainer with portfolio-aware features.
 
-Action space
-------------
+Action space (3-class)
+----------------------
   0 = HOLD
-  1 = BUY_50   (buy  50 shares, creates a new lot)
-  2 = BUY_100  (buy 100 shares, creates a new lot)
-  3 = BUY_200  (buy 200 shares, creates a new lot)
-  4 = SELL_LOT (sell oldest open lot, FIFO)
-  5 = SELL_ALL (close every open lot)
+  1 = BUY   – buy X shares;  X = round(P(BUY)  × MAX_BUY_SHARES), capped by cash
+  2 = SELL  – sell X shares; X = round(P(SELL) × total_held), FIFO partial exit
+
+Portfolio features (5 dims appended to 121 market dims → 126 total)
+--------------------------------------------------------------------
+  cash_ratio     : cash / total_equity
+  invested_ratio : market_value / total_equity
+  position_size  : total_shares / (MAX_BUY_SHARES × MAX_LOTS)
+  equity_growth  : tanh(equity / initial_cash − 1)
+  cost_vs_price  : avg_cost / current_price − 1  (negative = in profit)
 
 Training strategy
 -----------------
-  Phase 1 – Random exploration
-      Run N_explore random episodes through the training period.
-      For each episode record (feature, action_taken, weight) where
-      weight ∝ episode_return (profitable episodes get higher weight).
-      This mimics "let the model explore first" before supervised learning.
+  Phase 1 – Random exploration with portfolio simulation
+      Run N_explore random episodes; record (market_feat ++ portfolio_feat,
+      oracle_label) per bar.  Oracle label = label_by_return(ret) — NOT the
+      random action taken.  Diverse states + clean targets.
 
-  Phase 2 – Supervised labels
-      For every bar in the training period compute the forward-horizon
-      return and map it to one of the 6 actions by magnitude thresholds.
+  Phase 2 – Supervised labels (neutral portfolio state)
+      For every training bar: market_feat ++ neutral_portfolio_feat.
+      Neutral = all cash, no positions.  Label via label_by_return.
 
   Combined dataset
-      Stack exploration + supervised samples; train XGBoost (6-class)
-      with per-sample weights.
+      Exploration (126-dim, live portfolio) + Supervised (126-dim, neutral).
+      Train XGBoost 3-class multi:softprob with per-sample weights.
 
-  Model selection
-      Evaluate each candidate with a multi-episode, multi-lot backtest
-      on the validation window using random initial capital from the
-      configured pool.  Best model = highest average return %.
+  RL iterative improvement
+      Each epoch: random OR greedy episodes (portfolio-aware).
+      Greedy: sequential per-bar inference with live portfolio features.
+      Best epoch selected by test mlogloss on held-out game period.
 
   Policy output
-      For every bar in [game_start, game_end] run inference and write
-      action_id (0-5) + action_name + probabilities to JSON.
+      For every bar in [game_start, game_end] simulate a live portfolio
+      and run per-bar inference.  Writes action_id (0-2) + probabilities
+      + portfolio snapshot to JSON.
 """
 import argparse
 import csv
@@ -44,9 +49,16 @@ import numpy as np
 import xgboost as xgb
 
 # ── constants ──────────────────────────────────────────────────────────────────
-DATE_COLUMN = "Date"
-ACTIONS = {0: "HOLD", 1: "BUY_50", 2: "BUY_100", 3: "BUY_200", 4: "SELL_LOT", 5: "SELL_ALL"}
-QTY_MAP = {1: 50, 2: 100, 3: 200}
+DATE_COLUMN    = "Date"
+N_ACTIONS      = 3
+ACTIONS        = {0: "HOLD", 1: "BUY", 2: "SELL"}
+COMMISSION     = 0.001       # 0.1% per-side transaction cost
+LONG_WINDOW    = 60          # long context window (bars)
+MAX_BUY_SHARES = 100         # max shares per single BUY order
+MAX_LOTS       = 50          # max concurrent open lots
+N_MKTFEATS     = 124         # market feature dims (build_bar_features output)
+N_PORTFEATS    = 5           # portfolio state feature dims
+N_FEATURES     = N_MKTFEATS + N_PORTFEATS   # 129 total model input dims
 
 
 # ── CSV helpers ────────────────────────────────────────────────────────────────
@@ -115,8 +127,8 @@ def select_device(prefer_cuda: bool):
         return "cpu"
     try:
         dm = xgb.DMatrix(np.random.rand(64, 8).astype(np.float32),
-                         label=np.random.randint(0, 6, 64).astype(np.int32))
-        xgb.train({"objective": "multi:softprob", "num_class": 6,
+                         label=np.random.randint(0, N_ACTIONS, 64).astype(np.int32))
+        xgb.train({"objective": "multi:softprob", "num_class": N_ACTIONS,
                    "tree_method": "hist", "device": "cuda", "max_depth": 2},
                   dm, num_boost_round=2, verbose_eval=False)
         return "cuda"
@@ -125,83 +137,145 @@ def select_device(prefer_cuda: bool):
 
 
 # ── labeling ───────────────────────────────────────────────────────────────────
-def label_by_return(ret: float, th_lo: float, th_hi: float) -> int:
-    """Map a forward return into one of the 6 actions."""
-    if ret > th_hi:    return 3   # BUY_200
-    if ret > th_lo:    return 2   # BUY_100
-    if ret > 0:        return 1   # BUY_50
-    if ret > -th_lo:   return 0   # HOLD
-    if ret > -th_hi:   return 4   # SELL_LOT
-    return 5                       # SELL_ALL
+def label_by_return(ret: float, th_lo: float, th_hi: float = 0.008) -> int:
+    """3-class oracle: BUY(1) if ret>th_lo, SELL(2) if ret<-th_lo, else HOLD(0)."""
+    if ret > th_lo:    return 1   # BUY
+    if ret < -th_lo:   return 2   # SELL
+    return 0                       # HOLD
+
+
+# ── portfolio state features ───────────────────────────────────────────────────
+def portfolio_features(cash: float, lots: list, lot_costs: list,
+                        price: float, initial_cash: float) -> np.ndarray:
+    """5 scale-invariant portfolio state features.
+
+    Dims:
+      0 – cash_ratio      : cash / total_equity
+      1 – invested_ratio  : market_value / total_equity
+      2 – position_size   : total_shares / (MAX_BUY_SHARES * MAX_LOTS)
+      3 – equity_growth   : tanh(equity / initial_cash − 1)
+      4 – cost_vs_price   : avg_cost / price − 1  (negative = in profit)
+    """
+    n_shares = float(sum(lots))
+    invested = n_shares * price
+    total    = cash + invested
+    if lots:
+        avg_cost = float(sum(q * c for q, c in zip(lots, lot_costs)) / n_shares)
+    else:
+        avg_cost = float(price)
+    return np.array([
+        cash     / max(total, 1e-9),
+        invested / max(total, 1e-9),
+        n_shares / max(float(MAX_BUY_SHARES * MAX_LOTS), 1.0),
+        float(np.tanh(total / max(initial_cash, 1e-9) - 1.0)),
+        avg_cost / max(float(price), 1e-9) - 1.0,
+    ], dtype=np.float32)
+
+
+def neutral_portfolio_features() -> np.ndarray:
+    """All-cash, no-position portfolio state: [1, 0, 0, 0, 0]."""
+    return np.array([1.0, 0.0, 0.0, 0.0, 0.0], dtype=np.float32)
 
 
 # ── Phase 1: random exploration ────────────────────────────────────────────────
-def _build_valid_bars(dates, values, close_idx, train_start, train_end, window):
-    """Return list of (bar_idx, per-window-normalized features, real_price)."""
-    result = []
-    for i in range(window - 1, len(dates)):
+def _build_valid_bars(dates, values, close_idx, high_idx, low_idx,
+                      train_start, train_end, window):
+    """Return list of (bar_idx, features[121-dim], real_price, momentum_ret).
+    Requires at least LONG_WINDOW bars of history before the first valid bar.
+    """
+    LOOKBACK  = min(5, window - 1)
+    min_start = max(window, LONG_WINDOW) - 1
+    result    = []
+    for i in range(min_start, len(dates)):
         d = dates[i].date()
         if d < train_start or d >= train_end:
             continue
-        raw = values[i - window + 1 : i + 1]          # shape (window, n_feats)
-        feat = window_to_feats(raw)                    # per-window normalized
-        px = float(values[i, close_idx])               # real price for simulation
-        result.append((i, feat, px))
+        raw14 = values[i - window + 1 : i + 1]
+        raw60 = values[i - LONG_WINDOW + 1 : i + 1]
+        feat  = build_bar_features(raw14, raw60, dates[i],
+                                   close_idx, high_idx, low_idx)
+        px     = float(values[i, close_idx])
+        c_now  = float(values[i, close_idx])
+        c_prev = float(values[i - LOOKBACK, close_idx])
+        ret    = (c_now - c_prev) / max(abs(c_prev), 1e-9)
+        result.append((i, feat, px, ret))
     return result
 
 
-def _run_single_exploration(valid_bars, start_cash, rng, max_lots=50):
-    """One random-action episode; returns (records, episode_return)."""
-    cash = float(start_cash)
-    lots = []       # list of qty (FIFO)
-    records = []    # (feat, action_actually_taken)
+def _run_single_exploration(valid_bars, start_idx, episode_len, start_cash, rng,
+                            max_lots=MAX_LOTS, th_lo=0.003, th_hi=0.008):
+    """One random-action episode with portfolio tracking.
+    records: list of (feat_129, oracle_class).
+    Oracle label via label_by_return — NOT the action taken.
+    Includes 0.1% per-side transaction commission.
+    """
+    cash      = float(start_cash)
+    lots      = []        # share quantities per lot
+    lot_costs = []        # purchase prices (parallel to lots)
+    records   = []
+    end_idx   = min(start_idx + episode_len, len(valid_bars))
 
-    for _, feat, px in valid_bars:
-        action = int(rng.integers(0, 6))
+    for j in range(start_idx, end_idx):
+        _, market_feat, px, ret = valid_bars[j]
+        port_feat = portfolio_features(cash, lots, lot_costs, px, start_cash)
+        full_feat = np.concatenate([market_feat, port_feat]).astype(np.float32)
 
-        if action in (1, 2, 3):
-            qty = QTY_MAP[action]
-            cost = px * qty
+        action = int(rng.integers(0, N_ACTIONS))
+        qty    = int(rng.integers(1, MAX_BUY_SHARES + 1))   # random quantity
+
+        if action == 1:  # BUY
+            cost = px * qty * (1.0 + COMMISSION)
             if cost <= cash and len(lots) < max_lots:
                 cash -= cost
                 lots.append(qty)
-            else:
-                action = 0          # can't execute → HOLD
-        elif action == 4:           # SELL_LOT
-            if lots:
-                cash += px * lots.pop(0)
+                lot_costs.append(float(px))
             else:
                 action = 0
-        elif action == 5:           # SELL_ALL
-            for q in lots:
-                cash += px * q
-            lots = []
+        elif action == 2:  # SELL
+            total_shares = sum(lots)
+            if total_shares > 0:
+                shares_to_sell = min(qty, total_shares)
+                while shares_to_sell > 0 and lots:
+                    if lots[0] <= shares_to_sell:
+                        shares_to_sell -= lots[0]
+                        cash += lots.pop(0) * px * (1.0 - COMMISSION)
+                        lot_costs.pop(0)
+                    else:
+                        lots[0] -= shares_to_sell
+                        cash += shares_to_sell * px * (1.0 - COMMISSION)
+                        shares_to_sell = 0
+            else:
+                action = 0
 
-        records.append((feat, action))
+        records.append((full_feat, label_by_return(ret, th_lo, th_hi)))  # oracle class
 
-    final_px = valid_bars[-1][2] if valid_bars else 0.0
-    equity = cash + sum(q * final_px for q in lots)
+    final_px  = valid_bars[end_idx - 1][2] if end_idx > start_idx else 0.0
+    equity    = cash + sum(q * final_px for q in lots)
     ep_return = (equity - start_cash) / max(start_cash, 1e-9)
     return records, ep_return
 
 
-def run_random_exploration(dates, values, close_idx,
+def run_random_exploration(dates, values, close_idx, high_idx, low_idx,
                            train_start, train_end, window,
-                           n_episodes, capital_pool, rng):
-    """Run n_episodes random episodes.  Returns (X, y, weights) or None."""
-    valid = _build_valid_bars(dates, values, close_idx, train_start, train_end, window)
+                           n_episodes, episode_len, capital_pool, rng,
+                           th_lo=0.003, th_hi=0.008):
+    """Run n_episodes random episodes.  Returns (X, y_oracle_cls, weights) or None."""
+    valid = _build_valid_bars(dates, values, close_idx, high_idx, low_idx,
+                              train_start, train_end, window)
     if not valid:
         return None, None, None
 
+    max_start = max(1, len(valid) - episode_len)
     all_x, all_y, all_w = [], [], []
-    for ep_i in range(n_episodes):
+    for _ in range(n_episodes):
+        start_idx  = int(rng.integers(0, max_start))
         start_cash = float(capital_pool[int(rng.integers(0, len(capital_pool)))])
-        records, ep_ret = _run_single_exploration(valid, start_cash, rng)
-        # weight: profitable episodes get up to 6×, bad episodes get 0.1×
+        records, ep_ret = _run_single_exploration(
+            valid, start_idx, episode_len, start_cash, rng, th_lo=th_lo, th_hi=th_hi)
         w = float(np.clip(1.0 + 5.0 * ep_ret, 0.1, 6.0))
-        for feat, act in records:
+        for feat, lbl in records:
             all_x.append(feat)
-            all_y.append(act)
+            all_y.append(lbl)    # int oracle class (0-5)
             all_w.append(w)
 
     if not all_x:
@@ -212,34 +286,128 @@ def run_random_exploration(dates, values, close_idx,
             np.array(all_w, dtype=np.float32))
 
 
-# ── feature normalization ──────────────────────────────────────────────────────
+# ── feature normalization & engineering ──────────────────────────────────────
 def window_to_feats(window_data: np.ndarray) -> np.ndarray:
-    """Per-window z-score normalization — scale and level invariant.
-    Each column is normalized by its own mean/std within the window.
-    This ensures game-period features match training-period distribution
-    regardless of absolute price level.
-    """
+    """Per-window z-score normalization — scale and level invariant."""
     mean = window_data.mean(axis=0, keepdims=True)
     std  = window_data.std(axis=0, keepdims=True)
     std[std < 1e-9] = 1.0
     return ((window_data - mean) / std).astype(np.float32).reshape(-1)
 
 
+def compute_rsi(close: np.ndarray) -> float:
+    """Simple RSI, returned as scalar in [-1, 1] (center-normalized)."""
+    if len(close) < 2:
+        return 0.0
+    diffs  = np.diff(close.astype(np.float64))
+    gains  = diffs.clip(min=0.0).mean()
+    losses = (-diffs).clip(min=0.0).mean()
+    if losses < 1e-9:
+        return 1.0
+    rs  = gains / losses
+    rsi = 100.0 - 100.0 / (1.0 + rs)
+    return float((rsi - 50.0) / 50.0)   # [-1, 1]
 
-def build_supervised_dataset(dates, values, close_idx,
+
+def compute_atr_ratio(ohlcv: np.ndarray, h_idx: int, l_idx: int, c_idx: int) -> float:
+    """ATR(n) / close — scale-invariant volatility measure."""
+    trs = []
+    for k in range(1, len(ohlcv)):
+        h  = float(ohlcv[k, h_idx])
+        l  = float(ohlcv[k, l_idx])
+        pc = float(ohlcv[k - 1, c_idx])
+        trs.append(max(h - l, abs(h - pc), abs(l - pc)))
+    if not trs:
+        return 0.0
+    return float(np.mean(trs) / max(abs(float(ohlcv[-1, c_idx])), 1e-9))
+
+
+def time_features(d) -> np.ndarray:
+    """Cyclical time encoding: [sin_dow, cos_dow, sin_doy, cos_doy, year_norm]."""
+    if hasattr(d, "date"):
+        d = d.date()
+    dow = d.weekday()                          # 0=Mon … 4=Fri
+    doy = d.timetuple().tm_yday                # 1 … 366
+    return np.array([
+        np.sin(2 * np.pi * dow / 7),
+        np.cos(2 * np.pi * dow / 7),
+        np.sin(2 * np.pi * doy / 365.25),
+        np.cos(2 * np.pi * doy / 365.25),
+        float(d.year - 2000) / 30.0,           # ~0–1 over 2000-2030
+    ], dtype=np.float32)
+
+
+def build_bar_features(window14: np.ndarray, window60: np.ndarray,
+                        date, close_idx: int, high_idx: int, low_idx: int) -> np.ndarray:
+    """Full feature vector for one bar (121 dims).
+
+    Dims:
+      98 – per-window z-score of 14-bar OHLCV block
+       1 – RSI(14) in [-1, 1]
+       1 – ATR(14) / close  (scale-invariant volatility)
+      13 – log daily returns within 14-bar window
+       1 – 60-bar momentum   (close[last]/close[first] − 1)
+       1 – 60-bar return volatility
+       1 – 60-bar range position  (close in [min60, max60])
+       5 – time [sin_dow, cos_dow, sin_doy, cos_doy, year_norm]
+       3 – MA3/close−1, MA5/close−1, MA14/close−1  (scale-invariant)
+     ═══
+     124 total
+    """
+    # 1. Per-window z-score of raw 14-bar block (98 dims)
+    feat14 = window_to_feats(window14)
+
+    # 2. RSI and ATR from 14-bar window
+    close14 = window14[:, close_idx].astype(np.float64)
+    rsi     = compute_rsi(close14)
+    atr_r   = compute_atr_ratio(window14, high_idx, low_idx, close_idx)
+
+    # 3. Log daily returns inside 14-bar window (13 values)
+    log_rets14 = np.diff(np.log(np.maximum(close14, 1e-9))).astype(np.float32)
+
+    # 4. 60-bar macro summary
+    close60    = window60[:, close_idx].astype(np.float64)
+    mom60      = float((close60[-1] - close60[0]) / max(abs(close60[0]), 1e-9))
+    log_rets60 = np.diff(np.log(np.maximum(close60, 1e-9)))
+    vol60      = float(np.std(log_rets60)) if len(log_rets60) > 1 else 0.0
+    mn60, mx60 = float(close60.min()), float(close60.max())
+    rng60      = float((close60[-1] - mn60) / max(mx60 - mn60, 1e-9))
+
+    # 5. Cyclical time encoding (5 dims)
+    t_feats = time_features(date)
+
+    # 6. MA3, MA5, MA14 relative to current close (3 dims, scale-invariant)
+    cur_close = float(close14[-1])
+    ma3  = float(close14[-3:].mean())  / max(abs(cur_close), 1e-9) - 1.0
+    ma5  = float(close14[-5:].mean())  / max(abs(cur_close), 1e-9) - 1.0
+    ma14 = float(close14.mean())       / max(abs(cur_close), 1e-9) - 1.0
+
+    return np.concatenate([
+        feat14,
+        [rsi, atr_r],
+        log_rets14,
+        [mom60, vol60, rng60],
+        t_feats,
+        [ma3, ma5, ma14],
+    ]).astype(np.float32)
+
+
+
+def build_supervised_dataset(dates, values, close_idx, high_idx, low_idx,
                               train_start, train_end, window, horizon,
                               th_lo, th_hi, label_mode="momentum"):
-    """Build supervised training samples.
+    """Build supervised training samples with INT class labels (0-5).
 
-    label_mode='momentum'  : label by 5-day in-window trailing momentum
-                             (no future leakage → works in any period)
-    label_mode='forward'   : label by horizon-day forward return
-                             (requires future data → only in training window)
+    label_mode='momentum' : 5-day trailing momentum return → class via label_by_return
+    label_mode='forward'  : horizon-day forward return → class via label_by_return
+    Returns (X float32, y int32, idx int32)
     """
-    n = len(dates)
+    n        = len(dates)
+    LOOKBACK = min(5, window - 1)
+    min_start = max(window, LONG_WINDOW) - 1
     xs, ys, idx_arr = [], [], []
-    lookback = min(5, window - 1)   # momentum lookback within window
-    for i in range(window - 1, n):
+
+    for i in range(min_start, n):
         d0 = dates[i].date()
         if d0 < train_start or d0 >= train_end:
             continue
@@ -249,19 +417,22 @@ def build_supervised_dataset(dates, values, close_idx,
             d1 = dates[i + horizon].date()
             if d1 >= train_end:
                 continue
-        raw = values[i - window + 1 : i + 1]
-        feat = window_to_feats(raw)                    # per-window normalized
+        raw14 = values[i - window + 1 : i + 1]
+        raw60 = values[i - LONG_WINDOW + 1 : i + 1]
+        feat  = build_bar_features(raw14, raw60, dates[i],
+                                   close_idx, high_idx, low_idx)
         if label_mode == "forward":
-            c0 = float(values[i, close_idx])
-            c1 = float(values[i + horizon, close_idx])
+            c0  = float(values[i, close_idx])
+            c1  = float(values[i + horizon, close_idx])
             ret = (c1 - c0) / max(abs(c0), 1e-9)
-        else:   # momentum
+        else:
             c_now  = float(values[i, close_idx])
-            c_prev = float(values[i - lookback, close_idx])
-            ret = (c_now - c_prev) / max(abs(c_prev), 1e-9)
+            c_prev = float(values[i - LOOKBACK, close_idx])
+            ret    = (c_now - c_prev) / max(abs(c_prev), 1e-9)
         xs.append(feat)
-        ys.append(label_by_return(ret, th_lo, th_hi))
+        ys.append(label_by_return(ret, th_lo, th_hi))   # int class label 0-5
         idx_arr.append(i)
+
     if not xs:
         raise RuntimeError("No supervised samples built.")
     return (np.vstack(xs).astype(np.float32),
@@ -269,35 +440,59 @@ def build_supervised_dataset(dates, values, close_idx,
             np.array(idx_arr, dtype=np.int32))
 
 
-# ── multi-lot backtest ─────────────────────────────────────────────────────────
-def multibuy_backtest(pred_labels, row_indices, values, close_idx,
-                      start_cash, max_lots=50):
-    cash = float(start_cash)
-    lots = []   # FIFO list of qty
+# ── portfolio backtest ─────────────────────────────────────────────────────────
+def portfolio_backtest(model, x_market_va, row_indices, values, close_idx,
+                       start_cash, max_lots=MAX_LOTS, max_buy_shares=MAX_BUY_SHARES):
+    """Sequential backtest with live portfolio features and dynamic quantities.
 
-    for lbl, idx in zip(pred_labels, row_indices):
-        px = float(values[idx, close_idx])
-        if lbl in (1, 2, 3):
-            qty = QTY_MAP[lbl]
-            cost = px * qty
+    model        : trained XGBoost model (expects N_FEATURES=126-dim input)
+    x_market_va  : (N, N_MKTFEATS=124) pre-computed market features
+    row_indices  : corresponding bar indices into values array
+
+    For speed, we batch-predict using neutral portfolio features then update
+    sequentially — a close approximation that avoids per-bar DMatrix creation.
+    """
+    cash      = float(start_cash)
+    lots      = []
+    lot_costs = []
+
+    # Batch predict: append neutral portfolio once, predict all rows at once.
+    nport      = np.tile(neutral_portfolio_features(), (len(x_market_va), 1))
+    x_full_all = np.hstack([x_market_va, nport]).astype(np.float32)
+    all_probs  = model.predict(xgb.DMatrix(x_full_all)).reshape(-1, N_ACTIONS)
+
+    for step, (idx, probs) in enumerate(zip(row_indices, all_probs)):
+        px        = float(values[idx, close_idx])
+        action    = int(np.argmax(probs))
+
+        if action == 1:  # BUY
+            qty  = max(1, round(float(probs[1]) * max_buy_shares))
+            cost = px * qty * (1.0 + COMMISSION)
             if cost <= cash and len(lots) < max_lots:
                 cash -= cost
                 lots.append(qty)
-        elif lbl == 4:
-            if lots:
-                cash += px * lots.pop(0)
-        elif lbl == 5:
-            for q in lots:
-                cash += px * q
-            lots = []
+                lot_costs.append(float(px))
+        elif action == 2:  # SELL
+            total_shares = sum(lots)
+            if total_shares > 0:
+                shares_to_sell = max(1, round(float(probs[2]) * total_shares))
+                while shares_to_sell > 0 and lots:
+                    if lots[0] <= shares_to_sell:
+                        shares_to_sell -= lots[0]
+                        cash += lots.pop(0) * px * (1.0 - COMMISSION)
+                        lot_costs.pop(0)
+                    else:
+                        lots[0] -= shares_to_sell
+                        cash += shares_to_sell * px * (1.0 - COMMISSION)
+                        shares_to_sell = 0
 
     final_px = float(values[row_indices[-1], close_idx])
-    equity = cash + sum(q * final_px for q in lots)
+    equity   = cash + sum(q * final_px for q in lots)
     return {
         "final_equity": float(equity),
-        "pnl": float(equity - start_cash),
-        "return_pct": float((equity - start_cash) / max(start_cash, 1e-9) * 100.0),
-        "open_lots": int(len(lots)),
+        "pnl":          float(equity - start_cash),
+        "return_pct":   float((equity - start_cash) / max(start_cash, 1e-9) * 100.0),
+        "open_shares":  int(sum(lots)),
     }
 
 
@@ -311,67 +506,85 @@ def time_split(x, y, idx, w, valid_ratio=0.2):
 
 
 def train_candidate(x_tr, y_tr, w_tr, x_va, y_va, params, num_boost_round):
-    dtr = xgb.DMatrix(x_tr, label=y_tr, weight=w_tr)
-    dva = xgb.DMatrix(x_va, label=y_va)
+    """Train one XGB classifier; returns (model, pred_cls_va, val_mlogloss)."""
+    dtr   = xgb.DMatrix(x_tr, label=y_tr, weight=w_tr)
+    dva   = xgb.DMatrix(x_va, label=y_va)
     model = xgb.train(
         params, dtr,
         num_boost_round=num_boost_round,
         evals=[(dtr, "train"), (dva, "valid")],
-        early_stopping_rounds=40,
         verbose_eval=False,
     )
-    prob = model.predict(dva)
-    pred = np.argmax(prob, axis=1)
-    acc = float((pred == y_va).mean())
-    return model, pred, acc
+    probs        = model.predict(dva).reshape(-1, N_ACTIONS)
+    pred_cls     = np.argmax(probs, axis=1).astype(np.int32)
+    n            = len(y_va)
+    val_mlogloss = float(-np.mean(np.log(probs[np.arange(n), y_va.astype(int)] + 1e-9)))
+    return model, pred_cls, val_mlogloss
 
 
 def optimize_model(x_sup_tr, y_sup_tr, w_sup_tr,
                    x_sup_va, y_sup_va, idx_sup_va,
                    x_exp_tr, y_exp_tr, w_exp_tr,
                    values, close_idx, device, num_boost_round,
-                   capital_pool, eval_episodes, rng):
-    # Combine exploration (train-only) + supervised training
-    if x_exp_tr is not None and len(x_exp_tr) > 0:
-        x_tr = np.vstack([x_exp_tr, x_sup_tr])
-        y_tr = np.concatenate([y_exp_tr, y_sup_tr])
-        w_tr = np.concatenate([w_exp_tr, w_sup_tr])
-    else:
-        x_tr, y_tr, w_tr = x_sup_tr, y_sup_tr, w_sup_tr
+                   capital_pool, eval_episodes, rng,
+                   th_lo=0.003, th_hi=0.008, loss="mae"):
+    # Class-frequency weighting for supervised anchor
+    sup_cls  = y_sup_tr.astype(np.int32)
+    cls_cnts = np.bincount(sup_cls, minlength=N_ACTIONS).astype(np.float32)
+    cls_w    = len(sup_cls) / (float(N_ACTIONS) * np.maximum(cls_cnts, 1.0))
+    sup_w_bal = cls_w[sup_cls]
 
-    # Validation: supervised only (correct bar indices for backtest)
-    x_va, y_va = x_sup_va, y_sup_va
-    idx_va = idx_sup_va
+    # Add neutral portfolio features to supervised data (121 → 126 dims)
+    nport_tr      = np.tile(neutral_portfolio_features(), (len(x_sup_tr), 1))
+    nport_va      = np.tile(neutral_portfolio_features(), (len(x_sup_va), 1))
+    x_sup_tr_full = np.hstack([x_sup_tr, nport_tr])
+    x_sup_va_full = np.hstack([x_sup_va, nport_va])
+
+    # Combine exploration (126-dim) + class-balanced supervised (126-dim)
+    if x_exp_tr is not None and len(x_exp_tr) > 0:
+        x_tr = np.vstack([x_exp_tr, x_sup_tr_full])
+        y_tr = np.concatenate([y_exp_tr, y_sup_tr])
+        w_tr = np.concatenate([w_exp_tr, sup_w_bal])
+    else:
+        x_tr, y_tr, w_tr = x_sup_tr_full, y_sup_tr, sup_w_bal
+
+    x_va, y_va = x_sup_va_full, y_sup_va
+    idx_va     = idx_sup_va
+
+    objective   = "multi:softprob"
+    eval_metric = "mlogloss"
 
     candidates = [
-        {"eta": 0.03, "max_depth": 4, "subsample": 0.9, "colsample_bytree": 0.9, "min_child_weight": 2},
-        {"eta": 0.05, "max_depth": 5, "subsample": 0.9, "colsample_bytree": 0.9, "min_child_weight": 3},
-        {"eta": 0.07, "max_depth": 6, "subsample": 0.85, "colsample_bytree": 0.85, "min_child_weight": 4},
+        {"eta": 0.03, "max_depth": 8,  "subsample": 0.9,  "colsample_bytree": 0.9,  "min_child_weight": 2},
+        {"eta": 0.05, "max_depth": 10, "subsample": 0.9,  "colsample_bytree": 0.9,  "min_child_weight": 3},
+        {"eta": 0.07, "max_depth": 12, "subsample": 0.85, "colsample_bytree": 0.85, "min_child_weight": 4},
     ]
 
-    best = None
+    best       = None
     all_scores = []
     for i, g in enumerate(candidates, 1):
         params = {
-            "objective": "multi:softprob",
-            "num_class": 6,
-            "eval_metric": "mlogloss",
+            "objective":   objective,
+            "eval_metric": eval_metric,
+            "num_class":   N_ACTIONS,
             "tree_method": "hist",
-            "device": device,
-            "seed": 2026 + i,
+            "device":      device,
+            "seed":        2026 + i,
             **g,
         }
-        model, pred, acc = train_candidate(x_tr, y_tr, w_tr, x_va, y_va, params, num_boost_round)
+        model, pred_cls, val_mlogloss = train_candidate(
+            x_tr, y_tr, w_tr, x_va, y_va, params, num_boost_round)
 
-        # Evaluate with multi-episode random-capital multi-lot backtest
         ep_returns = []
         for _ in range(eval_episodes):
-            sc = float(capital_pool[int(rng.integers(0, len(capital_pool)))])
-            perf = multibuy_backtest(pred, idx_va, values, close_idx, start_cash=sc)
+            sc   = float(capital_pool[int(rng.integers(0, len(capital_pool)))])
+            perf = portfolio_backtest(model, x_sup_va, idx_va, values, close_idx,
+                                      start_cash=sc)
             ep_returns.append(perf["return_pct"])
 
         row = {
-            "candidate": i, "params": g, "valid_accuracy": acc,
+            "candidate": i, "params": g,
+            "val_mlogloss": float(val_mlogloss),
             "eval_episodes": int(eval_episodes),
             "avg_return_pct": float(np.mean(ep_returns)),
             "min_return_pct": float(np.min(ep_returns)),
@@ -386,120 +599,165 @@ def optimize_model(x_sup_tr, y_sup_tr, w_sup_tr,
 
 # ── RL epoch helpers ──────────────────────────────────────────────────────────
 def _run_policy_episode_segment(valid_bars, start_idx, episode_len,
-                                 start_cash, greedy_actions, epsilon, rng,
-                                 max_lots=50):
-    """Run one episode from start_idx for episode_len steps.
-    greedy_actions: precomputed argmax array for all valid bars (or None → pure random).
-    epsilon: probability of random action instead of greedy.
+                                 start_cash, use_greedy, current_model, rng,
+                                 th_lo=0.003, th_hi=0.008, max_lots=MAX_LOTS,
+                                 max_buy_shares=MAX_BUY_SHARES):
+    """Run one RL episode with live portfolio features.
+
+    use_greedy    : if True, use current_model for per-bar inference
+    current_model : trained XGBoost model (expects N_FEATURES=126-dim input)
+    Returns (records, ep_return, ep_sharpe)
+    records: list of (feat_126, oracle_class)
     """
-    end_idx = min(start_idx + episode_len, len(valid_bars))
-    cash = float(start_cash)
-    lots = []
-    records = []
+    end_idx       = min(start_idx + episode_len, len(valid_bars))
+    cash          = float(start_cash)
+    lots          = []
+    lot_costs     = []
+    records       = []
+    equity_series = [float(start_cash)]
 
     for j in range(start_idx, end_idx):
-        _, feat, px = valid_bars[j]
-        if greedy_actions is None or rng.random() < epsilon:
-            action = int(rng.integers(0, 6))
-        else:
-            action = int(greedy_actions[j])
+        _, market_feat, px, ret = valid_bars[j]
+        port_feat = portfolio_features(cash, lots, lot_costs, px, start_cash)
+        full_feat = np.concatenate([market_feat, port_feat]).astype(np.float32)
 
-        if action in (1, 2, 3):
-            qty = QTY_MAP[action]
-            cost = px * qty
+        if use_greedy and current_model is not None:
+            probs  = current_model.predict(
+                xgb.DMatrix(full_feat.reshape(1, -1))
+            ).reshape(N_ACTIONS)
+            action = int(np.argmax(probs))
+            p_act  = float(probs[action])
+        else:
+            probs  = None
+            action = int(rng.integers(0, N_ACTIONS))
+            p_act  = 0.5   # neutral confidence for random action
+
+        qty = max(1, round(p_act * max_buy_shares))  # confidence-scaled quantity
+
+        if action == 1:  # BUY
+            cost = px * qty * (1.0 + COMMISSION)
             if cost <= cash and len(lots) < max_lots:
                 cash -= cost
                 lots.append(qty)
+                lot_costs.append(float(px))
             else:
                 action = 0
-        elif action == 4:
-            if lots:
-                cash += px * lots.pop(0)
+        elif action == 2:  # SELL
+            total_shares = sum(lots)
+            if total_shares > 0:
+                shares_to_sell = max(1, round(p_act * total_shares))
+                while shares_to_sell > 0 and lots:
+                    if lots[0] <= shares_to_sell:
+                        shares_to_sell -= lots[0]
+                        cash += lots.pop(0) * px * (1.0 - COMMISSION)
+                        lot_costs.pop(0)
+                    else:
+                        lots[0] -= shares_to_sell
+                        cash += shares_to_sell * px * (1.0 - COMMISSION)
+                        shares_to_sell = 0
             else:
                 action = 0
-        elif action == 5:
-            for q in lots:
-                cash += px * q
-            lots = []
 
-        records.append((feat, action))
+        records.append((full_feat, label_by_return(ret, th_lo, th_hi)))  # oracle class
+        equity_series.append(cash + sum(q * px for q in lots))
 
-    final_px = valid_bars[end_idx - 1][2] if end_idx > start_idx else 0.0
-    equity = cash + sum(q * final_px for q in lots)
-    ep_return = (equity - start_cash) / max(start_cash, 1e-9)
-    return records, ep_return
+    final_px  = valid_bars[end_idx - 1][2] if end_idx > start_idx else 0.0
+    equity    = cash + sum(q * final_px for q in lots)
+    ep_return = (equity - float(start_cash)) / max(float(start_cash), 1e-9)
+
+    eq_arr    = np.array(equity_series, dtype=np.float64)
+    step_rets = np.diff(np.log(np.maximum(eq_arr, 1e-9)))
+    ep_sharpe = (float(step_rets.mean()) / (float(step_rets.std()) + 1e-9)
+                 * np.sqrt(252)) if len(step_rets) > 1 else 0.0
+
+    return records, ep_return, ep_sharpe
 
 
-def run_rl_epoch(valid_bars, x_all_feats, current_model, epsilon,
-                 n_episodes, episode_len, capital_pool, rng):
-    """One RL epoch: batch-predict current policy, run n_episodes, return data.
-
-    Batch prediction (one forward pass for all valid bars) makes each epoch
-    fast even with 1000 episodes.
+def run_rl_epoch(valid_bars, current_model, epsilon,
+                 n_episodes, episode_len, capital_pool, rng,
+                 th_lo=0.003, th_hi=0.008):
+    """One RL epoch: each episode is 100% random OR 100% greedy (portfolio-aware).
+    epsilon = fraction of episodes that are pure random exploration.
     """
-    n_bars = len(valid_bars)
-    greedy_actions = None
-    if current_model is not None and epsilon < 1.0:
-        prob_all = current_model.predict(xgb.DMatrix(x_all_feats))   # (n_bars, 6)
-        greedy_actions = np.argmax(prob_all, axis=1)                  # (n_bars,)
-
+    n_bars    = len(valid_bars)
     max_start = max(1, n_bars - episode_len)
     all_x, all_y, all_w, returns = [], [], [], []
+    n_random  = int(round(epsilon * n_episodes))
 
-    for _ in range(n_episodes):
+    for ep_i in range(n_episodes):
+        use_greedy = (ep_i >= n_random) and (current_model is not None)
         start_idx  = int(rng.integers(0, max_start))
         start_cash = float(capital_pool[int(rng.integers(0, len(capital_pool)))])
-        records, ep_ret = _run_policy_episode_segment(
+        records, ep_ret, ep_sharpe = _run_policy_episode_segment(
             valid_bars, start_idx, episode_len, start_cash,
-            greedy_actions, epsilon, rng,
+            use_greedy, current_model, rng, th_lo=th_lo, th_hi=th_hi,
         )
-        w = float(np.clip(1.0 + 5.0 * ep_ret, 0.1, 6.0))
-        for feat, act in records:
+        w = float(np.clip(0.5 + 1.5 * ep_sharpe + 3.0 * ep_ret, 0.1, 6.0))
+        for feat, lbl in records:
             all_x.append(feat)
-            all_y.append(act)
+            all_y.append(lbl)
             all_w.append(w)
         returns.append(ep_ret)
 
     return all_x, all_y, all_w, returns
 
 
-def run_rl_training(valid_bars, x_all_feats,
+def run_rl_training(valid_bars,
                     x_sup_tr, y_sup_tr,
                     x_sup_va, y_sup_va, idx_sup_va,
+                    x_test, y_test,
                     values, close_idx, device, num_boost_round,
                     capital_pool, eval_episodes, rng,
                     best_params, n_epochs, n_episodes_per_epoch,
                     episode_len, eps_start, eps_end,
+                    th_lo=0.003, th_hi=0.008, loss="mae",
                     max_ep_ratio=5):
-    """Iterative policy improvement over n_epochs.
+    """Iterative policy improvement (3-class multi:softprob).
 
-    Epoch 0 always uses epsilon=1.0 (pure random, same as initial exploration).
-    Subsequent epochs decay epsilon from eps_start → eps_end.
-    Supervised data is mixed in every epoch as a stable anchor.
-    Exploration is capped at max_ep_ratio × len(supervised) to prevent
-    the exploration data from drowning out the supervised signal.
+    x_sup_tr/x_sup_va/x_test: 121-dim market features.
+    Neutral portfolio features are appended here before training.
+    Episode data (126-dim) is generated with live portfolio features.
+    Best epoch selected by test mlogloss on held-out game period.
     """
-    best_model  = None
-    best_return = -np.inf
-    best_epoch  = 0
-    max_ep_samples = len(y_sup_tr) * max_ep_ratio   # cap per epoch
+    best_model         = None
+    best_test_mlogloss = np.inf
+    best_val_ret       = 0.0
+    best_epoch         = 0
+    max_ep_samples     = len(y_sup_tr) * max_ep_ratio
 
-    # Fixed XGB params from hyperparam search (or caller's choice)
+    objective   = "multi:softprob"
+    eval_metric = "mlogloss"
+
+    # Append neutral portfolio features to supervised/test data (121 → 126 dims)
+    nport_tr   = np.tile(neutral_portfolio_features(), (len(x_sup_tr), 1))
+    nport_va   = np.tile(neutral_portfolio_features(), (len(x_sup_va), 1))
+    nport_te   = np.tile(neutral_portfolio_features(), (len(x_test),   1))
+    x_sup_tr_f = np.hstack([x_sup_tr, nport_tr])
+    x_sup_va_f = np.hstack([x_sup_va, nport_va])
+    x_test_f   = np.hstack([x_test,   nport_te])
+
+    # Class-frequency weights for supervised anchor (inverse freq per bucket)
+    sup_cls  = y_sup_tr.astype(np.int32)
+    cls_cnts = np.bincount(sup_cls, minlength=N_ACTIONS).astype(np.float32)
+    cls_w    = len(sup_cls) / (float(N_ACTIONS) * np.maximum(cls_cnts, 1.0))
+    sup_w    = cls_w[sup_cls]
+
     base_params = {
-        "objective":        "multi:softprob",
-        "num_class":        6,
-        "eval_metric":      "mlogloss",
-        "tree_method":      "hist",
-        "device":           device,
+        "objective":   objective,
+        "eval_metric": eval_metric,
+        "num_class":   N_ACTIONS,
+        "tree_method": "hist",
+        "device":      device,
         **best_params,
     }
 
+    dtest = xgb.DMatrix(x_test_f, label=y_test)
+
     for epoch in range(n_epochs):
-        # epsilon schedule: epoch 0 → 1.0, then linearly eps_start → eps_end
         if epoch == 0:
             epsilon = 1.0
         elif n_epochs > 2:
-            t = (epoch - 1) / max(n_epochs - 2, 1)
+            t       = (epoch - 1) / max(n_epochs - 2, 1)
             epsilon = eps_start - (eps_start - eps_end) * t
         else:
             epsilon = eps_end
@@ -507,102 +765,164 @@ def run_rl_training(valid_bars, x_all_feats,
         print(f"\nEpoch {epoch + 1}/{n_epochs}  epsilon={epsilon:.3f}", flush=True)
 
         ep_x, ep_y, ep_w, returns = run_rl_epoch(
-            valid_bars, x_all_feats, best_model, epsilon,
+            valid_bars, best_model, epsilon,
             n_episodes_per_epoch, episode_len, capital_pool, rng,
+            th_lo=th_lo, th_hi=th_hi,
         )
 
         # Cap exploration samples so supervised signal isn't drowned out
-        ep_x_arr = np.vstack(ep_x).astype(np.float32)
+        ep_x_arr = np.vstack(ep_x).astype(np.float32)   # already 126-dim
         ep_y_arr = np.array(ep_y, dtype=np.int32)
         ep_w_arr = np.array(ep_w, dtype=np.float32)
         if len(ep_y_arr) > max_ep_samples:
-            sel = rng.choice(len(ep_y_arr), size=max_ep_samples, replace=False)
+            sel      = rng.choice(len(ep_y_arr), size=max_ep_samples, replace=False)
             ep_x_arr = ep_x_arr[sel]
             ep_y_arr = ep_y_arr[sel]
             ep_w_arr = ep_w_arr[sel]
 
-        print(f"  episodes={len(returns)}  avg_ep_return={np.mean(returns)*100:.2f}%"
+        n_rand_ep = int(round(epsilon * n_episodes_per_epoch))
+        n_xgb_ep  = n_episodes_per_epoch - n_rand_ep
+        print(f"  random_eps={n_rand_ep}  xgb_eps={n_xgb_ep}"
+              f"  avg_ep_return={np.mean(returns)*100:.2f}%"
               f"  ep_samples_used={len(ep_y_arr)}", flush=True)
 
-        # Combine: supervised (anchor) + capped epoch exploration
-        x_tr = np.vstack([x_sup_tr, ep_x_arr])
+        # Combine: supervised (neutral portfolio, 126-dim) + episodes (live portfolio, 126-dim)
+        x_tr = np.vstack([x_sup_tr_f, ep_x_arr])
         y_tr = np.concatenate([y_sup_tr, ep_y_arr])
-        w_tr = np.concatenate([np.ones(len(y_sup_tr), dtype=np.float32), ep_w_arr])
+        w_tr = np.concatenate([sup_w, ep_w_arr])
 
         params = {**base_params, "seed": 2026 + epoch}
         dtrain = xgb.DMatrix(x_tr, label=y_tr, weight=w_tr)
-        dva    = xgb.DMatrix(x_sup_va, label=y_sup_va)
+        dva    = xgb.DMatrix(x_sup_va_f, label=y_sup_va)
         model  = xgb.train(
             params, dtrain,
             num_boost_round=num_boost_round,
             evals=[(dtrain, "train"), (dva, "valid")],
-            early_stopping_rounds=40,
             verbose_eval=False,
         )
 
-        # Evaluate on supervised validation
-        pred_prob   = model.predict(dva)
-        pred_labels = np.argmax(pred_prob, axis=1)
-        val_acc     = float((pred_labels == y_sup_va).mean())
+        # Validation mlogloss
+        probs_va     = model.predict(dva).reshape(-1, N_ACTIONS)
+        nva          = len(y_sup_va)
+        val_mlogloss = float(-np.mean(np.log(
+            probs_va[np.arange(nva), y_sup_va.astype(int)] + 1e-9)))
 
+        # Test mlogloss on game period (primary selection criterion)
+        probs_test    = model.predict(dtest).reshape(-1, N_ACTIONS)
+        nte           = len(y_test)
+        test_mlogloss = float(-np.mean(np.log(
+            probs_test[np.arange(nte), y_test.astype(int)] + 1e-9)))
+
+        # Live portfolio backtest on validation bars
         ep_returns = []
         for _ in range(eval_episodes):
             sc   = float(capital_pool[int(rng.integers(0, len(capital_pool)))])
-            perf = multibuy_backtest(pred_labels, idx_sup_va, values, close_idx, sc)
+            perf = portfolio_backtest(
+                model, x_sup_va, idx_sup_va, values, close_idx, start_cash=sc)
             ep_returns.append(perf["return_pct"])
         avg_ret = float(np.mean(ep_returns))
 
         marker = ""
-        if avg_ret > best_return:
-            best_return = avg_ret
-            best_model  = model
-            best_epoch  = epoch + 1
-            marker = "  ← best"
-        print(f"  val_acc={val_acc:.3f}  val_avg_return={avg_ret:.2f}%"
-              f"  [best={best_return:.2f}% @ epoch {best_epoch}]{marker}", flush=True)
+        if test_mlogloss < best_test_mlogloss:
+            best_test_mlogloss = test_mlogloss
+            best_val_ret       = avg_ret
+            best_model         = model
+            best_epoch         = epoch + 1
+            marker             = "  ← best (mlogloss)"
+        print(f"  val_mlogloss={val_mlogloss:.5f}  test_mlogloss={test_mlogloss:.5f}  "
+              f"val_avg_return={avg_ret:.2f}%  "
+              f"[best mlogloss={best_test_mlogloss:.5f} @ epoch {best_epoch}]{marker}",
+              flush=True)
 
-    print(f"\nRL training done. Best epoch={best_epoch}  avg_return={best_return:.4f}%")
-    return best_model, best_return, best_epoch
+    print(f"\nRL training done. Best epoch={best_epoch}  "
+          f"test_mlogloss={best_test_mlogloss:.5f}  val_avg_return={best_val_ret:.2f}%")
+    return best_model, best_test_mlogloss, best_val_ret, best_epoch
 
 
 # ── game policy ────────────────────────────────────────────────────────────────
-def build_game_policy_xgb(dates, values, model, close_idx, game_start, game_end, window):
-    """XGB model inference for each game bar."""
-    n = len(dates)
-    rows = []
-    for i in range(window - 1, n):
+def build_game_policy_xgb(dates, values, model, close_idx, high_idx, low_idx,
+                           game_start, game_end, window, th_lo=0.003, th_hi=0.008):
+    """XGB inference for each game bar with live portfolio simulation.
+
+    Portfolio starts at game_start with start_cash (500,000 mid-pool).
+    Action quantities are dynamically scaled by softmax confidence.
+    """
+    start_cash = 500_000.0   # representative mid-pool capital
+    n          = len(dates)
+    rows       = []
+    min_start  = max(window, LONG_WINDOW) - 1
+    cash       = float(start_cash)
+    lots       = []
+    lot_costs  = []
+
+    for i in range(min_start, n):
         d = dates[i].date()
-        if d < game_start or d > game_end:
+        if d < game_start:
             continue
-        raw = values[i - window + 1 : i + 1]
-        feat = window_to_feats(raw).reshape(1, -1)     # per-window normalized
-        prob = model.predict(xgb.DMatrix(feat))[0]     # shape (6,)
-        cls = int(np.argmax(prob))
+        if d > game_end:
+            break
+        raw14    = values[i - window + 1 : i + 1]
+        raw60    = values[i - LONG_WINDOW + 1 : i + 1]
+        mkt_feat = build_bar_features(raw14, raw60, dates[i], close_idx, high_idx, low_idx)
+        px       = float(values[i, close_idx])
+
+        port_feat = portfolio_features(cash, lots, lot_costs, px, start_cash)
+        full_feat = np.concatenate([mkt_feat, port_feat]).reshape(1, -1).astype(np.float32)
+        probs     = model.predict(xgb.DMatrix(full_feat)).reshape(N_ACTIONS)
+        cls       = int(np.argmax(probs))
+        prob      = {ACTIONS[k]: float(probs[k]) for k in range(N_ACTIONS)}
+
+        # Execute action to update portfolio state for next bar
+        if cls == 1:  # BUY
+            qty  = max(1, round(float(probs[1]) * MAX_BUY_SHARES))
+            cost = px * qty * (1.0 + COMMISSION)
+            if cost <= cash and len(lots) < MAX_LOTS:
+                cash -= cost
+                lots.append(qty)
+                lot_costs.append(px)
+            else:
+                cls = 0
+        elif cls == 2:  # SELL
+            total_shares = sum(lots)
+            if total_shares > 0:
+                shares_to_sell = max(1, round(float(probs[2]) * total_shares))
+                while shares_to_sell > 0 and lots:
+                    if lots[0] <= shares_to_sell:
+                        shares_to_sell -= lots[0]
+                        cash += lots.pop(0) * px * (1.0 - COMMISSION)
+                        lot_costs.pop(0)
+                    else:
+                        lots[0] -= shares_to_sell
+                        cash += shares_to_sell * px * (1.0 - COMMISSION)
+                        shares_to_sell = 0
+            else:
+                cls = 0
+
+        equity = cash + sum(q * px for q in lots)
         rows.append({
-            "date": d.isoformat(),
-            "action_id": cls,
-            "action_name": ACTIONS[cls],
-            "signal": ("BUY" if cls in (1, 2, 3) else "SELL" if cls in (4, 5) else "HOLD"),
-            "pred_class": cls,
-            "probabilities": {ACTIONS[k]: float(prob[k]) for k in range(6)},
-            "close": float(values[i, close_idx]),
+            "date":          d.isoformat(),
+            "action_id":     cls,
+            "action_name":   ACTIONS[cls],
+            "signal":        ("BUY" if cls == 1 else "SELL" if cls == 2 else "HOLD"),
+            "pred_class":    cls,
+            "pred_return":   float(probs[cls]),
+            "probabilities": prob,
+            "close":         float(px),
+            "portfolio": {
+                "cash":        round(cash, 2),
+                "equity":      round(equity, 2),
+                "shares_held": int(sum(lots)),
+                "n_lots":      int(len(lots)),
+            },
         })
     if not rows:
         raise RuntimeError("No game policy rows in requested range.")
-    # diagnostic
-    hold_probs = [r["probabilities"]["HOLD"] for r in rows]
-    print(f"  XGB HOLD avg_prob={np.mean(hold_probs):.3f}  median={np.median(hold_probs):.3f}")
     return rows
 
 
 def build_game_policy_momentum(dates, values, close_idx, game_start, game_end,
                                 window, lookback, th_lo, th_hi):
-    """Rule-based momentum game policy (no future leakage).
-    At each bar: ret = (close[i] - close[i-lookback]) / close[i-lookback]
-    Then map to the 6-class action by the same threshold as training labels.
-    This is deterministic and always produces diverse BUY/SELL actions that
-    reflect the real market direction at each bar.
-    """
+    """Rule-based momentum game policy (no future leakage)."""
     n = len(dates)
     rows = []
     for i in range(window - 1, n):
@@ -613,35 +933,35 @@ def build_game_policy_momentum(dates, values, close_idx, game_start, game_end,
         c_prev = float(values[i - lookback, close_idx])
         ret    = (c_now - c_prev) / max(abs(c_prev), 1e-9)
         cls    = label_by_return(ret, th_lo, th_hi)
-        # Build a pseudo-probability vector (the rule is deterministic,
-        # but the JSON schema expects probabilities)
-        prob = {ACTIONS[k]: 0.02 for k in range(6)}
+        prob   = {ACTIONS[k]: 0.05 for k in range(N_ACTIONS)}
         prob[ACTIONS[cls]] = 0.90
         rows.append({
-            "date": d.isoformat(),
-            "action_id": cls,
-            "action_name": ACTIONS[cls],
-            "signal": ("BUY" if cls in (1, 2, 3) else "SELL" if cls in (4, 5) else "HOLD"),
-            "pred_class": cls,
+            "date":          d.isoformat(),
+            "action_id":     cls,
+            "action_name":   ACTIONS[cls],
+            "signal":        ("BUY" if cls == 1 else "SELL" if cls == 2 else "HOLD"),
+            "pred_class":    cls,
             "probabilities": prob,
-            "close": float(values[i, close_idx]),
-            "momentum_ret": round(float(ret), 6),
+            "close":         float(values[i, close_idx]),
+            "momentum_ret":  round(float(ret), 6),
         })
     if not rows:
         raise RuntimeError("No game policy rows in requested range.")
     return rows
 
 
-def build_game_policy(dates, values, model, close_idx, game_start, game_end,
-                      window, lookback=5, th_lo=0.003, th_hi=0.008,
+def build_game_policy(dates, values, model, close_idx, high_idx, low_idx,
+                      game_start, game_end, window,
+                      lookback=5, th_lo=0.003, th_hi=0.008,
                       game_policy_mode="momentum"):
-    """Dispatch to XGB or momentum game policy."""
+    """Dispatch to XGB regression or momentum game policy."""
     if game_policy_mode == "momentum":
         return build_game_policy_momentum(dates, values, close_idx,
                                           game_start, game_end, window,
                                           lookback, th_lo, th_hi)
-    return build_game_policy_xgb(dates, values, model, close_idx,
-                                 game_start, game_end, window)
+    return build_game_policy_xgb(dates, values, model, close_idx, high_idx, low_idx,
+                                 game_start, game_end, window,
+                                 th_lo=th_lo, th_hi=th_hi)
 
 
 # ── capital pool parser ────────────────────────────────────────────────────────
@@ -689,12 +1009,14 @@ def main():
                          "When >0, runs iterative policy improvement for this many epochs.")
     ap.add_argument("--episodes-per-epoch", type=int, default=1000,
                     help="Episodes to generate per RL epoch (default 1000)")
-    ap.add_argument("--episode-len", type=int, default=252,
+    ap.add_argument("--episode-len", type=int, default=512,
                     help="Steps per episode (default 252 ≈ 1 trading year)")
     ap.add_argument("--eps-start", type=float, default=0.8,
                     help="Epsilon at epoch 1 (epoch 0 is always 1.0). Default 0.8")
     ap.add_argument("--eps-end", type=float, default=0.1,
                     help="Epsilon at final epoch. Default 0.1")
+    ap.add_argument("--loss", choices=["mae", "mse"], default="mae",
+                    help="Regression loss: mae (reg:absoluteerror) or mse (reg:squarederror). Default mae.")
     args = ap.parse_args()
 
     csv_path = Path(args.csv)
@@ -715,6 +1037,8 @@ def main():
     if "Close" not in feature_columns:
         raise RuntimeError("'Close' column required but not found.")
     close_idx = feature_columns.index("Close")
+    high_idx  = feature_columns.index("High") if "High" in feature_columns else close_idx
+    low_idx   = feature_columns.index("Low")  if "Low"  in feature_columns else close_idx
 
     device = select_device(args.prefer_cuda)
     print(f"Using per-window normalization (scale-invariant features).")
@@ -722,12 +1046,14 @@ def main():
     # ── Phase 1: random exploration ──────────────────────────────────────────
     print(f"Phase 1: random exploration ({args.explore_episodes} episodes) ...")
     x_exp, y_exp, w_exp = run_random_exploration(
-        dates, values, close_idx,
+        dates, values, close_idx, high_idx, low_idx,
         train_start, train_end,
         args.window,
         n_episodes=args.explore_episodes,
+        episode_len=args.episode_len,
         capital_pool=capital_pool,
         rng=rng,
+        th_lo=args.th_lo, th_hi=args.th_hi,
     )
     if x_exp is None:
         print("  (No exploration data generated, skipping phase 1)")
@@ -735,7 +1061,7 @@ def main():
     # ── Phase 2: supervised labels ───────────────────────────────────────────
     print("Phase 2: building supervised labels ...")
     x_sup, y_sup, idx_sup = build_supervised_dataset(
-        dates, values, close_idx,
+        dates, values, close_idx, high_idx, low_idx,
         train_start, train_end,
         args.window, args.horizon,
         args.th_lo, args.th_hi,
@@ -786,20 +1112,33 @@ def main():
             capital_pool=capital_pool,
             eval_episodes=args.eval_episodes,
             rng=rng,
+            th_lo=args.th_lo, th_hi=args.th_hi, loss=args.loss,
         )
         best_params = best_classic["params"]
         print(f"  Best hyperparams: {best_params}")
 
-        # Step 2: build valid_bars list + feature matrix for batch prediction
-        valid_bars = _build_valid_bars(
-            dates, values, close_idx, train_start, train_end, args.window)
-        x_all_feats = np.vstack([f for _, f, _ in valid_bars]).astype(np.float32)
+        # Step 2: build valid_bars list for RL episode generation
+        valid_bars  = _build_valid_bars(
+            dates, values, close_idx, high_idx, low_idx, train_start, train_end, args.window)
+        print(f"  Valid bars: {len(valid_bars)}  Market dims: {N_MKTFEATS}  Total dims: {N_FEATURES}")
 
-        # Step 3: RL loop
-        rl_model, rl_return, rl_epoch = run_rl_training(
-            valid_bars, x_all_feats,
+        # Step 3: build test set from game period (used for test MAE per epoch)
+        from datetime import timedelta
+        print("  Building test set from game period ...")
+        x_test, y_test, idx_test = build_supervised_dataset(
+            dates, values, close_idx, high_idx, low_idx,
+            game_start, game_end + timedelta(days=1),
+            args.window, args.horizon, args.th_lo, args.th_hi,
+            label_mode=args.label_mode,
+        )
+        print(f"  Test samples (game period): {len(y_test)}")
+
+        # Step 4: RL loop
+        rl_model, rl_test_mlogloss, rl_val_ret, rl_epoch = run_rl_training(
+            valid_bars,
             x_sup_tr, y_sup_tr,
             x_sup_va, y_sup_va, idx_sup_va,
+            x_test, y_test,
             values, close_idx, device, args.rounds,
             capital_pool, args.eval_episodes, rng,
             best_params,
@@ -808,18 +1147,22 @@ def main():
             episode_len=args.episode_len,
             eps_start=args.eps_start,
             eps_end=args.eps_end,
+            th_lo=args.th_lo,
+            th_hi=args.th_hi,
+            loss=args.loss,
         )
 
         model_path = out_dir / "xgb_multibuy_model.json"
         rl_model.save_model(str(model_path))
         best_info = {
-            "model": rl_model,
-            "params": best_params,
+            "model":          rl_model,
+            "params":         best_params,
             "valid_accuracy": None,
-            "avg_return_pct": rl_return,
-            "min_return_pct": rl_return,
-            "max_return_pct": rl_return,
-            "best_rl_epoch": rl_epoch,
+            "avg_return_pct": rl_val_ret,
+            "min_return_pct": rl_val_ret,
+            "max_return_pct": rl_val_ret,
+            "best_rl_epoch":  rl_epoch,
+            "best_test_mlogloss": rl_test_mlogloss,
         }
         all_scores = []
 
@@ -836,6 +1179,7 @@ def main():
             capital_pool=capital_pool,
             eval_episodes=args.eval_episodes,
             rng=rng,
+            th_lo=args.th_lo, th_hi=args.th_hi, loss=args.loss,
         )
         model_path = out_dir / "xgb_multibuy_model.json"
         best_info["model"].save_model(str(model_path))
@@ -847,7 +1191,7 @@ def main():
     print(f"\nGenerating game policy (mode={args.game_policy_mode}) ...")
     lookback = min(5, args.window - 1)
     policy_rows = build_game_policy(
-        dates, values, best_info["model"], close_idx,
+        dates, values, best_info["model"], close_idx, high_idx, low_idx,
         game_start, game_end, args.window,
         lookback=lookback, th_lo=args.th_lo, th_hi=args.th_hi,
         game_policy_mode=args.game_policy_mode,

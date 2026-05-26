@@ -13,11 +13,8 @@
   "window": 14,
   "action_space": {
     "0": "HOLD",
-    "1": "BUY_50",
-    "2": "BUY_100",
-    "3": "BUY_200",
-    "4": "SELL_LOT",
-    "5": "SELL_ALL"
+    "1": "BUY",
+    "2": "SELL"
   },
   "train_range": {
     "end_exclusive": "2025-03-10"
@@ -37,10 +34,10 @@
     "mode": "rl",
     "explore_episodes": 200,
     "rl_epochs": 5,
-    "episodes_per_epoch": 1000,
-    "episode_len": 252,
-    "eval_episodes": 20,
-    "num_boost_round": 100,
+    "episodes_per_epoch": 200,
+    "episode_len": 512,
+    "eval_episodes": 10,
+    "num_boost_round": 200,
     "capital_pool": [
       100000.0,
       500000.0
@@ -50,543 +47,636 @@
     "chosen_candidate": {
       "params": {
         "eta": 0.05,
-        "max_depth": 5,
+        "max_depth": 10,
         "subsample": 0.9,
         "colsample_bytree": 0.9,
         "min_child_weight": 3
       },
       "valid_accuracy": null,
-      "avg_return_pct": 65.60917407226563
+      "avg_return_pct": 22.75942237211471
     },
     "all_candidates": []
   },
   "policy_rows": [
     {
       "date": "2025-03-10",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00046596102765761316,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00046596102765761316,
+        "BUY": 0.00010316518455510959,
+        "SELL": 0.9994308352470398
       },
       "close": 497.1000061035156,
-      "momentum_ret": -0.025447
+      "portfolio": {
+        "cash": 500000.0,
+        "equity": 500000.0,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-03-11",
-      "action_id": 1,
-      "action_name": "BUY_50",
-      "signal": "BUY",
-      "pred_class": 1,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.9401434063911438,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.9,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.9401434063911438,
+        "BUY": 0.05021864175796509,
+        "SELL": 0.009637979790568352
       },
       "close": 496.25,
-      "momentum_ret": 0.000787
+      "portfolio": {
+        "cash": 500000.0,
+        "equity": 500000.0,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-03-12",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.009650276042521,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.009650276042521,
+        "BUY": 0.00024041956930886954,
+        "SELL": 0.9901093244552612
       },
       "close": 495.94000244140625,
-      "momentum_ret": -0.005135
+      "portfolio": {
+        "cash": 500000.0,
+        "equity": 500000.0,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-03-13",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9991251826286316,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0008201165474019945,
+        "BUY": 0.9991251826286316,
+        "SELL": 5.466766015160829e-05
       },
       "close": 504.25,
-      "momentum_ret": 0.012876
+      "portfolio": {
+        "cash": 449524.58,
+        "equity": 499949.58,
+        "shares_held": 100,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-03-14",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9999217987060547,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 4.555663326755166e-05,
+        "BUY": 0.9999217987060547,
+        "SELL": 3.258012657170184e-05
       },
       "close": 514.5999755859375,
-      "momentum_ret": 0.038295
+      "portfolio": {
+        "cash": 398013.12,
+        "equity": 500933.11,
+        "shares_held": 200,
+        "n_lots": 2
+      }
     },
     {
       "date": "2025-03-17",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9999231100082397,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 4.212955536786467e-05,
+        "BUY": 0.9999231100082397,
+        "SELL": 3.472555908956565e-05
       },
       "close": 523.010009765625,
-      "momentum_ret": 0.052122
+      "portfolio": {
+        "cash": 345659.82,
+        "equity": 502562.82,
+        "shares_held": 300,
+        "n_lots": 3
+      }
     },
     {
       "date": "2025-03-18",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9999310970306396,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 3.8216567190829664e-05,
+        "BUY": 0.9999310970306396,
+        "SELL": 3.068410660489462e-05
       },
       "close": 523.1400146484375,
-      "momentum_ret": 0.054186
+      "portfolio": {
+        "cash": 293293.5,
+        "equity": 502549.51,
+        "shares_held": 400,
+        "n_lots": 4
+      }
     },
     {
       "date": "2025-03-19",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9999284744262695,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 3.932803883799352e-05,
+        "BUY": 0.9999284744262695,
+        "SELL": 3.221444057999179e-05
       },
       "close": 525.27001953125,
-      "momentum_ret": 0.05914
+      "portfolio": {
+        "cash": 240713.97,
+        "equity": 503348.98,
+        "shares_held": 500,
+        "n_lots": 5
+      }
     },
     {
       "date": "2025-03-20",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.999925971031189,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 4.217510286252946e-05,
+        "BUY": 0.999925971031189,
+        "SELL": 3.182010550517589e-05
       },
       "close": 528.72998046875,
-      "momentum_ret": 0.048547
+      "portfolio": {
+        "cash": 187788.1,
+        "equity": 505026.09,
+        "shares_held": 600,
+        "n_lots": 6
+      }
     },
     {
       "date": "2025-03-21",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.999488115310669,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0004488879640121013,
+        "BUY": 0.999488115310669,
+        "SELL": 6.292675971053541e-05
       },
       "close": 521.9099731445312,
-      "momentum_ret": 0.014205
+      "portfolio": {
+        "cash": 135544.91,
+        "equity": 500881.89,
+        "shares_held": 700,
+        "n_lots": 7
+      }
     },
     {
       "date": "2025-03-24",
-      "action_id": 2,
-      "action_name": "BUY_100",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 2,
+      "pred_class": 1,
+      "pred_return": 0.9441781044006348,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.052566710859537125,
+        "BUY": 0.9441781044006348,
+        "SELL": 0.003255148883908987
       },
       "close": 525.8499755859375,
-      "momentum_ret": 0.00543
+      "portfolio": {
+        "cash": 86065.58,
+        "equity": 503590.46,
+        "shares_held": 794,
+        "n_lots": 8
+      }
     },
     {
       "date": "2025-03-25",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9990087151527405,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0008890388417057693,
+        "BUY": 0.9990087151527405,
+        "SELL": 0.00010226954327663407
       },
       "close": 528.8699951171875,
-      "momentum_ret": 0.010953
+      "portfolio": {
+        "cash": 33125.7,
+        "equity": 505935.47,
+        "shares_held": 894,
+        "n_lots": 9
+      }
     },
     {
       "date": "2025-03-26",
-      "action_id": 3,
-      "action_name": "BUY_200",
-      "signal": "BUY",
-      "pred_class": 3,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00017952201596926898,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00017952201596926898,
+        "BUY": 0.9997376799583435,
+        "SELL": 8.275225991383195e-05
       },
       "close": 533.2100219726562,
-      "momentum_ret": 0.015116
+      "portfolio": {
+        "cash": 33125.7,
+        "equity": 509815.46,
+        "shares_held": 894,
+        "n_lots": 9
+      }
     },
     {
       "date": "2025-03-27",
-      "action_id": 3,
-      "action_name": "BUY_200",
-      "signal": "BUY",
-      "pred_class": 3,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0009787779999896884,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0009787779999896884,
+        "BUY": 0.9988792538642883,
+        "SELL": 0.00014190519868861884
       },
       "close": 534.52001953125,
-      "momentum_ret": 0.010951
+      "portfolio": {
+        "cash": 33125.7,
+        "equity": 510986.6,
+        "shares_held": 894,
+        "n_lots": 9
+      }
     },
     {
       "date": "2025-03-28",
-      "action_id": 3,
-      "action_name": "BUY_200",
-      "signal": "BUY",
-      "pred_class": 3,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.020737778395414352,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.020737778395414352,
+        "BUY": 0.9785959720611572,
+        "SELL": 0.0006662611267529428
       },
       "close": 526.3099975585938,
-      "momentum_ret": 0.008431
+      "portfolio": {
+        "cash": 33125.7,
+        "equity": 503646.84,
+        "shares_held": 894,
+        "n_lots": 9
+      }
     },
     {
       "date": "2025-03-31",
-      "action_id": 3,
-      "action_name": "BUY_200",
-      "signal": "BUY",
-      "pred_class": 3,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.000519629567861557,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.000519629567861557,
+        "BUY": 0.9994409680366516,
+        "SELL": 3.9366343116853386e-05
       },
       "close": 532.5800170898438,
-      "momentum_ret": 0.012798
+      "portfolio": {
+        "cash": 33125.7,
+        "equity": 509252.23,
+        "shares_held": 894,
+        "n_lots": 9
+      }
     },
     {
       "date": "2025-04-01",
-      "action_id": 2,
-      "action_name": "BUY_100",
-      "signal": "BUY",
-      "pred_class": 2,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00122596207074821,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00122596207074821,
+        "BUY": 0.9987125396728516,
+        "SELL": 6.15497847320512e-05
       },
       "close": 532.989990234375,
-      "momentum_ret": 0.00779
+      "portfolio": {
+        "cash": 33125.7,
+        "equity": 509618.75,
+        "shares_held": 894,
+        "n_lots": 9
+      }
     },
     {
       "date": "2025-04-02",
-      "action_id": 3,
-      "action_name": "BUY_200",
-      "signal": "BUY",
-      "pred_class": 3,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0010017768945544958,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0010017768945544958,
+        "BUY": 0.9987068176269531,
+        "SELL": 0.0002913438656833023
       },
       "close": 537.719970703125,
-      "momentum_ret": 0.008458
+      "portfolio": {
+        "cash": 33125.7,
+        "equity": 513847.35,
+        "shares_held": 894,
+        "n_lots": 9
+      }
     },
     {
       "date": "2025-04-03",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9988476037979126,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.001008424093015492,
+        "BUY": 0.0001440064370399341,
+        "SELL": 0.9988476037979126
       },
       "close": 530.1599731445312,
-      "momentum_ret": -0.008157
+      "portfolio": {
+        "cash": 506085.12,
+        "equity": 506615.28,
+        "shares_held": 1,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-04-04",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9997206330299377,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00017145164019893855,
+        "BUY": 0.00010788032523123547,
+        "SELL": 0.9997206330299377
       },
       "close": 493.5400085449219,
-      "momentum_ret": -0.062264
+      "portfolio": {
+        "cash": 506578.17,
+        "equity": 506578.17,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-04-07",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 9.347115701530129e-05,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 9.347115701530129e-05,
+        "BUY": 4.567662108456716e-05,
+        "SELL": 0.9998608827590942
       },
       "close": 490.3800048828125,
-      "momentum_ret": -0.079237
+      "portfolio": {
+        "cash": 506578.17,
+        "equity": 506578.17,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-04-08",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 6.657553603872657e-05,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 6.657553603872657e-05,
+        "BUY": 4.909589915769175e-05,
+        "SELL": 0.9998843669891357
       },
       "close": 492.6400146484375,
-      "momentum_ret": -0.075705
+      "portfolio": {
+        "cash": 506578.17,
+        "equity": 506578.17,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-04-09",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.006272046826779842,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.006272046826779842,
+        "BUY": 0.00022708733740728348,
+        "SELL": 0.9935008883476257
       },
       "close": 521.4099731445312,
-      "momentum_ret": -0.030332
+      "portfolio": {
+        "cash": 506578.17,
+        "equity": 506578.17,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-04-10",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0013959490461274981,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0013959490461274981,
+        "BUY": 0.00010321485751774162,
+        "SELL": 0.9985008239746094
       },
       "close": 515.8099975585938,
-      "momentum_ret": -0.027067
+      "portfolio": {
+        "cash": 506578.17,
+        "equity": 506578.17,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-04-11",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9997636675834656,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00018554793496150523,
+        "BUY": 0.9997636675834656,
+        "SELL": 5.079114271211438e-05
       },
       "close": 524.1099853515625,
-      "momentum_ret": 0.06194
+      "portfolio": {
+        "cash": 454114.76,
+        "equity": 506525.76,
+        "shares_held": 100,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-04-14",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9998171925544739,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0001433685829397291,
+        "BUY": 0.9998171925544739,
+        "SELL": 3.950679820263758e-05
       },
       "close": 529.52001953125,
-      "momentum_ret": 0.079816
+      "portfolio": {
+        "cash": 401109.8,
+        "equity": 507013.81,
+        "shares_held": 200,
+        "n_lots": 2
+      }
     },
     {
       "date": "2025-04-15",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9997273087501526,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00022510087001137435,
+        "BUY": 0.9997273087501526,
+        "SELL": 4.752530003315769e-05
       },
       "close": 528.1699829101562,
-      "momentum_ret": 0.072122
+      "portfolio": {
+        "cash": 348239.99,
+        "equity": 506690.98,
+        "shares_held": 300,
+        "n_lots": 3
+      }
     },
     {
       "date": "2025-04-16",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9982308745384216,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0013784567127004266,
+        "BUY": 0.0003906502097379416,
+        "SELL": 0.9982308745384216
       },
       "close": 516.4500122070312,
-      "momentum_ret": -0.009513
+      "portfolio": {
+        "cash": 502504.12,
+        "equity": 503020.57,
+        "shares_held": 1,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-04-17",
-      "action_id": 2,
-      "action_name": "BUY_100",
-      "signal": "BUY",
-      "pred_class": 2,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.6384050846099854,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.6384050846099854,
+        "BUY": 0.3276287019252777,
+        "SELL": 0.033966269344091415
       },
       "close": 518.2100219726562,
-      "momentum_ret": 0.004653
+      "portfolio": {
+        "cash": 502504.12,
+        "equity": 503022.33,
+        "shares_held": 1,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-04-21",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9991756081581116,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0007591604953631759,
+        "BUY": 6.516993016703054e-05,
+        "SELL": 0.9991756081581116
       },
       "close": 506.9200134277344,
-      "momentum_ret": -0.032798
+      "portfolio": {
+        "cash": 503010.54,
+        "equity": 503010.54,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-04-22",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.01910579949617386,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.01910579949617386,
+        "BUY": 0.0003268102591391653,
+        "SELL": 0.9805673956871033
       },
       "close": 520.7899780273438,
-      "momentum_ret": -0.016487
+      "portfolio": {
+        "cash": 503010.54,
+        "equity": 503010.54,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-04-23",
@@ -594,101 +684,119 @@
       "action_name": "HOLD",
       "signal": "HOLD",
       "pred_class": 0,
+      "pred_return": 0.8592804670333862,
       "probabilities": {
-        "HOLD": 0.9,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.8592804670333862,
+        "BUY": 0.06853024661540985,
+        "SELL": 0.07218924909830093
       },
       "close": 526.8099975585938,
-      "momentum_ret": -0.002575
+      "portfolio": {
+        "cash": 503010.54,
+        "equity": 503010.54,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-04-24",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9992337226867676,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0007027031970210373,
+        "BUY": 0.9992337226867676,
+        "SELL": 6.356157246045768e-05
       },
       "close": 531.6400146484375,
-      "momentum_ret": 0.029412
+      "portfolio": {
+        "cash": 449793.37,
+        "equity": 502957.37,
+        "shares_held": 100,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-04-25",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9994148015975952,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.000526940159033984,
+        "BUY": 0.9994148015975952,
+        "SELL": 5.8246103435521945e-05
       },
       "close": 530.9600219726562,
-      "momentum_ret": 0.024604
+      "portfolio": {
+        "cash": 396644.27,
+        "equity": 502836.28,
+        "shares_held": 200,
+        "n_lots": 2
+      }
     },
     {
       "date": "2025-04-28",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9998669624328613,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 9.50454268604517e-05,
+        "BUY": 0.9998669624328613,
+        "SELL": 3.799129626713693e-05
       },
       "close": 530.9400024414062,
-      "momentum_ret": 0.047384
+      "portfolio": {
+        "cash": 343497.18,
+        "equity": 502779.18,
+        "shares_held": 300,
+        "n_lots": 3
+      }
     },
     {
       "date": "2025-04-29",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.999870777130127,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 9.036412666318938e-05,
+        "BUY": 0.999870777130127,
+        "SELL": 3.8862868677824736e-05
       },
       "close": 534.5700073242188,
-      "momentum_ret": 0.02646
+      "portfolio": {
+        "cash": 289986.72,
+        "equity": 503814.72,
+        "shares_held": 400,
+        "n_lots": 4
+      }
     },
     {
       "date": "2025-04-30",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9996123909950256,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0003332787600811571,
+        "BUY": 0.9996123909950256,
+        "SELL": 5.4358864872483537e-05
       },
       "close": 533.25,
-      "momentum_ret": 0.012225
+      "portfolio": {
+        "cash": 236608.4,
+        "equity": 503233.4,
+        "shares_held": 500,
+        "n_lots": 5
+      }
     },
     {
       "date": "2025-05-01",
@@ -696,135 +804,159 @@
       "action_name": "HOLD",
       "signal": "HOLD",
       "pred_class": 0,
+      "pred_return": 0.6106632351875305,
       "probabilities": {
-        "HOLD": 0.9,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.6106632351875305,
+        "BUY": 0.02162594348192215,
+        "SELL": 0.36771082878112793
       },
       "close": 530.22998046875,
-      "momentum_ret": -0.002652
+      "portfolio": {
+        "cash": 236608.4,
+        "equity": 501723.39,
+        "shares_held": 500,
+        "n_lots": 5
+      }
     },
     {
       "date": "2025-05-02",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9997782111167908,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 9.969769598683342e-05,
+        "BUY": 0.9997782111167908,
+        "SELL": 0.00012210174463689327
       },
       "close": 539.7999877929688,
-      "momentum_ret": 0.016649
+      "portfolio": {
+        "cash": 182574.42,
+        "equity": 506454.41,
+        "shares_held": 600,
+        "n_lots": 6
+      }
     },
     {
       "date": "2025-05-05",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9998272061347961,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00010511556320125237,
+        "BUY": 6.76698109600693e-05,
+        "SELL": 0.9998272061347961
       },
       "close": 512.1500244140625,
-      "momentum_ret": -0.03539
+      "portfolio": {
+        "cash": 489557.14,
+        "equity": 489557.14,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-05-06",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00013009684334974736,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00013009684334974736,
+        "BUY": 4.468178303795867e-05,
+        "SELL": 0.9998252987861633
       },
       "close": 512.3300170898438,
-      "momentum_ret": -0.041604
+      "portfolio": {
+        "cash": 489557.14,
+        "equity": 489557.14,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-05-07",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0005478532402776182,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0005478532402776182,
+        "BUY": 5.249446621746756e-05,
+        "SELL": 0.9993996620178223
       },
       "close": 518.219970703125,
-      "momentum_ret": -0.028186
+      "portfolio": {
+        "cash": 489557.14,
+        "equity": 489557.14,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-05-08",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00019399641314521432,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00019399641314521432,
+        "BUY": 4.494434324442409e-05,
+        "SELL": 0.9997610449790955
       },
       "close": 513.25,
-      "momentum_ret": -0.032024
+      "portfolio": {
+        "cash": 489557.14,
+        "equity": 489557.14,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-05-09",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00016458373283967376,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00016458373283967376,
+        "BUY": 5.639810115098953e-05,
+        "SELL": 0.9997790455818176
       },
       "close": 513.739990234375,
-      "momentum_ret": -0.048277
+      "portfolio": {
+        "cash": 489557.14,
+        "equity": 489557.14,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-05-12",
-      "action_id": 2,
-      "action_name": "BUY_100",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 2,
+      "pred_class": 1,
+      "pred_return": 0.7319498062133789,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.24229231476783752,
+        "BUY": 0.7319498062133789,
+        "SELL": 0.0257579255849123
       },
       "close": 514.2999877929688,
-      "momentum_ret": 0.004198
+      "portfolio": {
+        "cash": 451975.7,
+        "equity": 489519.6,
+        "shares_held": 73,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-05-13",
@@ -832,186 +964,219 @@
       "action_name": "HOLD",
       "signal": "HOLD",
       "pred_class": 0,
+      "pred_return": 0.5734316110610962,
       "probabilities": {
-        "HOLD": 0.9,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.5734316110610962,
+        "BUY": 0.3600696325302124,
+        "SELL": 0.0664987713098526
       },
       "close": 511.8800048828125,
-      "momentum_ret": -0.000878
+      "portfolio": {
+        "cash": 451975.7,
+        "equity": 489342.94,
+        "shares_held": 73,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-05-14",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9998182654380798,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 9.880416473606601e-05,
+        "BUY": 8.299049659399316e-05,
+        "SELL": 0.9998182654380798
       },
       "close": 503.3999938964844,
-      "momentum_ret": -0.028598
+      "portfolio": {
+        "cash": 488687.15,
+        "equity": 488687.15,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-05-15",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0011357609182596207,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0011357609182596207,
+        "BUY": 0.0001715255930321291,
+        "SELL": 0.9986926913261414
       },
       "close": 507.3299865722656,
-      "momentum_ret": -0.011534
+      "portfolio": {
+        "cash": 488687.15,
+        "equity": 488687.15,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-05-16",
-      "action_id": 1,
-      "action_name": "BUY_50",
-      "signal": "BUY",
-      "pred_class": 1,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.8230255246162415,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.9,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.8230255246162415,
+        "BUY": 0.0645294189453125,
+        "SELL": 0.11244507133960724
       },
       "close": 514.3099975585938,
-      "momentum_ret": 0.00111
+      "portfolio": {
+        "cash": 488687.15,
+        "equity": 488687.15,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-05-19",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.08604715764522552,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.08604715764522552,
+        "BUY": 0.0049306973814964294,
+        "SELL": 0.9090221524238586
       },
       "close": 512.3900146484375,
-      "momentum_ret": -0.003714
+      "portfolio": {
+        "cash": 488687.15,
+        "equity": 488687.15,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-05-20",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.02522709034383297,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.02522709034383297,
+        "BUY": 0.0008615506812930107,
+        "SELL": 0.9739113450050354
       },
       "close": 508.739990234375,
-      "momentum_ret": -0.006134
+      "portfolio": {
+        "cash": 488687.15,
+        "equity": 488687.15,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-05-21",
-      "action_id": 2,
-      "action_name": "BUY_100",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 2,
+      "pred_class": 1,
+      "pred_return": 0.8941433429718018,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.10187673568725586,
+        "BUY": 0.8941433429718018,
+        "SELL": 0.003979901783168316
       },
       "close": 507.0299987792969,
-      "momentum_ret": 0.007211
+      "portfolio": {
+        "cash": 443516.35,
+        "equity": 488642.02,
+        "shares_held": 89,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-05-22",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 4,
+      "pred_class": 2,
+      "pred_return": 0.9974842071533203,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0018613229040056467,
+        "BUY": 0.0006545009091496468,
+        "SELL": 0.9974842071533203
       },
       "close": 503.57000732421875,
-      "momentum_ret": -0.007411
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-05-23",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0001527890854049474,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0001527890854049474,
+        "BUY": 4.449868720257655e-05,
+        "SELL": 0.9998027682304382
       },
       "close": 503.4599914550781,
-      "momentum_ret": -0.021096
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-05-27",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.01998806931078434,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.01998806931078434,
+        "BUY": 8.658810111228377e-05,
+        "SELL": 0.9799253940582275
       },
       "close": 509.1600036621094,
-      "momentum_ret": -0.006304
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-05-28",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0003149039694108069,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0003149039694108069,
+        "BUY": 6.36149852653034e-05,
+        "SELL": 0.9996215105056763
       },
       "close": 503.1099853515625,
-      "momentum_ret": -0.011067
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-05-29",
@@ -1019,33 +1184,39 @@
       "action_name": "HOLD",
       "signal": "HOLD",
       "pred_class": 0,
+      "pred_return": 0.9794768691062927,
       "probabilities": {
-        "HOLD": 0.9,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.9794768691062927,
+        "BUY": 0.004577953834086657,
+        "SELL": 0.01594523712992668
       },
       "close": 506.17999267578125,
-      "momentum_ret": -0.001676
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-05-30",
-      "action_id": 1,
-      "action_name": "BUY_50",
-      "signal": "BUY",
-      "pred_class": 1,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.9409089684486389,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.9,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.9409089684486389,
+        "BUY": 0.04934196546673775,
+        "SELL": 0.009749028831720352
       },
       "close": 503.9599914550781,
-      "momentum_ret": 0.000774
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-06-02",
@@ -1053,288 +1224,339 @@
       "action_name": "HOLD",
       "signal": "HOLD",
       "pred_class": 0,
+      "pred_return": 0.9001370072364807,
       "probabilities": {
-        "HOLD": 0.9,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.9001370072364807,
+        "BUY": 0.014904875308275223,
+        "SELL": 0.08495818078517914
       },
       "close": 502.80999755859375,
-      "momentum_ret": -0.001291
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-06-03",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00010851364640984684,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00010851364640984684,
+        "BUY": 4.894257290288806e-05,
+        "SELL": 0.9998425245285034
       },
       "close": 497.8299865722656,
-      "momentum_ret": -0.022252
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-06-04",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00011922015983145684,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00011922015983145684,
+        "BUY": 6.335521902656183e-05,
+        "SELL": 0.999817430973053
       },
       "close": 491.0,
-      "momentum_ret": -0.02407
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-06-05",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 8.482304838253185e-05,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 8.482304838253185e-05,
+        "BUY": 4.1470786527497694e-05,
+        "SELL": 0.9998736381530762
       },
       "close": 488.739990234375,
-      "momentum_ret": -0.034454
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-06-06",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 9.51663896557875e-05,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 9.51663896557875e-05,
+        "BUY": 4.112733222427778e-05,
+        "SELL": 0.9998637437820435
       },
       "close": 493.5299987792969,
-      "momentum_ret": -0.020696
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-06-09",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0008701645419932902,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0008701645419932902,
+        "BUY": 5.0687871407717466e-05,
+        "SELL": 0.9990791082382202
       },
       "close": 493.3299865722656,
-      "momentum_ret": -0.018854
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-06-10",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0001899435737868771,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0001899435737868771,
+        "BUY": 6.252132152440026e-05,
+        "SELL": 0.9997475743293762
       },
       "close": 491.1300048828125,
-      "momentum_ret": -0.013458
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-06-11",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.086356021463871,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.086356021463871,
+        "BUY": 0.00675067026168108,
+        "SELL": 0.9068933129310608
       },
       "close": 488.1400146484375,
-      "momentum_ret": -0.005825
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-06-12",
-      "action_id": 2,
-      "action_name": "BUY_100",
-      "signal": "BUY",
-      "pred_class": 2,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.567288875579834,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.567288875579834,
+        "BUY": 0.38242802023887634,
+        "SELL": 0.050283096730709076
       },
       "close": 490.3399963378906,
-      "momentum_ret": 0.003274
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-06-13",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0006627022521570325,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0006627022521570325,
+        "BUY": 6.037336788722314e-05,
+        "SELL": 0.9992769360542297
       },
       "close": 487.5400085449219,
-      "momentum_ret": -0.012137
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-06-16",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.018236879259347916,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.018236879259347916,
+        "BUY": 0.00016299473645631224,
+        "SELL": 0.9816001057624817
       },
       "close": 490.2300109863281,
-      "momentum_ret": -0.006284
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-06-17",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00016847424558363855,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00016847424558363855,
+        "BUY": 6.54986288282089e-05,
+        "SELL": 0.9997660517692566
       },
       "close": 483.4800109863281,
-      "momentum_ret": -0.015576
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-06-18",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.003951778635382652,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.003951778635382652,
+        "BUY": 0.0001387695228913799,
+        "SELL": 0.9959094524383545
       },
       "close": 485.1400146484375,
-      "momentum_ret": -0.006146
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-06-20",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0020529816392809153,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0020529816392809153,
+        "BUY": 0.0001492676674388349,
+        "SELL": 0.9977977275848389
       },
       "close": 484.8500061035156,
-      "momentum_ret": -0.011196
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-06-23",
-      "action_id": 1,
-      "action_name": "BUY_50",
-      "signal": "BUY",
-      "pred_class": 1,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.9819769859313965,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.9,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.9819769859313965,
+        "BUY": 0.012306112796068192,
+        "SELL": 0.0057169413194060326
       },
       "close": 487.7699890136719,
-      "momentum_ret": 0.000472
+      "portfolio": {
+        "cash": 488289.27,
+        "equity": 488289.27,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-06-24",
-      "action_id": 2,
-      "action_name": "BUY_100",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 2,
+      "pred_class": 1,
+      "pred_return": 0.9995326995849609,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.000407646904932335,
+        "BUY": 0.9995326995849609,
+        "SELL": 5.9725694882217795e-05
       },
       "close": 493.4800109863281,
-      "momentum_ret": 0.00663
+      "portfolio": {
+        "cash": 438891.92,
+        "equity": 488239.92,
+        "shares_held": 100,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-06-25",
-      "action_id": 2,
-      "action_name": "BUY_100",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 2,
+      "pred_class": 1,
+      "pred_return": 0.9815929532051086,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.016664663329720497,
+        "BUY": 0.9815929532051086,
+        "SELL": 0.0017423442332074046
       },
       "close": 486.2099914550781,
-      "momentum_ret": 0.005647
+      "portfolio": {
+        "cash": 391195.69,
+        "equity": 487465.27,
+        "shares_held": 198,
+        "n_lots": 2
+      }
     },
     {
       "date": "2025-06-26",
@@ -1342,84 +1564,99 @@
       "action_name": "HOLD",
       "signal": "HOLD",
       "pred_class": 0,
+      "pred_return": 0.9044392704963684,
       "probabilities": {
-        "HOLD": 0.9,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.9044392704963684,
+        "BUY": 0.04755523428320885,
+        "SELL": 0.04800555482506752
       },
       "close": 485.04998779296875,
-      "momentum_ret": -0.000186
+      "portfolio": {
+        "cash": 391195.69,
+        "equity": 487235.59,
+        "shares_held": 198,
+        "n_lots": 2
+      }
     },
     {
       "date": "2025-06-27",
-      "action_id": 1,
-      "action_name": "BUY_50",
-      "signal": "BUY",
-      "pred_class": 1,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.9321938157081604,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.9,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.9321938157081604,
+        "BUY": 0.060892388224601746,
+        "SELL": 0.0069137634709477425
       },
       "close": 485.67999267578125,
-      "momentum_ret": 0.001712
+      "portfolio": {
+        "cash": 391195.69,
+        "equity": 487360.33,
+        "shares_held": 198,
+        "n_lots": 2
+      }
     },
     {
       "date": "2025-06-30",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 4,
+      "pred_class": 2,
+      "pred_return": 0.953891396522522,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.045577894896268845,
+        "BUY": 0.000530643854290247,
+        "SELL": 0.953891396522522
       },
       "close": 485.7699890136719,
-      "momentum_ret": -0.0041
+      "portfolio": {
+        "cash": 482914.41,
+        "equity": 487286.34,
+        "shares_held": 9,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-07-01",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 4,
+      "pred_class": 2,
+      "pred_return": 0.9898994565010071,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.008986949920654297,
+        "BUY": 0.0011136007960885763,
+        "SELL": 0.9898994565010071
       },
       "close": 489.6099853515625,
-      "momentum_ret": -0.007842
+      "portfolio": {
+        "cash": 487316.49,
+        "equity": 487316.49,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-07-02",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0003010465297847986,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0003010465297847986,
+        "BUY": 0.00010211285552941263,
+        "SELL": 0.999596893787384
       },
       "close": 480.4800109863281,
-      "momentum_ret": -0.011785
+      "portfolio": {
+        "cash": 487316.49,
+        "equity": 487316.49,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-07-03",
@@ -1427,747 +1664,879 @@
       "action_name": "HOLD",
       "signal": "HOLD",
       "pred_class": 0,
+      "pred_return": 0.9897283315658569,
       "probabilities": {
-        "HOLD": 0.9,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.9897283315658569,
+        "BUY": 0.006318510975688696,
+        "SELL": 0.003953103441745043
       },
       "close": 485.0,
-      "momentum_ret": -0.000103
+      "portfolio": {
+        "cash": 487316.49,
+        "equity": 487316.49,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-07-07",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0001984533155336976,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0001984533155336976,
+        "BUY": 6.464069156209007e-05,
+        "SELL": 0.9997368454933167
       },
       "close": 478.0299987792969,
-      "momentum_ret": -0.015751
+      "portfolio": {
+        "cash": 487316.49,
+        "equity": 487316.49,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-07-08",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00014105458103585988,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00014105458103585988,
+        "BUY": 5.754455196438357e-05,
+        "SELL": 0.9998014569282532
       },
       "close": 477.4700012207031,
-      "momentum_ret": -0.017086
+      "portfolio": {
+        "cash": 487316.49,
+        "equity": 487316.49,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-07-09",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00012828923354391009,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00012828923354391009,
+        "BUY": 4.868739051744342e-05,
+        "SELL": 0.9998230338096619
       },
       "close": 478.9100036621094,
-      "momentum_ret": -0.021854
+      "portfolio": {
+        "cash": 487316.49,
+        "equity": 487316.49,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-07-10",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.012235404923558235,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.012235404923558235,
+        "BUY": 0.0005675781285390258,
+        "SELL": 0.9871970415115356
       },
       "close": 478.2699890136719,
-      "momentum_ret": -0.0046
+      "portfolio": {
+        "cash": 487316.49,
+        "equity": 487316.49,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-07-11",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00022681595874018967,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00022681595874018967,
+        "BUY": 5.335378955351189e-05,
+        "SELL": 0.9997197985649109
       },
       "close": 475.8599853515625,
-      "momentum_ret": -0.018845
+      "portfolio": {
+        "cash": 487316.49,
+        "equity": 487316.49,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-07-14",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.05375245213508606,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.05375245213508606,
+        "BUY": 0.0006273704930208623,
+        "SELL": 0.9456201791763306
       },
       "close": 476.30999755859375,
-      "momentum_ret": -0.003598
+      "portfolio": {
+        "cash": 487316.49,
+        "equity": 487316.49,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-07-15",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0006045043119229376,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0006045043119229376,
+        "BUY": 0.0001257543481187895,
+        "SELL": 0.9992697834968567
       },
       "close": 470.1300048828125,
-      "momentum_ret": -0.015373
+      "portfolio": {
+        "cash": 487316.49,
+        "equity": 487316.49,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-07-16",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.000157818547450006,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.000157818547450006,
+        "BUY": 4.6393481170525774e-05,
+        "SELL": 0.9997958540916443
       },
       "close": 471.30999755859375,
-      "momentum_ret": -0.015869
+      "portfolio": {
+        "cash": 487316.49,
+        "equity": 487316.49,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-07-17",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0023658815771341324,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0023658815771341324,
+        "BUY": 5.3951273002894595e-05,
+        "SELL": 0.9975801706314087
       },
       "close": 473.3999938964844,
-      "momentum_ret": -0.010183
+      "portfolio": {
+        "cash": 487316.49,
+        "equity": 487316.49,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-07-18",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.22726920247077942,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.22726920247077942,
+        "BUY": 0.0020243478938937187,
+        "SELL": 0.7707064747810364
       },
       "close": 473.79998779296875,
-      "momentum_ret": -0.004329
+      "portfolio": {
+        "cash": 487316.49,
+        "equity": 487316.49,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-07-21",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.06972114741802216,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.06972114741802216,
+        "BUY": 0.0005202873726375401,
+        "SELL": 0.9297585487365723
       },
       "close": 474.4100036621094,
-      "momentum_ret": -0.003989
+      "portfolio": {
+        "cash": 487316.49,
+        "equity": 487316.49,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-07-22",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9996986389160156,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00026129765319637954,
+        "BUY": 0.9996986389160156,
+        "SELL": 4.01339384552557e-05
       },
       "close": 478.1300048828125,
-      "momentum_ret": 0.017017
+      "portfolio": {
+        "cash": 439455.68,
+        "equity": 487268.68,
+        "shares_held": 100,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-07-23",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9999111890792847,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 5.673399573424831e-05,
+        "BUY": 0.9999111890792847,
+        "SELL": 3.207079498679377e-05
       },
       "close": 482.6300048828125,
-      "momentum_ret": 0.024018
+      "portfolio": {
+        "cash": 391144.41,
+        "equity": 487670.42,
+        "shares_held": 200,
+        "n_lots": 2
+      }
     },
     {
       "date": "2025-07-24",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9997933506965637,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0001725263282423839,
+        "BUY": 0.9997933506965637,
+        "SELL": 3.4088279790012166e-05
       },
       "close": 480.6000061035156,
-      "momentum_ret": 0.015209
+      "portfolio": {
+        "cash": 343036.35,
+        "equity": 487216.36,
+        "shares_held": 300,
+        "n_lots": 3
+      }
     },
     {
       "date": "2025-07-25",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9999047517776489,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 6.333622877718881e-05,
+        "BUY": 0.9999047517776489,
+        "SELL": 3.189970811945386e-05
       },
       "close": 484.07000732421875,
-      "momentum_ret": 0.021676
+      "portfolio": {
+        "cash": 294580.95,
+        "equity": 488208.95,
+        "shares_held": 400,
+        "n_lots": 4
+      }
     },
     {
       "date": "2025-07-28",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9994739890098572,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0004868485266342759,
+        "BUY": 0.9994739890098572,
+        "SELL": 3.922702671843581e-05
       },
       "close": 481.70001220703125,
-      "momentum_ret": 0.015366
+      "portfolio": {
+        "cash": 246362.77,
+        "equity": 487212.78,
+        "shares_held": 500,
+        "n_lots": 5
+      }
     },
     {
       "date": "2025-07-29",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 4,
+      "pred_class": 2,
+      "pred_return": 0.8368319869041443,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.1608935445547104,
+        "BUY": 0.0022744955494999886,
+        "SELL": 0.8368319869041443
       },
       "close": 476.55999755859375,
-      "momentum_ret": -0.003284
+      "portfolio": {
+        "cash": 445365.65,
+        "equity": 484443.57,
+        "shares_held": 82,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-07-30",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9997268319129944,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0002262021298520267,
+        "BUY": 4.69529622932896e-05,
+        "SELL": 0.9997268319129944
       },
       "close": 476.0,
-      "momentum_ret": -0.013737
+      "portfolio": {
+        "cash": 484358.62,
+        "equity": 484358.62,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-07-31",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00042299620690755546,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00042299620690755546,
+        "BUY": 5.3649204346584156e-05,
+        "SELL": 0.999523401260376
       },
       "close": 471.8800048828125,
-      "momentum_ret": -0.018144
+      "portfolio": {
+        "cash": 484358.62,
+        "equity": 484358.62,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-08-01",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00011815005564130843,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00011815005564130843,
+        "BUY": 3.9105441828724e-05,
+        "SELL": 0.9998427629470825
       },
       "close": 472.8399963378906,
-      "momentum_ret": -0.023199
+      "portfolio": {
+        "cash": 484358.62,
+        "equity": 484358.62,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-08-04",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0001068244018824771,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0001068244018824771,
+        "BUY": 5.326105747371912e-05,
+        "SELL": 0.9998399019241333
       },
       "close": 459.1099853515625,
-      "momentum_ret": -0.046896
+      "portfolio": {
+        "cash": 484358.62,
+        "equity": 484358.62,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-08-05",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00011145835742354393,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00011145835742354393,
+        "BUY": 4.063401138409972e-05,
+        "SELL": 0.9998478889465332
       },
       "close": 464.19000244140625,
-      "momentum_ret": -0.025957
+      "portfolio": {
+        "cash": 484358.62,
+        "equity": 484358.62,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-08-06",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0013567415298894048,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0013567415298894048,
+        "BUY": 4.966475171386264e-05,
+        "SELL": 0.9985936284065247
       },
       "close": 468.9100036621094,
-      "momentum_ret": -0.014895
+      "portfolio": {
+        "cash": 484358.62,
+        "equity": 484358.62,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-08-07",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0001611443149158731,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0001611443149158731,
+        "BUY": 6.0677091823890805e-05,
+        "SELL": 0.9997782111167908
       },
       "close": 461.4700012207031,
-      "momentum_ret": -0.022061
+      "portfolio": {
+        "cash": 484358.62,
+        "equity": 484358.62,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-08-08",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.001690797507762909,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.001690797507762909,
+        "BUY": 7.473072764696553e-05,
+        "SELL": 0.9982343912124634
       },
       "close": 465.3999938964844,
-      "momentum_ret": -0.015735
+      "portfolio": {
+        "cash": 484358.62,
+        "equity": 484358.62,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-08-11",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9935245513916016,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.004968584515154362,
+        "BUY": 0.9935245513916016,
+        "SELL": 0.0015069185756146908
       },
       "close": 464.7300109863281,
-      "momentum_ret": 0.012241
+      "portfolio": {
+        "cash": 438304.34,
+        "equity": 484312.61,
+        "shares_held": 99,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-08-12",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9983774423599243,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.001561569981276989,
+        "BUY": 0.9983774423599243,
+        "SELL": 6.097280129324645e-05
       },
       "close": 470.3900146484375,
-      "momentum_ret": 0.013357
+      "portfolio": {
+        "cash": 391218.3,
+        "equity": 484825.91,
+        "shares_held": 199,
+        "n_lots": 2
+      }
     },
     {
       "date": "2025-08-13",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9988741278648376,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0010836307192221284,
+        "BUY": 0.9988741278648376,
+        "SELL": 4.225080192554742e-05
       },
       "close": 477.30999755859375,
-      "momentum_ret": 0.017914
+      "portfolio": {
+        "cash": 343439.57,
+        "equity": 486155.26,
+        "shares_held": 299,
+        "n_lots": 3
+      }
     },
     {
       "date": "2025-08-14",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9999158382415771,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 5.2679544751299545e-05,
+        "BUY": 0.9999158382415771,
+        "SELL": 3.1432256946573034e-05
       },
       "close": 479.2200012207031,
-      "momentum_ret": 0.038464
+      "portfolio": {
+        "cash": 295469.65,
+        "equity": 486678.43,
+        "shares_held": 399,
+        "n_lots": 4
+      }
     },
     {
       "date": "2025-08-15",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9997550845146179,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00021269098215270787,
+        "BUY": 0.9997550845146179,
+        "SELL": 3.227714842068963e-05
       },
       "close": 477.20001220703125,
-      "momentum_ret": 0.025355
+      "portfolio": {
+        "cash": 247701.93,
+        "equity": 485824.73,
+        "shares_held": 499,
+        "n_lots": 5
+      }
     },
     {
       "date": "2025-08-18",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9998296499252319,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00013831387332174927,
+        "BUY": 0.9998296499252319,
+        "SELL": 3.20298204314895e-05
       },
       "close": 478.5199890136719,
-      "momentum_ret": 0.029673
+      "portfolio": {
+        "cash": 199802.08,
+        "equity": 486435.55,
+        "shares_held": 599,
+        "n_lots": 6
+      }
     },
     {
       "date": "2025-08-19",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9999165534973145,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 4.995643030270003e-05,
+        "BUY": 0.9999165534973145,
+        "SELL": 3.348291284055449e-05
       },
       "close": 485.30999755859375,
-      "momentum_ret": 0.031718
+      "portfolio": {
+        "cash": 151222.54,
+        "equity": 490454.23,
+        "shares_held": 699,
+        "n_lots": 7
+      }
     },
     {
       "date": "2025-08-20",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9998860359191895,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 7.32516564312391e-05,
+        "BUY": 0.9998860359191895,
+        "SELL": 4.0656374039826915e-05
       },
       "close": 488.67999267578125,
-      "momentum_ret": 0.023821
+      "portfolio": {
+        "cash": 102305.68,
+        "equity": 492760.99,
+        "shares_held": 799,
+        "n_lots": 8
+      }
     },
     {
       "date": "2025-08-21",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9998778104782104,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 7.651866326341406e-05,
+        "BUY": 0.9998778104782104,
+        "SELL": 4.565962080960162e-05
       },
       "close": 488.5899963378906,
-      "momentum_ret": 0.019553
+      "portfolio": {
+        "cash": 53397.82,
+        "equity": 492640.23,
+        "shares_held": 899,
+        "n_lots": 9
+      }
     },
     {
       "date": "2025-08-22",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9998962879180908,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 7.164202543208376e-05,
+        "BUY": 0.9998962879180908,
+        "SELL": 3.2052488677436486e-05
       },
       "close": 489.0,
-      "momentum_ret": 0.024728
+      "portfolio": {
+        "cash": 4448.92,
+        "equity": 492959.92,
+        "shares_held": 999,
+        "n_lots": 10
+      }
     },
     {
       "date": "2025-08-25",
-      "action_id": 3,
-      "action_name": "BUY_200",
-      "signal": "BUY",
-      "pred_class": 3,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0010298903798684478,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0010298903798684478,
+        "BUY": 0.9989349246025085,
+        "SELL": 3.51317175955046e-05
       },
       "close": 486.17999267578125,
-      "momentum_ret": 0.016008
+      "portfolio": {
+        "cash": 4448.92,
+        "equity": 490142.73,
+        "shares_held": 999,
+        "n_lots": 10
+      }
     },
     {
       "date": "2025-08-26",
-      "action_id": 3,
-      "action_name": "BUY_200",
-      "signal": "BUY",
-      "pred_class": 3,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00020903405675198883,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00020903405675198883,
+        "BUY": 0.9997268319129944,
+        "SELL": 6.416239921236411e-05
       },
       "close": 492.2099914550781,
-      "momentum_ret": 0.014218
+      "portfolio": {
+        "cash": 4448.92,
+        "equity": 496166.7,
+        "shares_held": 999,
+        "n_lots": 10
+      }
     },
     {
       "date": "2025-08-27",
-      "action_id": 3,
-      "action_name": "BUY_200",
-      "signal": "BUY",
-      "pred_class": 3,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00014337095490191132,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00014337095490191132,
+        "BUY": 0.9997649788856506,
+        "SELL": 9.16450226213783e-05
       },
       "close": 495.7200012207031,
-      "momentum_ret": 0.014406
+      "portfolio": {
+        "cash": 4448.92,
+        "equity": 499673.2,
+        "shares_held": 999,
+        "n_lots": 10
+      }
     },
     {
       "date": "2025-08-28",
-      "action_id": 3,
-      "action_name": "BUY_200",
-      "signal": "BUY",
-      "pred_class": 3,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 6.64320687064901e-05,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 6.64320687064901e-05,
+        "BUY": 0.9998891353607178,
+        "SELL": 4.4365533540258184e-05
       },
       "close": 499.8599853515625,
-      "momentum_ret": 0.023066
+      "portfolio": {
+        "cash": 4448.92,
+        "equity": 503809.04,
+        "shares_held": 999,
+        "n_lots": 10
+      }
     },
     {
       "date": "2025-08-29",
-      "action_id": 3,
-      "action_name": "BUY_200",
-      "signal": "BUY",
-      "pred_class": 3,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 4.2188763472950086e-05,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 4.2188763472950086e-05,
+        "BUY": 0.9999237060546875,
+        "SELL": 3.404431481612846e-05
       },
       "close": 502.9800109863281,
-      "momentum_ret": 0.028589
+      "portfolio": {
+        "cash": 4448.92,
+        "equity": 506925.95,
+        "shares_held": 999,
+        "n_lots": 10
+      }
     },
     {
       "date": "2025-09-02",
-      "action_id": 3,
-      "action_name": "BUY_200",
-      "signal": "BUY",
-      "pred_class": 3,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 5.9572485042735934e-05,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 5.9572485042735934e-05,
+        "BUY": 0.999910831451416,
+        "SELL": 2.957334800157696e-05
       },
       "close": 501.1400146484375,
-      "momentum_ret": 0.030771
+      "portfolio": {
+        "cash": 4448.92,
+        "equity": 505087.79,
+        "shares_held": 999,
+        "n_lots": 10
+      }
     },
     {
       "date": "2025-09-03",
-      "action_id": 3,
-      "action_name": "BUY_200",
-      "signal": "BUY",
-      "pred_class": 3,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00013281464634928852,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00013281464634928852,
+        "BUY": 0.9998373985290527,
+        "SELL": 2.9768820240860805e-05
       },
       "close": 501.489990234375,
-      "momentum_ret": 0.018854
+      "portfolio": {
+        "cash": 4448.92,
+        "equity": 505437.42,
+        "shares_held": 999,
+        "n_lots": 10
+      }
     },
     {
       "date": "2025-09-04",
-      "action_id": 3,
-      "action_name": "BUY_200",
-      "signal": "BUY",
-      "pred_class": 3,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 5.571356086875312e-05,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 5.571356086875312e-05,
+        "BUY": 0.9999114274978638,
+        "SELL": 3.2835629099281505e-05
       },
       "close": 506.9100036621094,
-      "momentum_ret": 0.022573
+      "portfolio": {
+        "cash": 4448.92,
+        "equity": 510852.01,
+        "shares_held": 999,
+        "n_lots": 10
+      }
     },
     {
       "date": "2025-09-05",
@@ -2175,169 +2544,199 @@
       "action_name": "HOLD",
       "signal": "HOLD",
       "pred_class": 0,
+      "pred_return": 0.9778259992599487,
       "probabilities": {
-        "HOLD": 0.9,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.9778259992599487,
+        "BUY": 0.010620396584272385,
+        "SELL": 0.011553613469004631
       },
       "close": 499.7699890136719,
-      "momentum_ret": -0.00018
+      "portfolio": {
+        "cash": 4448.92,
+        "equity": 503719.14,
+        "shares_held": 999,
+        "n_lots": 10
+      }
     },
     {
       "date": "2025-09-08",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9990218877792358,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0009182651410810649,
+        "BUY": 5.980971400276758e-05,
+        "SELL": 0.9990218877792358
       },
       "close": 493.7799987792969,
-      "momentum_ret": -0.018291
+      "portfolio": {
+        "cash": 496748.56,
+        "equity": 497242.34,
+        "shares_held": 1,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-09-09",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9988489151000977,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0011085182195529342,
+        "BUY": 4.255163003108464e-05,
+        "SELL": 0.9988489151000977
       },
       "close": 492.7200012207031,
-      "momentum_ret": -0.016802
+      "portfolio": {
+        "cash": 497240.79,
+        "equity": 497240.79,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-09-10",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0004127361753489822,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0004127361753489822,
+        "BUY": 4.1344545024912804e-05,
+        "SELL": 0.9995458722114563
       },
       "close": 490.0799865722656,
-      "momentum_ret": -0.022752
+      "portfolio": {
+        "cash": 497240.79,
+        "equity": 497240.79,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-09-11",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0003223772218916565,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0003223772218916565,
+        "BUY": 5.2260980737628415e-05,
+        "SELL": 0.9996253252029419
       },
       "close": 496.9100036621094,
-      "momentum_ret": -0.019727
+      "portfolio": {
+        "cash": 497240.79,
+        "equity": 497240.79,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-09-12",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.004017133265733719,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.004017133265733719,
+        "BUY": 3.689117875183001e-05,
+        "SELL": 0.9959459900856018
       },
       "close": 493.739990234375,
-      "momentum_ret": -0.012066
+      "portfolio": {
+        "cash": 497240.79,
+        "equity": 497240.79,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-09-15",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.04025571048259735,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.04025571048259735,
+        "BUY": 0.0008231389801949263,
+        "SELL": 0.9589211940765381
       },
       "close": 491.5400085449219,
-      "momentum_ret": -0.004536
+      "portfolio": {
+        "cash": 497240.79,
+        "equity": 497240.79,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-09-16",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.17030903697013855,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.17030903697013855,
+        "BUY": 0.0014854372711852193,
+        "SELL": 0.8282055258750916
       },
       "close": 490.989990234375,
-      "momentum_ret": -0.003511
+      "portfolio": {
+        "cash": 497240.79,
+        "equity": 497240.79,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-09-17",
-      "action_id": 2,
-      "action_name": "BUY_100",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 2,
+      "pred_class": 1,
+      "pred_return": 0.9028295278549194,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.09554411470890045,
+        "BUY": 0.9028295278549194,
+        "SELL": 0.0016263140132650733
       },
       "close": 492.3299865722656,
-      "momentum_ret": 0.004591
+      "portfolio": {
+        "cash": 452886.78,
+        "equity": 497196.48,
+        "shares_held": 90,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-09-18",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9981715679168701,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0017711464315652847,
+        "BUY": 5.7246958022005856e-05,
+        "SELL": 0.9981715679168701
       },
       "close": 490.5,
-      "momentum_ret": -0.0129
+      "portfolio": {
+        "cash": 496987.64,
+        "equity": 496987.64,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-09-19",
@@ -2345,203 +2744,239 @@
       "action_name": "HOLD",
       "signal": "HOLD",
       "pred_class": 0,
+      "pred_return": 0.8811166882514954,
       "probabilities": {
-        "HOLD": 0.9,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.8811166882514954,
+        "BUY": 0.004687011707574129,
+        "SELL": 0.11419633775949478
       },
       "close": 492.8500061035156,
-      "momentum_ret": -0.001803
+      "portfolio": {
+        "cash": 496987.64,
+        "equity": 496987.64,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-09-22",
-      "action_id": 2,
-      "action_name": "BUY_100",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 2,
+      "pred_class": 1,
+      "pred_return": 0.8945114612579346,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.10483016818761826,
+        "BUY": 0.8945114612579346,
+        "SELL": 0.0006583854556083679
       },
       "close": 493.7099914550781,
-      "momentum_ret": 0.004415
+      "portfolio": {
+        "cash": 453003.51,
+        "equity": 496943.7,
+        "shares_held": 89,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-09-23",
-      "action_id": 2,
-      "action_name": "BUY_100",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 2,
+      "pred_class": 1,
+      "pred_return": 0.986642599105835,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.013241416774690151,
+        "BUY": 0.986642599105835,
+        "SELL": 0.00011598867422435433
       },
       "close": 494.1000061035156,
-      "momentum_ret": 0.006334
+      "portfolio": {
+        "cash": 404038.69,
+        "equity": 496929.49,
+        "shares_held": 188,
+        "n_lots": 2
+      }
     },
     {
       "date": "2025-09-24",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9996041655540466,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00035015406319871545,
+        "BUY": 0.9996041655540466,
+        "SELL": 4.569934753817506e-05
       },
       "close": 497.0899963378906,
-      "momentum_ret": 0.009668
+      "portfolio": {
+        "cash": 354279.98,
+        "equity": 497441.9,
+        "shares_held": 288,
+        "n_lots": 3
+      }
     },
     {
       "date": "2025-09-25",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9986125230789185,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0013229186879470944,
+        "BUY": 0.9986125230789185,
+        "SELL": 6.456670234911144e-05
       },
       "close": 494.9599914550781,
-      "momentum_ret": 0.009093
+      "portfolio": {
+        "cash": 304734.49,
+        "equity": 496778.97,
+        "shares_held": 388,
+        "n_lots": 4
+      }
     },
     {
       "date": "2025-09-26",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9998961687088013,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 7.356378773692995e-05,
+        "BUY": 0.9998961687088013,
+        "SELL": 3.0269940907601267e-05
       },
       "close": 500.0299987792969,
-      "momentum_ret": 0.014568
+      "portfolio": {
+        "cash": 254681.49,
+        "equity": 498696.13,
+        "shares_held": 488,
+        "n_lots": 5
+      }
     },
     {
       "date": "2025-09-29",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9998512268066406,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00011748677206924185,
+        "BUY": 0.9998512268066406,
+        "SELL": 3.1290015613194555e-05
       },
       "close": 499.25,
-      "momentum_ret": 0.011221
+      "portfolio": {
+        "cash": 204706.56,
+        "equity": 498265.56,
+        "shares_held": 588,
+        "n_lots": 6
+      }
     },
     {
       "date": "2025-09-30",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9998748302459717,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 9.30598471313715e-05,
+        "BUY": 0.9998748302459717,
+        "SELL": 3.2135110814124346e-05
       },
       "close": 502.739990234375,
-      "momentum_ret": 0.017486
+      "portfolio": {
+        "cash": 154382.29,
+        "equity": 500267.4,
+        "shares_held": 688,
+        "n_lots": 7
+      }
     },
     {
       "date": "2025-10-01",
-      "action_id": 1,
-      "action_name": "BUY_50",
-      "signal": "BUY",
-      "pred_class": 1,
-      "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.9,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
-      },
-      "close": 498.20001220703125,
-      "momentum_ret": 0.002233
-    },
-    {
-      "date": "2025-10-02",
-      "action_id": 1,
-      "action_name": "BUY_50",
-      "signal": "BUY",
-      "pred_class": 1,
-      "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.9,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
-      },
-      "close": 495.9200134277344,
-      "momentum_ret": 0.00194
-    },
-    {
-      "date": "2025-10-03",
       "action_id": 0,
       "action_name": "HOLD",
       "signal": "HOLD",
       "pred_class": 0,
+      "pred_return": 0.5245988965034485,
       "probabilities": {
-        "HOLD": 0.9,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.5245988965034485,
+        "BUY": 0.4740424156188965,
+        "SELL": 0.0013586527202278376
+      },
+      "close": 498.20001220703125,
+      "portfolio": {
+        "cash": 154382.29,
+        "equity": 497143.9,
+        "shares_held": 688,
+        "n_lots": 7
+      }
+    },
+    {
+      "date": "2025-10-02",
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.8578816652297974,
+      "probabilities": {
+        "HOLD": 0.8578816652297974,
+        "BUY": 0.12112265825271606,
+        "SELL": 0.020995652303099632
+      },
+      "close": 495.9200134277344,
+      "portfolio": {
+        "cash": 154382.29,
+        "equity": 495575.26,
+        "shares_held": 688,
+        "n_lots": 7
+      }
+    },
+    {
+      "date": "2025-10-03",
+      "action_id": 2,
+      "action_name": "SELL",
+      "signal": "SELL",
+      "pred_class": 2,
+      "pred_return": 0.9866640567779541,
+      "probabilities": {
+        "HOLD": 0.012810478918254375,
+        "BUY": 0.0005254793213680387,
+        "SELL": 0.9866640567779541
       },
       "close": 498.75,
-      "momentum_ret": -0.00256
+      "portfolio": {
+        "cash": 492694.89,
+        "equity": 497183.64,
+        "shares_held": 9,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-10-06",
-      "action_id": 1,
-      "action_name": "BUY_50",
-      "signal": "BUY",
-      "pred_class": 1,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.9421985149383545,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.9,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.9421985149383545,
+        "BUY": 0.05279579386115074,
+        "SELL": 0.005005760584026575
       },
       "close": 500.0199890136719,
-      "momentum_ret": 0.001542
+      "portfolio": {
+        "cash": 492694.89,
+        "equity": 497195.07,
+        "shares_held": 9,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-10-07",
@@ -2549,220 +2984,259 @@
       "action_name": "HOLD",
       "signal": "HOLD",
       "pred_class": 0,
+      "pred_return": 0.8149692416191101,
       "probabilities": {
-        "HOLD": 0.9,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.8149692416191101,
+        "BUY": 0.0252999197691679,
+        "SELL": 0.15973088145256042
       },
       "close": 502.29998779296875,
-      "momentum_ret": -0.000875
+      "portfolio": {
+        "cash": 492694.89,
+        "equity": 497215.59,
+        "shares_held": 9,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-10-08",
-      "action_id": 2,
-      "action_name": "BUY_100",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 2,
+      "pred_class": 1,
+      "pred_return": 0.8519049882888794,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.14618632197380066,
+        "BUY": 0.8519049882888794,
+        "SELL": 0.0019086305983364582
       },
       "close": 499.8399963378906,
-      "momentum_ret": 0.003292
+      "portfolio": {
+        "cash": 450166.0,
+        "equity": 497150.96,
+        "shares_held": 94,
+        "n_lots": 2
+      }
     },
     {
       "date": "2025-10-09",
-      "action_id": 1,
-      "action_name": "BUY_50",
-      "signal": "BUY",
-      "pred_class": 1,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.7504003643989563,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.9,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.7504003643989563,
+        "BUY": 0.2454131692647934,
+        "SELL": 0.004186436999589205
       },
       "close": 496.739990234375,
-      "momentum_ret": 0.001653
+      "portfolio": {
+        "cash": 450166.0,
+        "equity": 496859.56,
+        "shares_held": 94,
+        "n_lots": 2
+      }
     },
     {
       "date": "2025-10-10",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9998244643211365,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00012138508463976905,
+        "BUY": 5.4142623412190005e-05,
+        "SELL": 0.9998244643211365
       },
       "close": 489.1300048828125,
-      "momentum_ret": -0.019288
+      "portfolio": {
+        "cash": 496098.24,
+        "equity": 496098.24,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-10-13",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00014478873345069587,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00014478873345069587,
+        "BUY": 4.2364539694972336e-05,
+        "SELL": 0.99981290102005
       },
       "close": 491.92999267578125,
-      "momentum_ret": -0.016179
+      "portfolio": {
+        "cash": 496098.24,
+        "equity": 496098.24,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-10-14",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00020999622938688844,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00020999622938688844,
+        "BUY": 4.646676825359464e-05,
+        "SELL": 0.9997435212135315
       },
       "close": 495.9700012207031,
-      "momentum_ret": -0.012602
+      "portfolio": {
+        "cash": 496098.24,
+        "equity": 496098.24,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-10-15",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00457373633980751,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00457373633980751,
+        "BUY": 5.125597817823291e-05,
+        "SELL": 0.9953749775886536
       },
       "close": 496.3900146484375,
-      "momentum_ret": -0.006902
+      "portfolio": {
+        "cash": 496098.24,
+        "equity": 496098.24,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-10-16",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00021891949290875345,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00021891949290875345,
+        "BUY": 7.673562504351139e-05,
+        "SELL": 0.9997043013572693
       },
       "close": 488.80999755859375,
-      "momentum_ret": -0.015964
+      "portfolio": {
+        "cash": 496098.24,
+        "equity": 496098.24,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-10-17",
-      "action_id": 2,
-      "action_name": "BUY_100",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 2,
+      "pred_class": 1,
+      "pred_return": 0.9619313478469849,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.03545699641108513,
+        "BUY": 0.9619313478469849,
+        "SELL": 0.0026116063818335533
       },
       "close": 492.4200134277344,
-      "momentum_ret": 0.006726
+      "portfolio": {
+        "cash": 448778.65,
+        "equity": 496050.97,
+        "shares_held": 96,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-10-20",
-      "action_id": 2,
-      "action_name": "BUY_100",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 2,
+      "pred_class": 1,
+      "pred_return": 0.9701078534126282,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.029503870755434036,
+        "BUY": 0.9701078534126282,
+        "SELL": 0.0003883190802298486
       },
       "close": 494.0799865722656,
-      "momentum_ret": 0.004371
+      "portfolio": {
+        "cash": 400804.96,
+        "equity": 496162.4,
+        "shares_held": 193,
+        "n_lots": 2
+      }
     },
     {
       "date": "2025-10-21",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9974512457847595,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.002490870887413621,
+        "BUY": 5.7854034821502864e-05,
+        "SELL": 0.9974512457847595
       },
       "close": 491.2900085449219,
-      "momentum_ret": -0.009436
+      "portfolio": {
+        "cash": 495529.12,
+        "equity": 495529.12,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-10-22",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.005346372257918119,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.005346372257918119,
+        "BUY": 7.201156404335052e-05,
+        "SELL": 0.9945816397666931
       },
       "close": 491.80999755859375,
-      "momentum_ret": -0.009227
+      "portfolio": {
+        "cash": 495529.12,
+        "equity": 495529.12,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-10-23",
       "action_id": 1,
-      "action_name": "BUY_50",
+      "action_name": "BUY",
       "signal": "BUY",
       "pred_class": 1,
+      "pred_return": 0.8765906691551208,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.9,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.12006092816591263,
+        "BUY": 0.8765906691551208,
+        "SELL": 0.003348363796249032
       },
       "close": 490.1600036621094,
-      "momentum_ret": 0.002762
+      "portfolio": {
+        "cash": 452351.9,
+        "equity": 495485.98,
+        "shares_held": 88,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-10-24",
@@ -2770,305 +3244,359 @@
       "action_name": "HOLD",
       "signal": "HOLD",
       "pred_class": 0,
+      "pred_return": 0.9867143034934998,
       "probabilities": {
-        "HOLD": 0.9,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.9867143034934998,
+        "BUY": 0.008123966865241528,
+        "SELL": 0.005161699373275042
       },
       "close": 492.1000061035156,
-      "momentum_ret": -0.00065
+      "portfolio": {
+        "cash": 452351.9,
+        "equity": 495656.7,
+        "shares_held": 88,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-10-27",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9997751116752625,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00017932613263837993,
+        "BUY": 4.5580669393530115e-05,
+        "SELL": 0.9997751116752625
       },
       "close": 488.07000732421875,
-      "momentum_ret": -0.012164
+      "portfolio": {
+        "cash": 495259.11,
+        "equity": 495259.11,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-10-28",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00011302081838948652,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00011302081838948652,
+        "BUY": 5.308669278747402e-05,
+        "SELL": 0.9998338222503662
       },
       "close": 481.44000244140625,
-      "momentum_ret": -0.020049
+      "portfolio": {
+        "cash": 495259.11,
+        "equity": 495259.11,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-10-29",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 8.815788896754384e-05,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 8.815788896754384e-05,
+        "BUY": 4.081788574694656e-05,
+        "SELL": 0.999871015548706
       },
       "close": 475.760009765625,
-      "momentum_ret": -0.032635
+      "portfolio": {
+        "cash": 495259.11,
+        "equity": 495259.11,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-10-30",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00011003061081282794,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00011003061081282794,
+        "BUY": 4.648431058740243e-05,
+        "SELL": 0.9998434782028198
       },
       "close": 478.5199890136719,
-      "momentum_ret": -0.023747
+      "portfolio": {
+        "cash": 495259.11,
+        "equity": 495259.11,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-10-31",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 9.747355943545699e-05,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 9.747355943545699e-05,
+        "BUY": 3.797809040406719e-05,
+        "SELL": 0.9998645782470703
       },
       "close": 477.5400085449219,
-      "momentum_ret": -0.029587
+      "portfolio": {
+        "cash": 495259.11,
+        "equity": 495259.11,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-11-03",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00014563676086254418,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00014563676086254418,
+        "BUY": 4.28205166826956e-05,
+        "SELL": 0.999811589717865
       },
       "close": 475.67999267578125,
-      "momentum_ret": -0.025386
+      "portfolio": {
+        "cash": 495259.11,
+        "equity": 495259.11,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-11-04",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9969912767410278,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0029430559370666742,
+        "BUY": 0.9969912767410278,
+        "SELL": 6.569799006683752e-05
       },
       "close": 487.6600036621094,
-      "momentum_ret": 0.01292
+      "portfolio": {
+        "cash": 446444.35,
+        "equity": 495210.35,
+        "shares_held": 100,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-11-05",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9998542070388794,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00010842709889402613,
+        "BUY": 0.9998542070388794,
+        "SELL": 3.730687967617996e-05
       },
       "close": 488.7699890136719,
-      "momentum_ret": 0.027346
+      "portfolio": {
+        "cash": 397518.47,
+        "equity": 495272.47,
+        "shares_held": 200,
+        "n_lots": 2
+      }
     },
     {
       "date": "2025-11-06",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9998623132705688,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00010707567707868293,
+        "BUY": 0.9998623132705688,
+        "SELL": 3.055934575968422e-05
       },
       "close": 493.1499938964844,
-      "momentum_ret": 0.030573
+      "portfolio": {
+        "cash": 348154.16,
+        "equity": 496099.15,
+        "shares_held": 300,
+        "n_lots": 3
+      }
     },
     {
       "date": "2025-11-07",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9999291896820068,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 3.996846862719394e-05,
+        "BUY": 0.9999291896820068,
+        "SELL": 3.0800525564700365e-05
       },
       "close": 499.05999755859375,
-      "momentum_ret": 0.045064
+      "portfolio": {
+        "cash": 298198.25,
+        "equity": 497822.25,
+        "shares_held": 400,
+        "n_lots": 4
+      }
     },
     {
       "date": "2025-11-10",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9999024868011475,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 6.59275974612683e-05,
+        "BUY": 0.9999024868011475,
+        "SELL": 3.15711076837033e-05
       },
       "close": 496.9800109863281,
-      "momentum_ret": 0.044778
+      "portfolio": {
+        "cash": 248450.55,
+        "equity": 496940.56,
+        "shares_held": 500,
+        "n_lots": 5
+      }
     },
     {
       "date": "2025-11-11",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9997522234916687,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0002145851613022387,
+        "BUY": 0.9997522234916687,
+        "SELL": 3.3200354664586484e-05
       },
       "close": 497.07000732421875,
-      "momentum_ret": 0.019296
+      "portfolio": {
+        "cash": 198693.84,
+        "equity": 496935.85,
+        "shares_held": 600,
+        "n_lots": 6
+      }
     },
     {
       "date": "2025-11-12",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9999127388000488,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 4.878620893578045e-05,
+        "BUY": 0.9999127388000488,
+        "SELL": 3.850498251267709e-05
       },
       "close": 502.3999938964844,
-      "momentum_ret": 0.027886
+      "portfolio": {
+        "cash": 148403.6,
+        "equity": 500083.6,
+        "shares_held": 700,
+        "n_lots": 7
+      }
     },
     {
       "date": "2025-11-13",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9999215602874756,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 4.62756615888793e-05,
+        "BUY": 0.9999215602874756,
+        "SELL": 3.216175900888629e-05
       },
       "close": 513.1099853515625,
-      "momentum_ret": 0.040474
+      "portfolio": {
+        "cash": 97041.3,
+        "equity": 507529.28,
+        "shares_held": 800,
+        "n_lots": 8
+      }
     },
     {
       "date": "2025-11-14",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9998695850372314,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 7.762567838653922e-05,
+        "BUY": 0.9998695850372314,
+        "SELL": 5.2716059144586325e-05
       },
       "close": 508.94000244140625,
-      "momentum_ret": 0.019797
+      "portfolio": {
+        "cash": 46096.4,
+        "equity": 504142.4,
+        "shares_held": 900,
+        "n_lots": 9
+      }
     },
     {
       "date": "2025-11-17",
-      "action_id": 3,
-      "action_name": "BUY_200",
-      "signal": "BUY",
-      "pred_class": 3,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0031847774516791105,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0031847774516791105,
+        "BUY": 0.9967466592788696,
+        "SELL": 6.851302896393463e-05
       },
       "close": 503.260009765625,
-      "momentum_ret": 0.012636
+      "portfolio": {
+        "cash": 46096.4,
+        "equity": 499030.41,
+        "shares_held": 900,
+        "n_lots": 9
+      }
     },
     {
       "date": "2025-11-18",
-      "action_id": 3,
-      "action_name": "BUY_200",
-      "signal": "BUY",
-      "pred_class": 3,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0010531541192904115,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0010531541192904115,
+        "BUY": 0.9989014863967896,
+        "SELL": 4.536857522907667e-05
       },
       "close": 504.3699951171875,
-      "momentum_ret": 0.014686
+      "portfolio": {
+        "cash": 46096.4,
+        "equity": 500029.4,
+        "shares_held": 900,
+        "n_lots": 9
+      }
     },
     {
       "date": "2025-11-19",
@@ -3076,135 +3604,159 @@
       "action_name": "HOLD",
       "signal": "HOLD",
       "pred_class": 0,
+      "pred_return": 0.888882577419281,
       "probabilities": {
-        "HOLD": 0.9,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.888882577419281,
+        "BUY": 0.03467268496751785,
+        "SELL": 0.07644475996494293
       },
       "close": 501.260009765625,
-      "momentum_ret": -0.002269
+      "portfolio": {
+        "cash": 46096.4,
+        "equity": 497230.41,
+        "shares_held": 900,
+        "n_lots": 9
+      }
     },
     {
       "date": "2025-11-20",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9996907711029053,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00025442102923989296,
+        "BUY": 5.480966865434311e-05,
+        "SELL": 0.9996907711029053
       },
       "close": 501.1199951171875,
-      "momentum_ret": -0.023367
+      "portfolio": {
+        "cash": 496653.39,
+        "equity": 496653.39,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-11-21",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.002613130724057555,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.002613130724057555,
+        "BUY": 0.00019789658836089075,
+        "SELL": 0.9971889853477478
       },
       "close": 504.0400085449219,
-      "momentum_ret": -0.009628
+      "portfolio": {
+        "cash": 496653.39,
+        "equity": 496653.39,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-11-24",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9902055859565735,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.009694627486169338,
+        "BUY": 0.9902055859565735,
+        "SELL": 9.97469323920086e-05
       },
       "close": 507.80999755859375,
-      "momentum_ret": 0.009041
+      "portfolio": {
+        "cash": 446329.93,
+        "equity": 496603.12,
+        "shares_held": 99,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-11-25",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9988663196563721,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0010858168825507164,
+        "BUY": 0.9988663196563721,
+        "SELL": 4.785332203027792e-05
       },
       "close": 508.57000732421875,
-      "momentum_ret": 0.008327
+      "portfolio": {
+        "cash": 395422.07,
+        "equity": 496627.5,
+        "shares_held": 199,
+        "n_lots": 2
+      }
     },
     {
       "date": "2025-11-26",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9998688697814941,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 8.968212205218151e-05,
+        "BUY": 0.9998688697814941,
+        "SELL": 4.146331048104912e-05
       },
       "close": 511.2300109863281,
-      "momentum_ret": 0.01989
+      "portfolio": {
+        "cash": 344247.94,
+        "equity": 497105.72,
+        "shares_held": 299,
+        "n_lots": 3
+      }
     },
     {
       "date": "2025-11-28",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9999159574508667,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 5.428842632682063e-05,
+        "BUY": 0.9999159574508667,
+        "SELL": 2.972718357341364e-05
       },
       "close": 513.8099975585938,
-      "momentum_ret": 0.025323
+      "portfolio": {
+        "cash": 292815.56,
+        "equity": 497825.75,
+        "shares_held": 399,
+        "n_lots": 4
+      }
     },
     {
       "date": "2025-12-01",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.99600750207901,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.003950613550841808,
+        "BUY": 0.99600750207901,
+        "SELL": 4.1951054299715906e-05
       },
       "close": 508.54998779296875,
-      "momentum_ret": 0.008948
+      "portfolio": {
+        "cash": 241909.71,
+        "equity": 495676.15,
+        "shares_held": 499,
+        "n_lots": 5
+      }
     },
     {
       "date": "2025-12-02",
@@ -3212,883 +3764,1039 @@
       "action_name": "HOLD",
       "signal": "HOLD",
       "pred_class": 0,
+      "pred_return": 0.8727068901062012,
       "probabilities": {
-        "HOLD": 0.9,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.8727068901062012,
+        "BUY": 0.014275985769927502,
+        "SELL": 0.11301706731319427
       },
       "close": 506.6499938964844,
-      "momentum_ret": -0.002284
+      "portfolio": {
+        "cash": 241909.71,
+        "equity": 494728.06,
+        "shares_held": 499,
+        "n_lots": 5
+      }
     },
     {
       "date": "2025-12-03",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9986627101898193,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.001276342081837356,
+        "BUY": 6.089328235248104e-05,
+        "SELL": 0.9986627101898193
       },
       "close": 503.6000061035156,
-      "momentum_ret": -0.009773
+      "portfolio": {
+        "cash": 492451.72,
+        "equity": 492955.32,
+        "shares_held": 1,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-12-04",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9998403787612915,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00011713879212038592,
+        "BUY": 4.248652476235293e-05,
+        "SELL": 0.9998403787612915
       },
       "close": 503.2300109863281,
-      "momentum_ret": -0.015649
+      "portfolio": {
+        "cash": 492954.45,
+        "equity": 492954.45,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-12-05",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00018389298929832876,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00018389298929832876,
+        "BUY": 3.76471143681556e-05,
+        "SELL": 0.9997784495353699
       },
       "close": 504.3399963378906,
-      "momentum_ret": -0.018431
+      "portfolio": {
+        "cash": 492954.45,
+        "equity": 492954.45,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-12-08",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00010784449841594324,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00010784449841594324,
+        "BUY": 4.399837052915245e-05,
+        "SELL": 0.9998481273651123
       },
       "close": 497.2300109863281,
-      "momentum_ret": -0.022259
+      "portfolio": {
+        "cash": 492954.45,
+        "equity": 492954.45,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-12-09",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0001032289510476403,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0001032289510476403,
+        "BUY": 4.3640786316245794e-05,
+        "SELL": 0.9998531341552734
       },
       "close": 491.42999267578125,
-      "momentum_ret": -0.03004
+      "portfolio": {
+        "cash": 492954.45,
+        "equity": 492954.45,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-12-10",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00010692230716813356,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00010692230716813356,
+        "BUY": 4.5926495658932254e-05,
+        "SELL": 0.9998471736907959
       },
       "close": 490.42999267578125,
-      "momentum_ret": -0.026152
+      "portfolio": {
+        "cash": 492954.45,
+        "equity": 492954.45,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-12-11",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00029898673528805375,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00029898673528805375,
+        "BUY": 5.289678665576503e-05,
+        "SELL": 0.9996480941772461
       },
       "close": 495.8500061035156,
-      "momentum_ret": -0.014665
+      "portfolio": {
+        "cash": 492954.45,
+        "equity": 492954.45,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-12-12",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.007026958744972944,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.007026958744972944,
+        "BUY": 7.843468483770266e-05,
+        "SELL": 0.9928945899009705
       },
       "close": 499.5199890136719,
-      "momentum_ret": -0.009557
+      "portfolio": {
+        "cash": 492954.45,
+        "equity": 492954.45,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-12-15",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9988859295845032,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00107478816062212,
+        "BUY": 0.9988859295845032,
+        "SELL": 3.932331674150191e-05
       },
       "close": 506.3800048828125,
-      "momentum_ret": 0.018402
+      "portfolio": {
+        "cash": 442265.81,
+        "equity": 492903.81,
+        "shares_held": 100,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-12-16",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9993652701377869,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0005611118976958096,
+        "BUY": 0.9993652701377869,
+        "SELL": 7.366172212641686e-05
       },
       "close": 499.8399963378906,
-      "momentum_ret": 0.017113
+      "portfolio": {
+        "cash": 392231.82,
+        "equity": 492199.82,
+        "shares_held": 200,
+        "n_lots": 2
+      }
     },
     {
       "date": "2025-12-17",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9998443126678467,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00011864670523209497,
+        "BUY": 0.9998443126678467,
+        "SELL": 3.698651198646985e-05
       },
       "close": 504.2699890136719,
-      "momentum_ret": 0.02822
+      "portfolio": {
+        "cash": 341754.4,
+        "equity": 493035.4,
+        "shares_held": 300,
+        "n_lots": 3
+      }
     },
     {
       "date": "2025-12-18",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9985059499740601,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0014489078894257545,
+        "BUY": 0.9985059499740601,
+        "SELL": 4.5139175199437886e-05
       },
       "close": 503.3900146484375,
-      "momentum_ret": 0.015206
+      "portfolio": {
+        "cash": 291365.06,
+        "equity": 492721.06,
+        "shares_held": 400,
+        "n_lots": 4
+      }
     },
     {
       "date": "2025-12-19",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9983188509941101,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0015677985502406955,
+        "BUY": 0.00011327050015097484,
+        "SELL": 0.9983188509941101
       },
       "close": 494.5299987792969,
-      "momentum_ret": -0.00999
+      "portfolio": {
+        "cash": 488485.21,
+        "equity": 488979.74,
+        "shares_held": 1,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-12-22",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9992075562477112,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0006744807469658554,
+        "BUY": 0.00011795928003266454,
+        "SELL": 0.9992075562477112
       },
       "close": 499.95001220703125,
-      "momentum_ret": -0.012698
+      "portfolio": {
+        "cash": 488984.66,
+        "equity": 488984.66,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-12-23",
-      "action_id": 1,
-      "action_name": "BUY_50",
-      "signal": "BUY",
-      "pred_class": 1,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.9755687117576599,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.9,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.9755687117576599,
+        "BUY": 0.01458346750587225,
+        "SELL": 0.009847882203757763
       },
       "close": 500.510009765625,
-      "momentum_ret": 0.00134
+      "portfolio": {
+        "cash": 488984.66,
+        "equity": 488984.66,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-12-24",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.046015117317438126,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.046015117317438126,
+        "BUY": 0.00040982975042425096,
+        "SELL": 0.9535750150680542
       },
       "close": 501.3399963378906,
-      "momentum_ret": -0.00581
+      "portfolio": {
+        "cash": 488984.66,
+        "equity": 488984.66,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-12-26",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0025780824944376945,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0025780824944376945,
+        "BUY": 4.6608311095042154e-05,
+        "SELL": 0.9973753690719604
       },
       "close": 498.29998779296875,
-      "momentum_ret": -0.010111
+      "portfolio": {
+        "cash": 488984.66,
+        "equity": 488984.66,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2025-12-29",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9977366924285889,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0022078724578022957,
+        "BUY": 0.9977366924285889,
+        "SELL": 5.542204235098325e-05
       },
       "close": 501.04998779296875,
-      "momentum_ret": 0.013184
+      "portfolio": {
+        "cash": 438829.56,
+        "equity": 488934.55,
+        "shares_held": 100,
+        "n_lots": 1
+      }
     },
     {
       "date": "2025-12-30",
-      "action_id": 2,
-      "action_name": "BUY_100",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 2,
+      "pred_class": 1,
+      "pred_return": 0.9926890730857849,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00727368239313364,
+        "BUY": 0.9926890730857849,
+        "SELL": 3.7241639802232385e-05
       },
       "close": 503.7099914550781,
-      "momentum_ret": 0.007521
+      "portfolio": {
+        "cash": 388912.4,
+        "equity": 489150.69,
+        "shares_held": 199,
+        "n_lots": 2
+      }
     },
     {
       "date": "2025-12-31",
-      "action_id": 2,
-      "action_name": "BUY_100",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 2,
+      "pred_class": 1,
+      "pred_return": 0.9905087947845459,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.009441238828003407,
+        "BUY": 0.9905087947845459,
+        "SELL": 4.99544148624409e-05
       },
       "close": 502.6499938964844,
-      "momentum_ret": 0.004276
+      "portfolio": {
+        "cash": 339100.29,
+        "equity": 488889.99,
+        "shares_held": 298,
+        "n_lots": 3
+      }
     },
     {
       "date": "2026-01-02",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9995474219322205,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.000376739859348163,
+        "BUY": 7.58431779104285e-05,
+        "SELL": 0.9995474219322205
       },
       "close": 496.8500061035156,
-      "momentum_ret": -0.008956
+      "portfolio": {
+        "cash": 487013.53,
+        "equity": 487013.53,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-01-05",
-      "action_id": 1,
-      "action_name": "BUY_50",
-      "signal": "BUY",
-      "pred_class": 1,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.9883342981338501,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.9,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.9883342981338501,
+        "BUY": 0.007505667861551046,
+        "SELL": 0.004159977193921804
       },
       "close": 498.5199890136719,
-      "momentum_ret": 0.000442
+      "portfolio": {
+        "cash": 487013.53,
+        "equity": 487013.53,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-01-06",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0631268322467804,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0631268322467804,
+        "BUY": 0.00042667044908739626,
+        "SELL": 0.936446487903595
       },
       "close": 499.04998779296875,
-      "momentum_ret": -0.003992
+      "portfolio": {
+        "cash": 487013.53,
+        "equity": 487013.53,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-01-07",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 9.857665281742811e-05,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 9.857665281742811e-05,
+        "BUY": 4.065170287503861e-05,
+        "SELL": 0.9998607635498047
       },
       "close": 496.1199951171875,
-      "momentum_ret": -0.015068
+      "portfolio": {
+        "cash": 487013.53,
+        "equity": 487013.53,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-01-08",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.011771032586693764,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.011771032586693764,
+        "BUY": 0.00016934078303165734,
+        "SELL": 0.9880595803260803
       },
       "close": 499.7699890136719,
-      "momentum_ret": -0.00573
+      "portfolio": {
+        "cash": 487013.53,
+        "equity": 487013.53,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-01-09",
-      "action_id": 2,
-      "action_name": "BUY_100",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 2,
+      "pred_class": 1,
+      "pred_return": 0.9855045676231384,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.014319628477096558,
+        "BUY": 0.9855045676231384,
+        "SELL": 0.00017582694999873638
       },
       "close": 499.1000061035156,
-      "momentum_ret": 0.004529
+      "portfolio": {
+        "cash": 437553.22,
+        "equity": 486964.12,
+        "shares_held": 99,
+        "n_lots": 1
+      }
     },
     {
       "date": "2026-01-12",
-      "action_id": 1,
-      "action_name": "BUY_50",
-      "signal": "BUY",
-      "pred_class": 1,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.9933348894119263,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.9,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.9933348894119263,
+        "BUY": 0.0035810167901217937,
+        "SELL": 0.0030840588733553886
       },
       "close": 498.6700134277344,
-      "momentum_ret": 0.000301
+      "portfolio": {
+        "cash": 437553.22,
+        "equity": 486921.55,
+        "shares_held": 99,
+        "n_lots": 1
+      }
     },
     {
       "date": "2026-01-13",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 4,
+      "pred_class": 2,
+      "pred_return": 0.9995970129966736,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00034121080534532666,
+        "BUY": 6.174862937768921e-05,
+        "SELL": 0.9995970129966736
       },
       "close": 495.239990234375,
-      "momentum_ret": -0.007635
+      "portfolio": {
+        "cash": 486532.95,
+        "equity": 486532.95,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-01-14",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.13203981518745422,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.13203981518745422,
+        "BUY": 0.004021528176963329,
+        "SELL": 0.8639386296272278
       },
       "close": 493.1499938964844,
-      "momentum_ret": -0.005986
+      "portfolio": {
+        "cash": 486532.95,
+        "equity": 486532.95,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-01-15",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00014905669377185404,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00014905669377185404,
+        "BUY": 4.0600833017379045e-05,
+        "SELL": 0.9998103976249695
       },
       "close": 492.6199951171875,
-      "momentum_ret": -0.014307
+      "portfolio": {
+        "cash": 486532.95,
+        "equity": 486532.95,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-01-16",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0003160585183650255,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0003160585183650255,
+        "BUY": 7.058583287289366e-05,
+        "SELL": 0.999613344669342
       },
       "close": 493.2900085449219,
-      "momentum_ret": -0.011641
+      "portfolio": {
+        "cash": 486532.95,
+        "equity": 486532.95,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-01-20",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00010005322837969288,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00010005322837969288,
+        "BUY": 4.099165016668849e-05,
+        "SELL": 0.9998589754104614
       },
       "close": 485.3900146484375,
-      "momentum_ret": -0.026631
+      "portfolio": {
+        "cash": 486532.95,
+        "equity": 486532.95,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-01-21",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00012399257684592158,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00012399257684592158,
+        "BUY": 4.850551704294048e-05,
+        "SELL": 0.99982750415802
       },
       "close": 483.8299865722656,
-      "momentum_ret": -0.023039
+      "portfolio": {
+        "cash": 486532.95,
+        "equity": 486532.95,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-01-22",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00011894369526999071,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00011894369526999071,
+        "BUY": 4.588601950672455e-05,
+        "SELL": 0.9998351335525513
       },
       "close": 484.489990234375,
-      "momentum_ret": -0.017561
+      "portfolio": {
+        "cash": 486532.95,
+        "equity": 486532.95,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-01-23",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 9.46488871704787e-05,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 9.46488871704787e-05,
+        "BUY": 4.88692858198192e-05,
+        "SELL": 0.9998564720153809
       },
       "close": 478.9700012207031,
-      "momentum_ret": -0.027709
+      "portfolio": {
+        "cash": 486532.95,
+        "equity": 486532.95,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-01-26",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0002579784777481109,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0002579784777481109,
+        "BUY": 4.1589697502786294e-05,
+        "SELL": 0.9997004270553589
       },
       "close": 483.4700012207031,
-      "momentum_ret": -0.019907
+      "portfolio": {
+        "cash": 486532.95,
+        "equity": 486532.95,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-01-27",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0003513905976433307,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0003513905976433307,
+        "BUY": 9.362390119349584e-05,
+        "SELL": 0.9995549321174622
       },
       "close": 474.6700134277344,
-      "momentum_ret": -0.022085
+      "portfolio": {
+        "cash": 486532.95,
+        "equity": 486532.95,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-01-28",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00021485112665686756,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00021485112665686756,
+        "BUY": 8.166939369402826e-05,
+        "SELL": 0.9997034668922424
       },
       "close": 473.489990234375,
-      "momentum_ret": -0.021371
+      "portfolio": {
+        "cash": 486532.95,
+        "equity": 486532.95,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-01-29",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00040774597437120974,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00040774597437120974,
+        "BUY": 5.871259781997651e-05,
+        "SELL": 0.9995335340499878
       },
       "close": 476.7900085449219,
-      "momentum_ret": -0.015893
+      "portfolio": {
+        "cash": 486532.95,
+        "equity": 486532.95,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-01-30",
-      "action_id": 2,
-      "action_name": "BUY_100",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 2,
+      "pred_class": 1,
+      "pred_return": 0.754345178604126,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.24375495314598083,
+        "BUY": 0.754345178604126,
+        "SELL": 0.0018998491577804089
       },
       "close": 480.5299987792969,
-      "momentum_ret": 0.003257
+      "portfolio": {
+        "cash": 450457.16,
+        "equity": 486496.91,
+        "shares_held": 75,
+        "n_lots": 1
+      }
     },
     {
       "date": "2026-02-02",
-      "action_id": 2,
-      "action_name": "BUY_100",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 2,
+      "pred_class": 1,
+      "pred_return": 0.9954051971435547,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.9,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00449442770332098,
+        "BUY": 0.9954051971435547,
+        "SELL": 0.0001003723155008629
       },
       "close": 487.2900085449219,
-      "momentum_ret": 0.007901
+      "portfolio": {
+        "cash": 401679.43,
+        "equity": 486955.18,
+        "shares_held": 175,
+        "n_lots": 2
+      }
     },
     {
       "date": "2026-02-03",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9999171495437622,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 5.046056321589276e-05,
+        "BUY": 0.9999171495437622,
+        "SELL": 3.239847137592733e-05
       },
       "close": 493.739990234375,
-      "momentum_ret": 0.040175
+      "portfolio": {
+        "cash": 352256.05,
+        "equity": 488034.55,
+        "shares_held": 275,
+        "n_lots": 3
+      }
     },
     {
       "date": "2026-02-04",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9999343156814575,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 3.603386721806601e-05,
+        "BUY": 0.9999343156814575,
+        "SELL": 2.9621263820445165e-05
       },
       "close": 503.8299865722656,
-      "momentum_ret": 0.064077
+      "portfolio": {
+        "cash": 301822.67,
+        "equity": 490758.92,
+        "shares_held": 375,
+        "n_lots": 4
+      }
     },
     {
       "date": "2026-02-05",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9999346733093262,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 3.694233237183653e-05,
+        "BUY": 0.9999346733093262,
+        "SELL": 2.842243338818662e-05
       },
       "close": 503.8900146484375,
-      "momentum_ret": 0.056838
+      "portfolio": {
+        "cash": 251383.28,
+        "equity": 490731.04,
+        "shares_held": 475,
+        "n_lots": 5
+      }
     },
     {
       "date": "2026-02-06",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9999356269836426,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 3.4950626286445186e-05,
+        "BUY": 0.9999356269836426,
+        "SELL": 2.937224053312093e-05
       },
       "close": 508.0899963378906,
-      "momentum_ret": 0.057353
+      "portfolio": {
+        "cash": 200523.47,
+        "equity": 492675.22,
+        "shares_held": 575,
+        "n_lots": 6
+      }
     },
     {
       "date": "2026-02-09",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9991342425346375,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0008262213668785989,
+        "BUY": 0.9991342425346375,
+        "SELL": 3.959390232921578e-05
       },
       "close": 498.0799865722656,
-      "momentum_ret": 0.022143
+      "portfolio": {
+        "cash": 150665.67,
+        "equity": 486869.66,
+        "shares_held": 675,
+        "n_lots": 7
+      }
     },
     {
       "date": "2026-02-10",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9987010955810547,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0012222345685586333,
+        "BUY": 0.9987010955810547,
+        "SELL": 7.662404823349789e-05
       },
       "close": 500.29998779296875,
-      "momentum_ret": 0.013286
+      "portfolio": {
+        "cash": 100585.64,
+        "equity": 488318.13,
+        "shares_held": 775,
+        "n_lots": 8
+      }
     },
     {
       "date": "2026-02-11",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 4,
+      "pred_class": 2,
+      "pred_return": 0.9887276887893677,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.010943028144538403,
+        "BUY": 0.0003292318433523178,
+        "SELL": 0.9887276887893677
       },
       "close": 500.0199890136719,
-      "momentum_ret": -0.007562
+      "portfolio": {
+        "cash": 483217.93,
+        "equity": 487718.11,
+        "shares_held": 9,
+        "n_lots": 1
+      }
     },
     {
       "date": "2026-02-12",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 4,
+      "pred_class": 2,
+      "pred_return": 0.977174699306488,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.02239122800529003,
+        "BUY": 0.000434099230915308,
+        "SELL": 0.977174699306488
       },
       "close": 500.010009765625,
-      "momentum_ret": -0.0077
+      "portfolio": {
+        "cash": 487713.52,
+        "equity": 487713.52,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-02-13",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0005544699379242957,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0005544699379242957,
+        "BUY": 7.36667716410011e-05,
+        "SELL": 0.9993718266487122
       },
       "close": 497.54998779296875,
-      "momentum_ret": -0.020744
+      "portfolio": {
+        "cash": 487713.52,
+        "equity": 487713.52,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-02-17",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.994831383228302,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.005109300836920738,
+        "BUY": 0.994831383228302,
+        "SELL": 5.937208334216848e-05
       },
       "close": 503.4100036621094,
-      "momentum_ret": 0.010701
+      "portfolio": {
+        "cash": 437826.1,
+        "equity": 487663.69,
+        "shares_held": 99,
+        "n_lots": 1
+      }
     },
     {
       "date": "2026-02-18",
@@ -4096,255 +4804,300 @@
       "action_name": "HOLD",
       "signal": "HOLD",
       "pred_class": 0,
+      "pred_return": 0.9527357816696167,
       "probabilities": {
-        "HOLD": 0.9,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.9527357816696167,
+        "BUY": 0.0226451363414526,
+        "SELL": 0.024619057774543762
       },
       "close": 499.07000732421875,
-      "momentum_ret": -0.002458
+      "portfolio": {
+        "cash": 437826.1,
+        "equity": 487234.03,
+        "shares_held": 99,
+        "n_lots": 1
+      }
     },
     {
       "date": "2026-02-19",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 4,
+      "pred_class": 2,
+      "pred_return": 0.9886828064918518,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.01104638073593378,
+        "BUY": 0.00027080130530521274,
+        "SELL": 0.9886828064918518
       },
       "close": 496.94000244140625,
-      "momentum_ret": -0.00616
+      "portfolio": {
+        "cash": 486477.52,
+        "equity": 486974.46,
+        "shares_held": 1,
+        "n_lots": 1
+      }
     },
     {
       "date": "2026-02-20",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 4,
+      "pred_class": 2,
+      "pred_return": 0.9763666987419128,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.023089684545993805,
+        "BUY": 0.0005436369683593512,
+        "SELL": 0.9763666987419128
       },
       "close": 498.20001220703125,
-      "momentum_ret": -0.00362
+      "portfolio": {
+        "cash": 486975.22,
+        "equity": 486975.22,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-02-23",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0028417420107871294,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0028417420107871294,
+        "BUY": 0.0004055563185829669,
+        "SELL": 0.9967526793479919
       },
       "close": 494.0899963378906,
-      "momentum_ret": -0.006954
+      "portfolio": {
+        "cash": 486975.22,
+        "equity": 486975.22,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-02-24",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00018715996702667326,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00018715996702667326,
+        "BUY": 4.4766660721506923e-05,
+        "SELL": 0.999768078327179
       },
       "close": 494.510009765625,
-      "momentum_ret": -0.017679
+      "portfolio": {
+        "cash": 486975.22,
+        "equity": 486975.22,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-02-25",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.0003225818509235978,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0003225818509235978,
+        "BUY": 6.601490895263851e-05,
+        "SELL": 0.9996114373207092
       },
       "close": 493.989990234375,
-      "momentum_ret": -0.010179
+      "portfolio": {
+        "cash": 486975.22,
+        "equity": 486975.22,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-02-26",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9949496984481812,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0049964627251029015,
+        "BUY": 0.9949496984481812,
+        "SELL": 5.3867548558628187e-05
       },
       "close": 502.6700134277344,
-      "momentum_ret": 0.011531
+      "portfolio": {
+        "cash": 437161.12,
+        "equity": 486925.45,
+        "shares_held": 99,
+        "n_lots": 1
+      }
     },
     {
       "date": "2026-02-27",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9998757839202881,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 8.375461038667709e-05,
+        "BUY": 0.9998757839202881,
+        "SELL": 4.048216578667052e-05
       },
       "close": 504.95001220703125,
-      "momentum_ret": 0.013549
+      "portfolio": {
+        "cash": 386615.63,
+        "equity": 487100.68,
+        "shares_held": 199,
+        "n_lots": 2
+      }
     },
     {
       "date": "2026-03-02",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
+      "action_id": 2,
+      "action_name": "SELL",
       "signal": "SELL",
-      "pred_class": 5,
+      "pred_class": 2,
+      "pred_return": 0.9990515112876892,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.0006017152918502688,
+        "BUY": 0.00034671061439439654,
+        "SELL": 0.9990515112876892
       },
       "close": 480.1700134277344,
-      "momentum_ret": -0.028173
+      "portfolio": {
+        "cash": 482073.91,
+        "equity": 482073.91,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-03-03",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00010299530549673364,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00010299530549673364,
+        "BUY": 5.71682867303025e-05,
+        "SELL": 0.9998397827148438
       },
       "close": 481.3599853515625,
-      "momentum_ret": -0.026592
+      "portfolio": {
+        "cash": 482073.91,
+        "equity": 482073.91,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-03-04",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.00031055600265972316,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.00031055600265972316,
+        "BUY": 6.495939305750653e-05,
+        "SELL": 0.999624490737915
       },
       "close": 487.4800109863281,
-      "momentum_ret": -0.013178
+      "portfolio": {
+        "cash": 482073.91,
+        "equity": 482073.91,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-03-05",
-      "action_id": 4,
-      "action_name": "SELL_LOT",
-      "signal": "SELL",
-      "pred_class": 4,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.08676222711801529,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.9,
-        "SELL_ALL": 0.02
+        "HOLD": 0.08676222711801529,
+        "BUY": 0.0042528994381427765,
+        "SELL": 0.908984899520874
       },
       "close": 500.3999938964844,
-      "momentum_ret": -0.004516
+      "portfolio": {
+        "cash": 482073.91,
+        "equity": 482073.91,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-03-06",
-      "action_id": 5,
-      "action_name": "SELL_ALL",
-      "signal": "SELL",
-      "pred_class": 5,
+      "action_id": 0,
+      "action_name": "HOLD",
+      "signal": "HOLD",
+      "pred_class": 0,
+      "pred_return": 0.015912899747490883,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.02,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.9
+        "HOLD": 0.015912899747490883,
+        "BUY": 0.0010524406097829342,
+        "SELL": 0.983034610748291
       },
       "close": 498.9800109863281,
-      "momentum_ret": -0.011823
+      "portfolio": {
+        "cash": 482073.91,
+        "equity": 482073.91,
+        "shares_held": 0,
+        "n_lots": 0
+      }
     },
     {
       "date": "2026-03-09",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9997922778129578,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.00016140683146659285,
+        "BUY": 0.9997922778129578,
+        "SELL": 4.6304903662530705e-05
       },
       "close": 497.20001220703125,
-      "momentum_ret": 0.035467
+      "portfolio": {
+        "cash": 432304.18,
+        "equity": 482024.19,
+        "shares_held": 100,
+        "n_lots": 1
+      }
     },
     {
       "date": "2026-03-10",
-      "action_id": 3,
-      "action_name": "BUY_200",
+      "action_id": 1,
+      "action_name": "BUY",
       "signal": "BUY",
-      "pred_class": 3,
+      "pred_class": 1,
+      "pred_return": 0.9995705485343933,
       "probabilities": {
-        "HOLD": 0.02,
-        "BUY_50": 0.02,
-        "BUY_100": 0.02,
-        "BUY_200": 0.9,
-        "SELL_LOT": 0.02,
-        "SELL_ALL": 0.02
+        "HOLD": 0.0003580767079256475,
+        "BUY": 0.9995705485343933,
+        "SELL": 7.141332025639713e-05
       },
       "close": 494.1400146484375,
-      "momentum_ret": 0.02655
+      "portfolio": {
+        "cash": 382840.77,
+        "equity": 481668.77,
+        "shares_held": 200,
+        "n_lots": 2
+      }
     }
   ],
-  "generated_at": "2026-05-26T14:44:05"
+  "generated_at": "2026-05-26T16:45:31"
 }
